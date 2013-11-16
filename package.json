@@ -5,6 +5,7 @@
   , "dependencies": {
       "express": ""
     , "nunjucks": ""
+    , "knox": ""
   }
   , "repository": {
     "type": "git",
