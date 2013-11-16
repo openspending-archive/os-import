@@ -1,0 +1,25 @@
+{
+  "name": "os-upload"
+  , "version": "0.1.0"
+  , "author": "Open Knowledge Foundation <labs@okfn.org>"
+  , "dependencies": {
+      "express": ""
+    , "nunjucks": ""
+  }
+  , "repository": {
+    "type": "git",
+    "url": "https://github.com/openspending/os-upload"
+  }
+  , "devDependencies": {
+      "supertest": ""
+    , "mocha": ""
+    , "faux-knox": ""
+  }
+  , "engines": {
+    "node": "0.10.x",
+    "npm": "1.3.x"
+  }
+  , "scripts": {
+    "test": "./node_modules/mocha/bin/mocha test/*.js"
+  }
+}
