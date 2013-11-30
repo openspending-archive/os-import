@@ -2,9 +2,31 @@
 
 {% block content %}
 <div class="hero-unit">
-  <h1>Let's get some uploading going!</h1>
+  <h1>
+    Load data into the OpenSpending Datastore
+  </h1>
+</div>
 
+<h2>Here's how it works ...</h2>
+<div class="row">
+  <div class="span3">
+    1. Give us your CSV file
+  </div>
+  <div class="span3">
+    2. We'll check its kosher
+  </div>
+  <div class="span3">
+    3. We'll ask a few extra questions about this dataset
+  </div>
+  <div class="span3">
+    4. We'll store it safe and sound in our extra robust datastore (s3)
+  </div>
+</div>
+
+
+<div class="wizard">
   <br /><br />
+  <p>First give us the CSV file!</p>
   <form class="form form-horizontal" action="" method="POST" enctype="multipart/form-data">
     <input
       type="file"

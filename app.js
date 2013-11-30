@@ -26,5 +26,6 @@ app.get('/', routes.home);
 app.post('/', routes.uploadPost);
 app.get('/login', routes.login);
 app.post('/login', routes.loginPost);
+app.post('/api/1/check', routes.checkFile);
 
 exports.app = app;

@@ -23,5 +23,46 @@ describe('API', function() {
         done();
       });
   });
-});
 
+  it('checks', function(done) {
+    var exp = {
+      "fields": [
+        {
+          "name": "h1",
+          "description": "",
+          "type": "string"
+        },
+        {
+          "name": "h2",
+          "description": "",
+          "type": "string"
+        },
+        {
+          "name": "h3",
+          "description": "",
+          "type": "string"
+        }
+      ]
+    };
+    request(app)
+      .post('/api/1/check')
+      .attach('datafile', 'test/data/sample1.csv')
+      .expect(exp)
+      .end(function(err, res) {
+        if (err) return done(err);
+        done();
+      });
+  });
+  it('checks - bad data', function(done) {
+    request(app)
+      .post('/api/1/check')
+      .send({
+        url: 'https://raw.github.com/okfn/messytables/master/horror/simple.xls'
+      })
+      .end(function(err, res) {
+        // unfortunately error won't fire as we'll just attempt to read this as csv
+        if (err) return done(err);
+        done();
+      });
+  });
+});

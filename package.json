@@ -6,6 +6,8 @@
       "express": ""
     , "nunjucks": ""
     , "knox": ""
+    , "request": ""
+    , "datapackage": "git://github.com/okfn/datapackage.js#master"
   }
   , "repository": {
     "type": "git",
