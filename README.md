@@ -36,6 +36,11 @@ Or the npm way:
 
     npm test
 
+You'll need to set a valid OpenSpending API Key environment variable for the
+tests to work.
+
+    export APIKEY=....
+
 ----
 
 # For Developers

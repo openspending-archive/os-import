@@ -4,6 +4,7 @@ var fs = require('fs')
   , express = require('express')
   , assert = require('assert')
   , config = require('../lib/config.js')
+  , datastore = require('../lib/datastore.js')
   ;
 
 var app = require('../app.js').app;
@@ -22,6 +23,20 @@ describe('API', function() {
         assert(fs.existsSync(fp), 'File not saved to expected location ' + fp);
         done();
       });
+  });
+
+  it('authorizedToUpload', function(done) {
+    datastore.authorizedToUpload(config.apikey, 'a-dataset-that-does-not-exist', function(err, ok) {
+      assert(ok);
+      done(err);
+    });
+  });
+
+  it('not authorizedToUpload', function(done) {
+    datastore.authorizedToUpload('a bad api key', 'a-dataset-that-does-not-exist', function(err, ok) {
+      assert(!ok);
+      done(err);
+    });
   });
 
   it('checks', function(done) {
