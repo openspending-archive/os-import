@@ -11,6 +11,7 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.cookieParser('TODO os-upload random secret'));
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
@@ -23,5 +24,7 @@ app.listen(app.get('port'), function() {
 
 app.get('/', routes.home);
 app.post('/', routes.uploadPost);
+app.get('/login', routes.login);
+app.post('/login', routes.loginPost);
 
 exports.app = app;

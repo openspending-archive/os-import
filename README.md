@@ -38,6 +38,14 @@ Or the npm way:
 
 ----
 
+# For Developers
+
+For authentication we require the user to paste in their OS API Key which is
+then cached in a cookie (named "apikey"). The API Key is then used in requests
+to the [OpenSpending Permission API][perms].
+
+[perms]: http://community.openspending.org/help/api/permissions/
+
 # Architecture and Design
 
 ## User Stories
