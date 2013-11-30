@@ -2,6 +2,7 @@ var express = require('express')
   , path = require('path')
   , nunjucks = require('nunjucks')
   , routes = require('./routes/index.js')
+  , config = require('./lib/config.js')
   ;
 
 var app = express();
@@ -20,6 +21,13 @@ env.express(app);
 
 app.listen(app.get('port'), function() {
   console.log("Listening on " + app.get('port'));
+});
+
+app.all('*', function(req, res, next) {
+  if (config.mode === 'testing' && config.apikey) {
+    req.cookies.apikey = config.apikey;
+  }
+  next();
 });
 
 app.get('/', routes.home);

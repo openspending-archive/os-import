@@ -9,17 +9,17 @@ var fs = require('fs')
 
 var app = require('../app.js').app;
 
-console.log(config.mode);
 var localBucket = config.s3.bucket;
 
 describe('API', function() {
   it('Upload', function(done) {
     request(app)
       .post('/')
+      .field('dataset', 'abc')
       .attach('datafile', 'test/data/sample1.csv')
       .end(function(err, res) {
-        // console.log(res);
-        var fp = path.join(localBucket, 'abc');
+        assert.equal(res.statusCode, 200);
+        var fp = path.join(localBucket, 'datasets', 'abc', 'data', 'sample1.csv');
         assert(fs.existsSync(fp), 'File not saved to expected location ' + fp);
         done();
       });

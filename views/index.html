@@ -26,15 +26,35 @@
 
 <div class="wizard">
   <br /><br />
-  <p>First give us the CSV file!</p>
+  <legend>First give us the CSV file!</legend>
   <form class="form form-horizontal" action="" method="POST" enctype="multipart/form-data">
-    <input
-      type="file"
-      name="datafile"
-      required=""
-      />
-    <br />
-    <button type="submit">Upload</button>
+    <div class="control-group">
+      <label for="dataset" class="control-label">Dataset name</label>
+      <div class="controls">
+        <input
+          type="text"
+          name="dataset"
+          required=""
+          placeholder="my-openspending-dataset-identifier"
+          />
+        <p class="help-block">This can be a new or existing dataset</p>
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="datafile" class="control-label">File</label>
+      <div class="controls">
+        <input
+          type="file"
+          name="datafile"
+          required=""
+          />
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </div>
+    </div>
   </form>
 </div>
 {% endblock %}
