@@ -35,7 +35,7 @@ exports.uploadPost = function(req, res) {
       } else {
         res.send({
           error: 'false',
-          data: result
+          message: 'Uploaded OK'
         });
       }
     });
