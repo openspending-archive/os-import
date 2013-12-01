@@ -30,11 +30,15 @@ exports.uploadPost = function(req, res) {
     }
     fp = 'datasets/' + dataset + '/data/' + req.files.datafile.originalFilename;
     store.client.putFile(req.files.datafile.path, fp, function(err, result) {
-      if (err) {
-        res.send({error: 'true'});
+      if (err || result.statusCode !== 200) {
+        res.send({
+          status: 'error',
+          code: result.statusCode
+        });
       } else {
         res.send({
-          error: 'false',
+          status: 'ok',
+          code: 200,
           message: 'Uploaded OK'
         });
       }
