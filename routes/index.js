@@ -29,17 +29,19 @@ exports.uploadPost = function(req, res) {
       return;
     }
     fp = 'datasets/' + dataset + '/data/' + req.files.datafile.originalFilename;
-    store.client.putFile(req.files.datafile.path, fp, function(err, result) {
+    store.client.putFile(req.files.datafile.path, fp, {'x-amz-acl': 'public-read'}, function(err, result) {
+      var location = 'http://data.openspending.org/' + fp;
       if (err || result.statusCode !== 200) {
-        res.send({
+        res.send('uploaded.html', {
           status: 'error',
           code: result.statusCode
         });
       } else {
-        res.send({
+        res.render('uploaded.html', {
           status: 'ok',
           code: 200,
-          message: 'Uploaded OK'
+          message: 'Uploaded OK',
+          location: location
         });
       }
     });

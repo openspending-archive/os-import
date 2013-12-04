@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Upload Status: {{ status }}</h2>
+
+<ul>
+  <li>Status code: {{ code }}</li>
+  <li>Message: {{message}}</li>
+  <li>File uploaded to: <a href="{{location}}">{{location}}</a></li>
+</ul>
+
+{% endblock %}
+
+
