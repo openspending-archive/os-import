@@ -8,7 +8,7 @@ general interface to <http://data.openspending.org/>.
 Not on npm yet so you'll need to clone the code and then install:
 
     git clone https://github.com/openspending/os-upload
-    cd os-upload 
+    cd os-upload
     npm install .
 
 ### Run the app locally
@@ -28,6 +28,11 @@ Deploy to Heroku:
 
 ### Testing
 
+You'll need to set a valid OpenSpending API Key environment variable for the
+tests to work.
+
+    export APIKEY=....
+
 Run them with mocha:
 
     mocha test
@@ -35,11 +40,6 @@ Run them with mocha:
 Or the npm way:
 
     npm test
-
-You'll need to set a valid OpenSpending API Key environment variable for the
-tests to work.
-
-    export APIKEY=....
 
 ----
 
@@ -64,7 +64,7 @@ to the [OpenSpending Permission API][perms].
 * [ ] I want to see what is in the datastore (size, recent changes)
 * [ ] As a Admin I want to see what uploads have happened recently
 * [ ]As a OS sysadmin I want somewhere to archive all the datasets in
-  openspending so if our db fails we don’t lose everything 
+  openspending so if our db fails we don’t lose everything
 
 ## Overall Plan including File Layout in the DataStore (data.openspending.org)
 

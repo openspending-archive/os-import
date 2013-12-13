@@ -7,6 +7,11 @@ var fs = require('fs')
   , datastore = require('../lib/datastore.js')
   ;
 
+if (config.apikey === null || typeof config.apikey === 'undefined') {
+  throw "ERROR: You must set the APIKEY environment variable to a valid " +
+        "OpenSpending API key when testing!\n";
+}
+
 var app = require('../app.js').app;
 
 var localBucket = config.s3.bucket;
