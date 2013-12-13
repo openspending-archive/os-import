@@ -24,7 +24,7 @@ app.listen(app.get('port'), function() {
 });
 
 app.all('*', function(req, res, next) {
-  if (config.mode === 'testing' && config.apikey) {
+  if (config.mode === 'testing') {
     req.cookies.apikey = config.apikey;
   }
   next();
