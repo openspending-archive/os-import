@@ -35,8 +35,8 @@ app.set('view_env', nunjucks.configure(viewsPath, {express: app}));
 app.listen(app.get('port'), function() { console.log('Listening on ' + app.get('port')); });
 
 app.all('*', function(req, res, next) {
-  if (config.mode === 'testing') {
-    req.cookies.apikey = config.apikey;
+  if (config.get('debug')) {
+    req.cookies.apikey = config.get('apikey');
   }
 
   next();

@@ -8,7 +8,7 @@ nconf.file({file: path.join(path.dirname(path.dirname(__dirname)), '/settings.js
 
  // this is the object that you want to override in your own local config
 nconf.defaults({
-  apikey: process.env.APIKEY,
+  apikey: process.env.APIKEY || 'APIKEY',
 
   appconfig: {
     port: process.env.PORT || 5000,
