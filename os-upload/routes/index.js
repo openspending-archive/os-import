@@ -1,5 +1,4 @@
-var store = require('../lib/datastore.js')
-  , fs = require('fs')
+var fs = require('fs')
   , request = require('request')
   , datapackage = require('datapackage')
   ;

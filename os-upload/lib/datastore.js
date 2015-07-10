@@ -1,18 +1,18 @@
 var knox = require('knox')
-  , config = require('./config.js')
+  , config = require('../config')
   , request = require('request')
   ;
 
 // HACK: should this probably be somewhere nicer
-if (config.mode != 'production') {
+if (!config.get('debug')) {
   knox = require('faux-knox');
 }
   
 exports.client = knox.createClient({
-    key: config.s3.key
-  , secret: config.s3.secret
-  , bucket: config.s3.bucket
-  , region: config.s3.region
+    key: config.get('s3.key')
+  , secret: config.get('s3.secret')
+  , bucket: config.get('s3.bucket')
+  , region: config.get('s3.region')
 });
 
 exports.authorizedToUpload = function(apikey, dataset, cb) {
