@@ -6,16 +6,18 @@ var
   , bodyParser = require('body-parser')
   , flash = require('connect-flash')
   , methodOverride = require('method-override')
+  , nunjucks = require('nunjucks')
   , path = require('path')
   , routes = require('./routes/index.js')
   , session = require('express-session')
   , sessionSecret = process.env.SESSION_SECRET || ['open', 'data', 'spending']
+  , viewsPath = __dirname + '/views'
   ;
 
 // General config
 app.set('config', config);
 app.set('port', config.get('appconfig:port'));
-app.set('views', __dirname + '/views');
+app.set('views', viewsPath);
 
 // Setup middlewares
 app.use([
@@ -26,6 +28,9 @@ app.use([
   session({secret: sessionSecret, resave: true, saveUninitialized: true}),
   flash(),
 ]);
+
+// Templates
+app.set('view_env', nunjucks.configure(viewsPath, {express: app}));
 
 app.listen(app.get('port'), function() { console.log('Listening on ' + app.get('port')); });
 
