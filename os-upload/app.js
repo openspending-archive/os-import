@@ -17,7 +17,6 @@ var
 // General config
 app.set('config', config);
 app.set('port', config.get('appconfig:port'));
-app.set('views', viewsPath);
 
 // Setup middlewares
 app.use([
@@ -30,7 +29,7 @@ app.use([
 ]);
 
 // Templates
-app.set('view_env', nunjucks.configure(viewsPath, {express: app}));
+nunjucks.configure(viewsPath, {express: app});
 
 app.listen(app.get('port'), function() { console.log('Listening on ' + app.get('port')); });
 
