@@ -12,10 +12,12 @@ var express = require('express')
 
 var app = express();
 
+// General config
 app.set('config', config);
 app.set('port', config.get('appconfig:port'));
 app.set('views', __dirname + '/views');
 
+// Setup middlewares
 app.use([
   cookieParser(),
   bodyParser.urlencoded({extended: true}),
@@ -36,6 +38,7 @@ app.all('*', function(req, res, next) {
   next();
 });
 
+// Routes
 app.get('/', routes.home);
 app.post('/', routes.uploadPost);
 app.get('/login', routes.login);
