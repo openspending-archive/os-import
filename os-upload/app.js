@@ -1,16 +1,16 @@
-var express = require('express')
+var 
+    express = require('express')
+  , app = express()
+  , config = require('./config')
+  , cookieParser = require('cookie-parser')
+  , bodyParser = require('body-parser')
   , flash = require('connect-flash')
-  , path = require('path')
   , methodOverride = require('method-override')
+  , path = require('path')
   , routes = require('./routes/index.js')
   , session = require('express-session')
   , sessionSecret = process.env.SESSION_SECRET || ['open', 'data', 'spending']
-  , cookieParser = require('cookie-parser')
-  , bodyParser = require('body-parser')
-  , config = require('./config')
   ;
-
-var app = express();
 
 // General config
 app.set('config', config);
@@ -27,14 +27,13 @@ app.use([
   flash(),
 ]);
 
-app.listen(app.get('port'), function() {
-  console.log("Listening on " + app.get('port'));
-});
+app.listen(app.get('port'), function() { console.log('Listening on ' + app.get('port')); });
 
 app.all('*', function(req, res, next) {
   if (config.mode === 'testing') {
     req.cookies.apikey = config.apikey;
   }
+
   next();
 });
 
@@ -44,5 +43,4 @@ app.post('/', routes.uploadPost);
 app.get('/login', routes.login);
 app.post('/login', routes.loginPost);
 app.post('/api/1/check', routes.checkFile);
-
 exports.app = app;
