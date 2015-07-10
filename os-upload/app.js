@@ -25,7 +25,7 @@ app.use([
   bodyParser.json(),
   methodOverride(),
   session({secret: sessionSecret, resave: true, saveUninitialized: true}),
-  flash(),
+  flash()
 ]);
 
 // Templates
