@@ -1,23 +1,29 @@
 var express = require('express')
+  , flash = require('connect-flash')
   , path = require('path')
-  , nunjucks = require('nunjucks')
+  , methodOverride = require('method-override')
   , routes = require('./routes/index.js')
-  , config = require('./lib/config.js')
+  , session = require('express-session')
+  , sessionSecret = process.env.SESSION_SECRET || ['open', 'data', 'spending']
+  , cookieParser = require('cookie-parser')
+  , bodyParser = require('body-parser')
+  , config = require('./config')
   ;
 
 var app = express();
 
-app.configure(function(){
-  app.set('port', process.env.PORT || 5000);
-  app.set('views', __dirname + '/views');
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.cookieParser('TODO os-upload random secret'));
-  app.use(express.static(path.join(__dirname, 'public')));
-});
+app.set('config', config);
+app.set('port', config.get('appconfig:port'));
+app.set('views', __dirname + '/views');
 
-var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('views'));
-env.express(app);
+app.use([
+  cookieParser(),
+  bodyParser.urlencoded({extended: true}),
+  bodyParser.json(),
+  methodOverride(),
+  session({secret: sessionSecret, resave: true, saveUninitialized: true}),
+  flash(),
+]);
 
 app.listen(app.get('port'), function() {
   console.log("Listening on " + app.get('port'));
