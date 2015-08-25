@@ -6,6 +6,7 @@ var fs = require('fs')
 exports.home = function(req, res) {
   if (! req.cookies.apikey ) {
     res.redirect('/login');
+    return;
   }
   res.render('index.html', {
     title: 'Home'
