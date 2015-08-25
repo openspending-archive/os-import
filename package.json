@@ -31,6 +31,7 @@
   },
   "scripts": {
     "start": "node os-upload/app.js",
+    "start_dev": "DEBUG=true node os-upload/app.js",
     "test": "./node_modules/mocha/bin/mocha test/*.js"
   }
 }
