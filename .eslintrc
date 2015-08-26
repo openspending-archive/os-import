@@ -1,0 +1,37 @@
+{
+	"env": {
+		"browser": true,
+		"node"   : true
+	},
+	
+	"plugins": [
+		"ottofeller"
+	],
+	
+	"rules": {
+		"consistent-return"       : 0,
+		"curly"                   : [2, "multi"],
+		"indent"                  : [2, "tab"],
+		"key-spacing"             : 0,
+		"lines-around-comment"    : [2, {"allowBlockStart": true, "beforeBlockComment": true, "beforeLineComment": true}],
+		"no-mixed-spaces-and-tabs": [1],
+		
+		// Allow spaced alignemnt of "=" and ":"
+		"no-multi-spaces": [2, {exceptions: {"Property": true, "AssignmentExpression": true}}],
+		
+		"no-spaced-func": [1],
+		
+		// We often change the lambda-function context with .bind()
+		"no-extra-parens": 0,
+		
+		"no-unused-expressions"                     : [1],
+		"ottofeller/no-var-on-same-line"            : [2],
+		"ottofeller/newline-around-multiline-blocks": [1],
+		"padded-blocks"                             : [2, "never"],
+		"sort-vars"                                 : [1, {"ignoreCase": true}],
+		"space-before-function-paren"               : [1, "never"],
+		"space-after-keywords"                      : [2, "never"],
+		"strict"                                    : [1, "never"],
+		"quotes"                                    : [1, "single"]
+	}
+}
