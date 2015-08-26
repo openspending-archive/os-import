@@ -73,7 +73,7 @@ gulp.task('app-scripts-watched', function() {
   var
     watcher = watchify(bundler);
 
-  watcher .on('update', function() { scriptPipeline(watcher.bundle(), 'app.min.js'); });
+  watcher.on('update', function() { scriptPipeline(watcher.bundle(), 'app.min.js'); });
   return scriptPipeline(watcher.bundle(), 'app.min.js');
 });
 
