@@ -79,15 +79,15 @@ gulp.task('app-scripts-watched', function() {
 
 // List unused dependencies in stderr.
 gulp.task('check-deps', function() {
-  depcheck(path.resolve('./'), {withoutDev: false, ignoreDirs: ['dist', 'node_modules']}, function(U) {
-    if(!_.isEmpty(U.dependencies))
-      console.error('Unused dependencies: ', U.dependencies.join(', '));
+  depcheck(path.resolve('./'), {withoutDev: false, ignoreDirs: ['dist', 'node_modules']}, function(unused) {
+    if(!_.isEmpty(unused.dependencies))
+      console.error('Unused dependencies: ', unused.dependencies.join(', '));
 
-    if(!_.isEmpty(U.devDependencies))
-      console.error('Unused dev dependencies: ', U.devDependencies.join(', '));
+    if(!_.isEmpty(unused.devDependencies))
+      console.error('Unused dev dependencies: ', unused.devDependencies.join(', '));
 
-    if(!_.isEmpty(U.invalidFiles))
-      console.error('JS files that couldn\'t be parsed: ', U.invalidFiles.join(', '));
+    if(!_.isEmpty(unused.invalidFiles))
+      console.error('JS files that couldn\'t be parsed: ', unused.invalidFiles.join(', '));
   });
 });
 
