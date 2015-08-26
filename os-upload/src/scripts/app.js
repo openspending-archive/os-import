@@ -1,9 +1,9 @@
 var backbone = require('backbone');
-var BigbangView = require('./components/ui/sheisalive');
+var SheIsAliveView = require('./components/ui/sheisalive');
 var Router = require('./router');
 
 
-window.APP = new SheisAliveView({el: '#application'});
+window.APP = new SheIsAliveView({el: '#application'});
 window.ROUTER = new Router();
 
 window.APP.render();
