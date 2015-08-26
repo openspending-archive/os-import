@@ -1,8 +1,11 @@
-var express = require('express');
-var app = express();
+var
+	express = require('express'),
+	path = require('path');
 
+var
+	app = express();
 
-app.use(express.static(__dirname + '/dist'));
-app.get('/', function(request, response){ response.sendFile(__dirname + '/src/templates/index.html'); });
-app.get('*', function(request, response){ response.sendFile(__dirname + '/src/templates/app.html'); });
+app.use(express.static(path.join(__dirname, '/dist')));
+app.get('/', function(request, response) { response.sendFile(path.join(__dirname, '/src/templates/index.html')); });
+app.get('*', function(request, response) { response.sendFile(path.join(__dirname, '/src/templates/app.html')); });
 module.exports = app;

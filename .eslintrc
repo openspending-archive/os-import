@@ -11,7 +11,7 @@
 	"rules": {
 		"consistent-return"       : 0,
 		"curly"                   : [2, "multi"],
-		"indent"                  : [2, "tab"],
+		"indent"                  : [2, 2],
 		"key-spacing"             : 0,
 		"lines-around-comment"    : [2, {"allowBlockStart": true, "beforeBlockComment": true, "beforeLineComment": true}],
 		"no-mixed-spaces-and-tabs": [1],

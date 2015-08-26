@@ -1,6 +1,7 @@
-var app = require('./app');
-var port = process.env.PORT || 3000;
+var
+	app = require('./app');
 
-var server = app.listen(port, function() {
-  console.log('OS-upload is being served at :' + port);
-});
+var
+	port = process.env.PORT || 3000;
+
+app.listen(port, function() { console.log('OS-upload is being served at :' + port); });
