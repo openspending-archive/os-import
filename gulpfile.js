@@ -10,10 +10,14 @@ var
   concat = require('gulp-concat'),
   depcheck = require('depcheck'),
   gulp = require('gulp'),
+  less = require('gulp-less'),
   minifyCss = require('gulp-minify-css'),
   path = require('path'),
+  prefixer = require('gulp-autoprefixer'),
+  rename = require('gulp-rename'),
   resolve = require('resolve'),
   source = require('vinyl-source-stream'),
+  sourcemaps = require('gulp-sourcemaps'),
   streamqueue = require('streamqueue'),
   uglify = require('gulp-uglify'),
   watchify = require('watchify');
@@ -106,9 +110,14 @@ gulp.task('landing-scripts', function() {
 
 // Provide frontend styles as a single bundle.
 gulp.task('styles', function() {
-  return streamqueue({objectMode: true}, gulp.src(stylesDir + '/app.css'))
-    .pipe(concat('app.min.css'))
+  // Style files dir structure may be comlicated, pick manually files to be compiled
+  gulp.src([path.join(stylesDir, 'app.less'), path.join(stylesDir, 'landing.less')])
+    .pipe(sourcemaps.init())
+    .pipe(less())
+    .pipe(prefixer({browsers: ['last 4 versions']}))
+    .pipe(sourcemaps.write())
     .pipe(minifyCss({compatibility: 'ie8'}))
+    .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(distDir));
 });
 
