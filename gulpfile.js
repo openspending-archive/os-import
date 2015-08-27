@@ -7,7 +7,6 @@ var
 
   /* eslint-enable no-unused-vars */
   buffer = require('vinyl-buffer'),
-  concat = require('gulp-concat'),
   depcheck = require('depcheck'),
   gulp = require('gulp'),
   less = require('gulp-less'),
@@ -18,7 +17,6 @@ var
   resolve = require('resolve'),
   source = require('vinyl-source-stream'),
   sourcemaps = require('gulp-sourcemaps'),
-  streamqueue = require('streamqueue'),
   uglify = require('gulp-uglify'),
   watchify = require('watchify');
 
