@@ -91,6 +91,10 @@ gulp.task('check-deps', function() {
   });
 });
 
+gulp.task('copy-static', function() {
+  return gulp.src([path.join(baseDir, 'src', 'static', '/**/*')]).pipe(gulp.dest(distDir));
+});
+
 gulp.task('landing-scripts', function() {
   return scriptPipeline(browserify({
     cache       : {},
