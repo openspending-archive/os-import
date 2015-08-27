@@ -1,19 +1,23 @@
 var
   _ = require('underscore'),
   browserify = require('browserify'),
+
+  /* eslint-disable no-unused-vars */
   browserifyHandlebars = require('browserify-handlebars'),
+
+  /* eslint-enable no-unused-vars */
   buffer = require('vinyl-buffer'),
   concat = require('gulp-concat'),
   depcheck = require('depcheck'),
-  ghPages = require('gulp-gh-pages'),
-  glob = require('glob').sync,
   gulp = require('gulp'),
-  historyApiFallback = require('connect-history-api-fallback'),
+  less = require('gulp-less'),
   minifyCss = require('gulp-minify-css'),
   path = require('path'),
+  prefixer = require('gulp-autoprefixer'),
   rename = require('gulp-rename'),
   resolve = require('resolve'),
   source = require('vinyl-source-stream'),
+  sourcemaps = require('gulp-sourcemaps'),
   streamqueue = require('streamqueue'),
   uglify = require('gulp-uglify'),
   watchify = require('watchify');
@@ -59,10 +63,10 @@ function scriptPipeline(bundle, outfile, options) {
 // Provide frontend dependencies as a single bundle.
 gulp.task('vendor-scripts', function() {
   var
-    bundler = browserify({});
+    vendorBundler = browserify({});
 
-  frontendDependencies.forEach(function(id) { bundler.require(resolve.sync(id), {expose: id}); });
-  return scriptPipeline(bundler.bundle(), 'vendor.min.js', {uglify: true});
+  frontendDependencies.forEach(function(id) { vendorBundler.require(resolve.sync(id), {expose: id}); });
+  return scriptPipeline(vendorBundler.bundle(), 'vendor.min.js', {uglify: true});
 });
 
 gulp.task('app-scripts', function() {
@@ -91,13 +95,31 @@ gulp.task('check-deps', function() {
   });
 });
 
+gulp.task('copy-static', function() {
+  return gulp.src([path.join(baseDir, 'src', 'static', '/**/*')]).pipe(gulp.dest(distDir));
+});
+
+gulp.task('landing-scripts', function() {
+  return scriptPipeline(browserify({
+    cache       : {},
+    entries     : [scriptsDir + '/components/ui/landing.js'],
+    fullPaths   : true,
+    packageCache: {}
+  }).bundle(), 'landing.min.js', {uglify: true});
+});
+
 // Provide frontend styles as a single bundle.
 gulp.task('styles', function() {
-  return streamqueue({objectMode: true}, gulp.src(stylesDir + '/app.css'))
-    .pipe(concat('app.min.css'))
+  // Style files dir structure may be comlicated, pick manually files to be compiled
+  gulp.src([path.join(stylesDir, 'app.less'), path.join(stylesDir, 'landing.less')])
+    .pipe(sourcemaps.init())
+    .pipe(less())
+    .pipe(prefixer({browsers: ['last 4 versions']}))
+    .pipe(sourcemaps.write())
     .pipe(minifyCss({compatibility: 'ie8'}))
+    .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(distDir));
 });
 
-gulp.task('default', ['vendor-scripts', 'app-scripts', 'styles']);
-gulp.task('dev', ['vendor-scripts', 'app-scripts-watched', 'styles']);
+gulp.task('default', ['vendor-scripts', 'app-scripts', 'landing-scripts', 'styles', 'copy-static']);
+gulp.task('dev', ['vendor-scripts', 'app-scripts-watched', 'landing-scripts', 'styles', 'copy-static']);
