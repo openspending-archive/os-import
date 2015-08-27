@@ -121,5 +121,5 @@ gulp.task('styles', function() {
     .pipe(gulp.dest(distDir));
 });
 
-gulp.task('default', ['vendor-scripts', 'app-scripts', 'landing-scripts', 'styles']);
-gulp.task('dev', ['vendor-scripts', 'app-scripts-watched', 'landing-scripts', 'styles']);
+gulp.task('default', ['vendor-scripts', 'app-scripts', 'landing-scripts', 'styles', 'copy-static']);
+gulp.task('dev', ['vendor-scripts', 'app-scripts-watched', 'landing-scripts', 'styles', 'copy-static']);
