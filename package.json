@@ -60,7 +60,7 @@
   },
   "scripts": {
     "build": "gulp",
-    "lint_js": "eslint gulpfile.js os-upload/src",
+    "lint_js": "eslint -c ./.eslintrc gulpfile.js os-upload/src",
     "test": "mocha tests --recursive --reporter spec",
     "start": "node os-upload",
     "start_dev": "gulp dev & node os-upload",
