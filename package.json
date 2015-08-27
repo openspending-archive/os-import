@@ -1,5 +1,5 @@
 {
-  "name": "os-upload",
+  "name": "os-import",
   "version": "0.0.1",
   "description": "A web UI for creating, editing and validating Data Packages.",
   "keywords": [
@@ -65,10 +65,10 @@
   },
   "scripts": {
     "build": "gulp",
-    "lint_js": "eslint -c ./.eslintrc gulpfile.js os-upload/src",
+    "lint_js": "eslint -c ./.eslintrc gulpfile.js os-import/src",
     "test": "mocha tests --recursive --reporter spec",
-    "start": "node os-upload",
-    "start_dev": "gulp dev & node os-upload",
+    "start": "node os-import",
+    "start_dev": "gulp dev & node os-import",
     "deploy": "git push heroku master"
   },
   "author": {
@@ -89,10 +89,10 @@
     }
   ],
   "homepage": "",
-  "bugs": "https://github.com/openspending/os-upload/issues",
+  "bugs": "https://github.com/openspending/os-import/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openspending/os-upload.git"
+    "url": "https://github.com/openspending/os-import.git"
   },
   "license": "MIT"
 }

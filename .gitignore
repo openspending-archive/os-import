@@ -9,4 +9,4 @@ __pycache__/
 bower_components/*
 node_modules/*
 .puablish/
-os-upload/dist
+os-import/dist

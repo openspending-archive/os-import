@@ -23,7 +23,7 @@ var
   watchify = require('watchify');
 
 var
-  baseDir = './os-upload',
+  baseDir = './os-import',
   distDir = baseDir + '/dist',
   frontendDependencies = _.keys(require('./package.json').dependencies),
 

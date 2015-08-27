@@ -2,7 +2,7 @@ var
   $ = require('jquery'),
   _ = require('underscore'),
   Browser = require('zombie'),
-  app = require('../os-upload/app'),
+  app = require('../os-import/app'),
   assert = require('chai').assert;
 
 process.env.NODE_ENV = 'test';
