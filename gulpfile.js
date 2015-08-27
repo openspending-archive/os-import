@@ -91,6 +91,15 @@ gulp.task('check-deps', function() {
   });
 });
 
+gulp.task('landing-scripts', function() {
+  return scriptPipeline(browserify({
+    cache       : {},
+    entries     : [scriptsDir + '/components/ui/landing.js'],
+    fullPaths   : true,
+    packageCache: {}
+  }).bundle(), 'landing.min.js', {uglify: true});
+});
+
 // Provide frontend styles as a single bundle.
 gulp.task('styles', function() {
   return streamqueue({objectMode: true}, gulp.src(stylesDir + '/app.css'))
@@ -99,5 +108,5 @@ gulp.task('styles', function() {
     .pipe(gulp.dest(distDir));
 });
 
-gulp.task('default', ['vendor-scripts', 'app-scripts', 'styles']);
-gulp.task('dev', ['vendor-scripts', 'app-scripts-watched', 'styles']);
+gulp.task('default', ['vendor-scripts', 'app-scripts', 'landing-scripts', 'styles']);
+gulp.task('dev', ['vendor-scripts', 'app-scripts-watched', 'landing-scripts', 'styles']);

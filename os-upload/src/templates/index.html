@@ -179,22 +179,7 @@
   </div>
 
   <!-- Footer Scripts -->
-  <!-- Requires jQuery and Bootstrap -->
-  <script src="vendor.min.js"></script>
-  
   <!-- Just visual representation -->
-  <script>$(function() {
-    function adjustWidth() { $('.promo__arrow-wrapper').width($('.promo__main').width()); }
-
-    $('[data-delay]').each(function() {
-      setTimeout(
-        (function() { $(this).addClass('is-animated'); }).bind(this),
-        $(this).attr('data-delay')
-      );
-    });
-
-    adjustWidth();
-    $(window).on('resize', adjustWidth);
-  });</script>
+  <script src="landing.min.js"></script>
 </body>
 </html>
