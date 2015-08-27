@@ -8,4 +8,5 @@ __pycache__/
 *.py[cod]
 bower_components/*
 node_modules/*
-.publish/
+.puablish/
+os-upload/dist
