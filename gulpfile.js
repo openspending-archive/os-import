@@ -1,17 +1,17 @@
 var
   _ = require('underscore'),
   browserify = require('browserify'),
+
+  /* eslint-disable no-unused-vars */
   browserifyHandlebars = require('browserify-handlebars'),
+
+  /* eslint-enable no-unused-vars */
   buffer = require('vinyl-buffer'),
   concat = require('gulp-concat'),
   depcheck = require('depcheck'),
-  ghPages = require('gulp-gh-pages'),
-  glob = require('glob').sync,
   gulp = require('gulp'),
-  historyApiFallback = require('connect-history-api-fallback'),
   minifyCss = require('gulp-minify-css'),
   path = require('path'),
-  rename = require('gulp-rename'),
   resolve = require('resolve'),
   source = require('vinyl-source-stream'),
   streamqueue = require('streamqueue'),
@@ -59,10 +59,10 @@ function scriptPipeline(bundle, outfile, options) {
 // Provide frontend dependencies as a single bundle.
 gulp.task('vendor-scripts', function() {
   var
-    bundler = browserify({});
+    vendorBundler = browserify({});
 
-  frontendDependencies.forEach(function(id) { bundler.require(resolve.sync(id), {expose: id}); });
-  return scriptPipeline(bundler.bundle(), 'vendor.min.js', {uglify: true});
+  frontendDependencies.forEach(function(id) { vendorBundler.require(resolve.sync(id), {expose: id}); });
+  return scriptPipeline(vendorBundler.bundle(), 'vendor.min.js', {uglify: true});
 });
 
 gulp.task('app-scripts', function() {
