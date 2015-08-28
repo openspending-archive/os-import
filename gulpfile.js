@@ -21,9 +21,14 @@ var
   watchify = require('watchify');
 
 var
+  backendDependencies = ['express', 'node-ssi'],
   baseDir = './os-import',
   distDir = baseDir + '/dist',
-  frontendDependencies = _.keys(require('./package.json').dependencies),
+
+  frontendDependencies = _.chain(require('./package.json').dependencies)
+    .omit(backendDependencies)
+    .keys()
+    .value(),
 
   /* eslint-disable sort-vars */
   srcDir = baseDir + '/src',
