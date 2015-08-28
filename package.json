@@ -25,6 +25,7 @@
     "glob": "^5.0.6",
     "goodtables": "^0.1.0",
     "jquery": "^2.1.4",
+    "lodash": "^3.10.1",
     "omit-empty": "^0.3.1",
     "resolve": "^1.1.6",
     "superagent-bluebird-promise": "^2.0.2",

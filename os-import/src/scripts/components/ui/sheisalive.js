@@ -3,8 +3,14 @@ var
   backbone = require('backbone'),
 
   /* eslint-disable no-unused-vars */
-  backboneBase = require('backbone-base');
+  backboneBase = require('backbone-base')
+
+  /* eslint-disable no-unused-vars */
+  CreateDpView = require('./create-dp');
 
 module.exports = backbone.BaseView.extend({
-  render: function() { return this; }
+  render: function() {
+  	this.layout.createDp = new CreateDpView();
+  	return this;
+  }
 });
