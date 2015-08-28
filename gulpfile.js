@@ -114,7 +114,7 @@ gulp.task('landing-scripts', function() {
 // Provide frontend styles as a single bundle.
 gulp.task('styles', function() {
   // Style files dir structure may be comlicated, pick manually files to be compiled
-  gulp.src([path.join(stylesDir, 'app.less'), path.join(stylesDir, 'landing.less')])
+  gulp.src([path.join(stylesDir, 'styles.less')])
     .pipe(sourcemaps.init())
     .pipe(less())
     .pipe(prefixer({browsers: ['last 4 versions']}))
