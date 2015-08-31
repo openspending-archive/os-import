@@ -6,5 +6,10 @@ var
 
 /* eslint-enable no-unused-vars */
 module.exports = backbone.BaseView.extend({
-	render: function() { return this; }
+  render: function() {
+    this.$el.html(this.template({}));
+    return this;
+  },
+
+  template: window.TEMPLATES['create-dp/upload.hbs']
 });
