@@ -52,9 +52,11 @@
       <div data-id="upload" class="input input--doudle"></div>
 
       <div class="input">
-        <button class="form-button form-button--big form-button--loading">
+        <!-- .form-button--loading to activate loading state -->
+        <button data-id="submit" class="form-button form-button--big">
           <span class="form-button__spinner"><svg><use xlink:href="#spinner"></use></svg></span>
-          Checking files
+          <span data-id="upload-in-progress" hidden>Checking files</span>
+          <span data-id="create">Create</span>
         </button>
       </div>
     </form>
