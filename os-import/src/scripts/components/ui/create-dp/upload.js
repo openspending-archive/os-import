@@ -1,13 +1,9 @@
+require('backbone-base');
 require('fileapi');
 
 var
   _ = require('lodash'),
   backbone = require('backbone'),
-
-  /* eslint-disable no-unused-vars */
-  backboneBase = require('backbone-base'),
-
-  /* eslint-enable no-unused-vars */
   csv = require('csv'),
   jtsInfer = require('json-table-schema').infer,
   request = require('superagent-bluebird-promise'),

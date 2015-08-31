@@ -1,11 +1,8 @@
+require('backbone-base');
+
 var
   _ = require('lodash'),
   backbone = require('backbone'),
-
-  /* eslint-disable no-unused-vars */
-  backboneBase = require('backbone-base'),
-
-  /* eslint-enable no-unused-vars */
   FormView = require('./form'),
   HeaderView = require('./header');
 

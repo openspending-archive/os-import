@@ -1,11 +1,8 @@
 // http://www.youtube.com/watch?v=OiBtx18jc4Q
+require('backbone-base');
+
 var
   backbone = require('backbone'),
-
-  /* eslint-disable no-unused-vars */
-  backboneBase = require('backbone-base'),
-
-  /* eslint-disable no-unused-vars */
   CreateDpView = require('./create-dp');
 
 module.exports = backbone.BaseView.extend({
