@@ -10,19 +10,19 @@ var
   /* eslint-enable no-unused-vars */
   csv = require('csv'),
   jtsInfer = require('json-table-schema').infer,
-  Promise = require('bluebird'),
   request = require('superagent-bluebird-promise'),
   validator = require('validator');
 
 module.exports = backbone.BaseView.extend({
   events: {
     'change [data-id=file]': function(event) {
-       this.trigger('upload-started');
+      this.trigger('upload-started');
 
       FileAPI.readAsText(FileAPI.getFiles(event.currentTarget)[0], (function(fileEvent) {
-        if(fileEvent.type === 'load') {
+        if(fileEvent.type === 'load')
           this.parseCSV(fileEvent.target.name, fileEvent.result);
-        } else if(fileEvent.type !== 'progress') {
+        
+        else if(fileEvent.type !== 'progress') {
           this.trigger('upload-error');
 
           // TODO Implement upload errors rendering
