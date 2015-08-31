@@ -32,7 +32,7 @@
   }
 
   label {
-    font-size: 28px;
+    font-size: 20px;
     font-weight: 400;
   }
 
@@ -43,11 +43,11 @@
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 90px;
-    line-height: 90px;
-    padding-left: 30px;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 15px;
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-    font-size: 32px;
+    font-size: 24px;
 
     &:focus {
       outline: none;
@@ -59,8 +59,8 @@
     top: 0;
     right: 0;
     color: #fff;
-    font-size: 22px;
-    line-height: 36px;
+    font-size: 14px;
+    line-height: 22px;
     padding-left: 10px;
     padding-right: 10px;
     background-color: @green;
@@ -72,18 +72,18 @@
     z-index: 0;
     display: block;
     width: 100%;
-    height: 90px;
-    line-height: 90px;
-    padding-left: 30px;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 15px;
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-    font-size: 32px;
+    font-size: 24px;
   }
 
   &__container {
     display: flex;
     align-items: center;
     position: relative;
-    height: 90px;
+    height: 60px;
     border-radius: 6px;
     border: 2px solid @green;
     background-color: #fff;
@@ -101,7 +101,7 @@
     .form-button {
       position: relative;
       z-index: 3;
-      margin-left: 15px;
+      margin-left: 10px;
       flex-shrink: 0;
     }
   }
@@ -109,14 +109,14 @@
   &__status {
     display: flex;
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     right: 10px;
     z-index: 2;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     color: #fff;
-    font-size: 30px;
+    font-size: 26px;
 
     i {
       margin: auto;
@@ -132,8 +132,8 @@
       background-color: #949495;
 
       svg {
-        width: 35px;
-        height: 35px;
+        width: 25px;
+        height: 25px;
         animation: spinner 1s infinite linear;
       }
 
@@ -162,9 +162,10 @@
     .input__separator {
       width: 20%;
       text-align: center;
-      font-size: 28px;
-      line-height: 90px;
+      font-size: 20px;
+      line-height: 55px;
       color: #949495;
+      white-space: nowrap;
 
       &::after,
       &::before {
@@ -188,7 +189,7 @@
 
   &__remove {
     position: absolute;
-    bottom: 25px;
+    bottom: 10px;
     right: -60px;
     width: 50px;
     height: 50px;
@@ -212,8 +213,9 @@
     margin-top: -4px;
     left: 0;
     right: 0;
-    font-size: 24px;
-    line-height: 42px;
+    font-size: 14px;
+    line-height: 26px;
+    padding-top: 4px;
     padding-left: 10px;
     border-radius: 0 0 5px 5px;
     color: #fff;
@@ -231,9 +233,9 @@
 
 .form-button {
   border-radius: 6px;
-  height: 60px;
-  line-height: 60px;
-  font-size: 24px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 20px;
   text-transform: uppercase;
   background-color: @green;
   padding-left: 20px;
@@ -253,13 +255,13 @@
     display: none;
     width: 35px;
     height: 35px;
-    padding-top: 7px;
+    padding-top: 5px;
     margin-right: 5px;
     vertical-align: top;
 
     svg {
-      width: 35px;
-      height: 35px;
+      width: 25px;
+      height: 25px;
       animation: spinner 1s infinite linear;
     }
   }
