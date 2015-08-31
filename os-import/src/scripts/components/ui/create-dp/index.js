@@ -20,7 +20,7 @@ module.exports = backbone.BaseView.extend({
   },
 
   render: function() {
-    this.layout.form = new FormView();
+    this.layout.form = (new FormView({el: window.APP.$('#create-dp-form')})).render();
     this.layout.header = (new HeaderView({el: window.APP.$('#create-dp-header')})).render();
     this.layout.upload = (new UploadView()).render();
     return this;
