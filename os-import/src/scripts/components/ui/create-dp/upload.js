@@ -43,6 +43,8 @@ module.exports = backbone.BaseView.extend({
         return false;
       }
 
+      this.trigger('upload-started');
+
       // TODO Filter non-csv data with appropriate error message
       // Download data file and trigger event to let parent form to catch it up
       request.get(url)
