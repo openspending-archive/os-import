@@ -1,11 +1,14 @@
 require('backbone-base');
+require('backbone-forms');
 
 var
   _ = require('lodash'),
   backbone = require('backbone'),
+  DataFilesEditor = require('./data-files-editor'),
+  NameEditor = require('./name-editor'),
   UploadView = require('./upload');
 
-module.exports = backbone.BaseView.extend({
+module.exports = backbone.Form.extend(backbone.BaseView.prototype).extend({
   activate: function(state) {
     backbone.BaseView.prototype.activate.call(this, state);
 
@@ -38,6 +41,11 @@ module.exports = backbone.BaseView.extend({
     this.$el.html(this.template({}));
     this.layout.upload = (new UploadView({el: this.$('[data-id=upload]'), parent: this})).render();
     return this;
+  },
+
+  schema: {
+    title: {label: 'Name your Data Package', type: NameEditor, validator: ['required'], urlBase: 'https://openspending.org/'},
+    files: {type: DataFilesEditor, validator: ['required']}
   },
 
   template: window.TEMPLATES['create-dp/form.hbs']

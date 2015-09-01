@@ -68,7 +68,15 @@ gulp.task('vendor-scripts', function() {
   var
     vendorBundler = browserify({});
 
-  frontendDependencies.forEach(function(id) { vendorBundler.require(resolve.sync(id), {expose: id}); });
+  frontendDependencies.forEach(function(id) {
+    if(id === 'backbone-forms')
+      // Avoid AMD version of backbone-forms
+      vendorBundler.require(resolve.sync(id + '/distribution/backbone-forms'), {expose: id});
+
+    else
+      vendorBundler.require(resolve.sync(id), {expose: id});
+  });
+
   return scriptPipeline(vendorBundler.bundle(), 'vendor.min.js', {uglify: true});
 });
 
