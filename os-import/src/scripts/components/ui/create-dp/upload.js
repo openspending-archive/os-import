@@ -22,6 +22,8 @@ module.exports = backbone.BaseView.extend({
       var
         url = this.$('[data-id=link]').val();
 
+      this.$('[data-id=link]').val('');
+
       if(event.keyCode !== 13)
         return true;
 
