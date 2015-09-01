@@ -16,8 +16,9 @@ module.exports = backbone.BaseView.extend({
   },
 
   render: function() {
-    this.layout.form = (new FormView({el: window.APP.$('#create-dp-form')})).render();
+    this.layout.form = (new FormView()).render();
     this.layout.header = (new HeaderView({el: window.APP.$('#create-dp-header')})).render();
+    window.APP.$('#create-dp-form').append(this.layout.form.el);
     return this;
   }
 });

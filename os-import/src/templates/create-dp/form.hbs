@@ -1,54 +1,8 @@
 <div class="container">
   <div class="upload-form">
     <form action="/">
-      <div class="input">
-        <label for="package-name0">Name your Data Package</label>
-
-        <div class="input__container">
-          <div class="input__inline-label">
-            https://openspending.org/my-data-package
-          </div>
-
-          <input type="text" name="package-name0" id="package-name0" placeholder="My Data Package">
-        </div>
-      </div>
-
-      <div class="input">
-        <label for="package-name0">Add one or more data file(s)</label>
-
-        <div class="input__container">
-          <button type="button" class="form-button form-button--inline">Replace file</button>
-          <div class="input__file-label">my_first_file.csv</div>
-          <input type="file" name="package-name0" id="package-name0" value="my_first_file.csv" disabled>
-        </div>
-
-        <div class="input__status input__status--done"><i class="fa fa-check"></i></div>
-        <button type="button" class="input__remove"><i class="fa fa-times"></i></button>
-      </div>
-
-      <div class="input">
-        <div class="input__error">We encountered some problems with this file. Click here for a breakdown of the issues.</div>
-
-        <div class="input__container">
-          <div class="input__file-label">http://my-website/my_second_file.xls</div>
-          <input type="file" name="package-name0" id="package-name0" value="http://my-website/my_second_file.xls">
-        </div>
-
-        <div class="input__status input__status--fail"><i class="fa fa-exclamation"></i></div>
-        <button type="button" class="input__remove"><i class="fa fa-times"></i></button>
-      </div>
-
-      <div class="input">
-        <div class="input__status input__status--loading"><svg viewBox="0 0 36 36"><use xlink:href="#spinner"></use></svg></div>
-
-        <div class="input__container">
-          <div class="input__file-label">http://my-website/my_third_file.csv</div>
-          <input type="file" name="package-name0" id="package-name0" value="http://my-website/my_second_file.xls" disabled>
-        </div>
-
-        <button type="button" class="input__remove"><i class="fa fa-times"></i></button>
-      </div>
-
+      <div data-editors="name"></div>
+      <div data-editors="files"></div>
       <div data-id="upload" class="input input--doudle"></div>
 
       <div class="input">

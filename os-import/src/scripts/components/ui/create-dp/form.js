@@ -8,7 +8,7 @@ var
   NameEditor = require('./name-editor'),
   UploadView = require('./upload');
 
-module.exports = backbone.Form.extend(backbone.BaseView.prototype).extend({
+module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   activate: function(state) {
     backbone.BaseView.prototype.activate.call(this, state);
 
@@ -27,6 +27,11 @@ module.exports = backbone.Form.extend(backbone.BaseView.prototype).extend({
     return this;
   },
 
+  initialize: function(options) {
+    backbone.BaseView.prototype.initialize.call(this, options);
+    backbone.Form.prototype.initialize.call(this, options);
+  },
+
   loading: function(state) {
     var
       isLoading = _.isUndefined(state) || state;
@@ -38,13 +43,13 @@ module.exports = backbone.Form.extend(backbone.BaseView.prototype).extend({
   },
 
   render: function() {
-    this.$el.html(this.template({}));
+    backbone.Form.prototype.render.call(this);
     this.layout.upload = (new UploadView({el: this.$('[data-id=upload]'), parent: this})).render();
     return this;
   },
 
   schema: {
-    title: {label: 'Name your Data Package', type: NameEditor, validator: ['required'], urlBase: 'https://openspending.org/'},
+    name: {label: 'Name your Data Package', type: NameEditor, validator: ['required'], urlBase: 'https://openspending.org/'},
     files: {type: DataFilesEditor, validator: ['required']}
   },
 
