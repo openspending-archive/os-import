@@ -1,10 +1,7 @@
-<label for="package-name0">Add one or more data file(s)</label>
-
 <div class="input__container">
   <button type="button" class="form-button form-button--inline">Replace file</button>
-  <div class="input__file-label">my_first_file.csv</div>
-  <input type="file" name="package-name0" id="package-name0" value="my_first_file.csv" disabled>
+  <div class="input__file-label">{{ name }}</div>
 </div>
 
 <div class="input__status input__status--done"><i class="fa fa-check"></i></div>
-<button type="button" class="input__remove"><i class="fa fa-times"></i></button>
+<button data-id="remove" type="button" class="input__remove"><i class="fa fa-times"></i></button>

@@ -19,8 +19,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     this.layout.upload.on('upload-started', this.loading, this);
 
     this.layout.upload.on('parse-complete', function(csvData) {
-      // TODO Apply data to the form
-      console.log(csvData);
+      this.fields.files.setValue(this.fields.files.getValue().concat(csvData))
       this.loading(false);
     }, this);
 
