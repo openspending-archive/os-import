@@ -14,7 +14,19 @@ module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototy
   },
 
   ItemView: backbone.BaseView.extend({
-    events: {'click [data-id=remove]': function() { this.parent.collection.remove(this.model); }},
+    attributes: {class: 'input'},
+
+    events: {
+      'click [data-id=replace]': function() { this.$('[data-id=file]').trigger('click'); },
+      'click [data-id=remove]': function() { this.parent.collection.remove(this.model); },
+
+      // Replace current file and upload new on when Replace button clicked
+      'change [data-id=file]': function(event) {
+        this.parent.collection.remove(this.model);
+        this.parent.schema.uploader(FileAPI.getFiles(event.currentTarget)[0]);
+      }
+    },
+
     render: function() { this.$el.html(this.template(this.model.toJSON())); return this; },
     template: window.TEMPLATES['create-dp/data-file-editor.hbs']
   }),

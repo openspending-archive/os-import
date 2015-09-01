@@ -1,6 +1,7 @@
 <div class="input__container">
-  <button type="button" class="form-button form-button--inline">Replace file</button>
+  <button data-id="replace" type="button" class="form-button form-button--inline">Replace file</button>
   <div class="input__file-label">{{ name }}</div>
+  <input data-id="file" type="file" name="file" accept="text/csv" hidden>
 </div>
 
 <div class="input__status input__status--done"><i class="fa fa-check"></i></div>

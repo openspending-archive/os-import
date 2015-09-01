@@ -12,21 +12,8 @@ var
 module.exports = backbone.BaseView.extend({
   events: {
     'change [data-id=file]': function(event) {
-      this.trigger('upload-started');
-
-      FileAPI.readAsText(FileAPI.getFiles(event.currentTarget)[0], (function(fileEvent) {
-        if(fileEvent.type === 'load')
-          this.parseCSV(fileEvent.target.name, fileEvent.result);
-        
-        else if(fileEvent.type !== 'progress') {
-          this.trigger('upload-error');
-
-          // TODO Implement upload errors rendering
-          this.setError('File upload failed');
-        }
-
-        this.$(event.currentTarget).val('');
-      }).bind(this));
+      this.uploadLocalFile(FileAPI.getFiles(event.currentTarget)[0]);
+      this.$(event.currentTarget).val('');
     },
 
     'click [data-id=select-file]': function() { this.$('[data-id=file]').trigger('click'); },
@@ -75,5 +62,23 @@ module.exports = backbone.BaseView.extend({
   },
 
   render: function() { this.$el.html(this.template({})); return this; },
-  template: window.TEMPLATES['create-dp/upload.hbs']
+  template: window.TEMPLATES['create-dp/upload.hbs'],
+
+  uploadLocalFile: function(file) {
+    this.trigger('upload-started');
+
+    FileAPI.readAsText(file, (function(fileEvent) {
+      if(fileEvent.type === 'load')
+        this.parseCSV(fileEvent.target.name, fileEvent.result);
+      
+      else if(fileEvent.type !== 'progress') {
+        this.trigger('upload-error');
+
+        // TODO Implement upload errors rendering
+        this.setError('File upload failed');
+      }
+    }).bind(this));
+
+    return this;
+  }
 });

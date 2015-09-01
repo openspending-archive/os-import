@@ -49,7 +49,14 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
 
   schema: {
     name: {label: 'Name your Data Package', type: NameEditor, validator: ['required'], urlBase: 'https://openspending.org/'},
-    files: {type: DataFilesEditor, validator: ['required']}
+
+    files: {
+      type: DataFilesEditor,
+      validator: ['required'],
+
+      // Incapsulate editor upload routine in param to ensure generic use
+      uploader: function(file) { return window.APP.layout.createDp.layout.form.layout.upload.uploadLocalFile(file); }
+    }
   },
 
   template: window.TEMPLATES['create-dp/form.hbs']
