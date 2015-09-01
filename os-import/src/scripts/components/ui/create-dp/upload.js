@@ -54,9 +54,10 @@ module.exports = backbone.BaseView.extend({
       }
 
       this.trigger('parse-complete', {
-        data: data,
-        name: name,
-        schema: jtsInfer(data[0], _.rest(data))
+        data  : data,
+        name  : name,
+        schema: jtsInfer(data[0], _.rest(data)),
+        text  : string
       });
     }).bind(this));
 

@@ -2,15 +2,15 @@ require('backbone-base');
 require('backbone-forms');
 
 var
+  _ = require('lodash'),
   backbone = require('backbone');
 
 module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototype).extend({
-  getValue: function() { return this.collection.toJSON(); },
+  getValue: function() { return (this.collection && this.collection.length) ? this.collection.toJSON() : ''; },
 
   initialize: function(options) {
     backbone.BaseListView.prototype.initialize.call(this, options);
     backbone.Form.editors.Base.prototype.initialize.call(this, options);
-    this.collection = new backbone.Collection();
   },
 
   ItemView: backbone.BaseView.extend({
@@ -28,9 +28,27 @@ module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototy
     },
 
     render: function() { this.$el.html(this.template(this.model.toJSON())); return this; },
-    template: window.TEMPLATES['create-dp/data-file-editor.hbs']
+    template: window.TEMPLATES['create-dp/data-file-editor-item.hbs']
   }),
 
+  render: function() { this.$el.html(this.template()); return this; },
+
   // Passed with array of objects
-  setValue: function(files) { this.reset(new backbone.Collection(files)); return this; }
+  setValue: function(files) {
+    this.$('[data-id="generic-error"]').prop('hidden', true).html('');
+    this.reset(new backbone.Collection(files));
+    return this;
+  },
+
+  template: window.TEMPLATES['create-dp/data-file-editor.hbs'],
+
+  validate: function() {
+    var
+      error = backbone.Form.editors.Base.prototype.validate.call(this);
+
+    if(!_.isEmpty(error)) {
+      this.$('[data-id="generic-error"]').prop('hidden', false).html(error.message);
+      return error;
+    }
+  }
 });

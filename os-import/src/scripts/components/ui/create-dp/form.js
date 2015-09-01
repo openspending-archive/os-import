@@ -19,11 +19,15 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     this.layout.upload.on('upload-started', this.loading, this);
 
     this.layout.upload.on('parse-complete', function(csvData) {
-      this.fields.files.setValue(this.fields.files.getValue().concat(csvData))
+      this.fields.files.setValue((this.fields.files.getValue() || []).concat(csvData))
       this.loading(false);
     }, this);
 
     return this;
+  },
+
+  events: {
+    'click [data-id=create]': function() { this.validate(); return false; }
   },
 
   initialize: function(options) {
@@ -48,11 +52,11 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   },
 
   schema: {
-    name: {label: 'Name your Data Package', type: NameEditor, validator: ['required'], urlBase: 'https://openspending.org/'},
+    name: {label: 'Name your Data Package', type: NameEditor, validators: ['required'], urlBase: 'https://openspending.org/'},
 
     files: {
       type: DataFilesEditor,
-      validator: ['required'],
+      validators: [{type: 'required', message: 'You need to upload at least one data file'}],
 
       // Incapsulate editor upload routine in param to ensure generic use
       uploader: function(file) { return window.APP.layout.createDp.layout.form.layout.upload.uploadLocalFile(file); }
