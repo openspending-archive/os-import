@@ -24,7 +24,6 @@ module.exports = backbone.BaseListView.extend(BaseModalView.prototype).extend({
 
   reset: function(errors) {
     this.errors = errors;
-    console.log(errors);
 
     backbone.BaseListView.prototype.reset.call(this, new backbone.Collection(
       _.map(this.errors, function(error) { return _.values(error)[0]; })
