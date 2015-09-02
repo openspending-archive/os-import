@@ -54,10 +54,14 @@ module.exports = backbone.BaseView.extend({
   parseCSV: function(name, string) {
     csv.parse(string, (function(error, data) {
       var
+        // https://github.com/gvidon/backbone-base/issues/2
+        id = [name, (new Date()).getTime()].join(''),
+
         schema;
 
       if(error) {
         this.trigger('parse-complete', {
+          id: id,
           name: name,
           parseError: {message: error}
         });
@@ -74,6 +78,7 @@ module.exports = backbone.BaseView.extend({
 
           this.trigger('parse-complete', {
             data: data,
+            id: id,
             name: name,
 
             parseError: !_.isEmpty(errors) && {
