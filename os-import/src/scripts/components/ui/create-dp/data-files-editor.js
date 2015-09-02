@@ -50,5 +50,8 @@ module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototy
       this.$('[data-id="generic-error"]').prop('hidden', false).html(error.message);
       return error;
     }
+
+    if(this.collection.any(function(model) { return model.parseError; }))
+      return this.collection.pluck('parseError');
   }
 });
