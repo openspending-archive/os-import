@@ -27,7 +27,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       this.fields.files.setValue((this.fields.files.getValue() || []).concat(data));
     }, this);
 
-    // Allow submission if all files are valid
+    // Allow submission if there are files and all files are valid
     this.on('change', (function(F, T, E) {
       var
         field = this.fields.files,
