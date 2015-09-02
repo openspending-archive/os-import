@@ -52,7 +52,12 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   },
 
   schema: {
-    name: {label: 'Name your Data Package', type: NameEditor, validators: ['required'], urlBase: 'https://openspending.org/'},
+    name: {
+      label: 'Name your Data Package',
+      type: NameEditor,
+      validators: [{type: 'required', message: 'Your data package should have a name'}],
+      urlBase: 'https://openspending.org/'
+    },
 
     files: {
       type: DataFilesEditor,

@@ -19,9 +19,18 @@ module.exports = backbone.Form.editors.Base.extend({
     }
   },
 
-  getValue  : function() { return this.$('[data-id=name]').val(); },
-  render    : function() { this.$el.html(this.template(_.extend(this.schema, {unique: this.cid}))); return this; },
-  setValue  : function(value) { this.$('[data-id=name]').val(value); return this; },
-  template  : window.TEMPLATES['create-dp/name-editor.hbs'],
+  getValue: function() { return this.$('[data-id=name]').val(); },
+  render  : function() { this.$el.html(this.template(_.extend(this.schema, {unique: this.cid}))); return this; },
+  setValue: function(value) { this.$('[data-id=name]').val(value); return this; },
+  template: window.TEMPLATES['create-dp/name-editor.hbs'],
+
+  validate: function() {
+    var
+      error = backbone.Form.editors.Base.prototype.validate.call(this);
+
+    this.$('[data-id=error]').prop('hidden', _.isEmpty(error)).html((error || {}).message);    
+    return error;
+  },
+
   updateSlug: function(name) { this.$('[data-id=slug]').html(slug(name).toLowerCase()); return this; }
 });
