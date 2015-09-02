@@ -5,6 +5,7 @@ var
   _ = require('lodash'),
   backbone = require('backbone'),
   csv = require('csv'),
+  GoodTables = require('goodtables'),
   jtsInfer = require('json-table-schema').infer,
   request = require('superagent-bluebird-promise'),
   validator = require('validator');
@@ -44,21 +45,48 @@ module.exports = backbone.BaseView.extend({
     }
   },
 
+  initialize: function(options) {
+    backbone.BaseView.prototype.initialize.call(this, options);
+    this.goodTables = new GoodTables({method: 'post', report_type: 'grouped'});
+  },
+
+  // Get CSV schema and validate text and schema over good tables
   parseCSV: function(name, string) {
     csv.parse(string, (function(error, data) {
-      // TODO Implement parse errors rendering
+      var
+        schema;
+
       if(error) {
-        console.log(error);
-        this.trigger('parse-error');
+        this.trigger('parse-complete', {
+          name: name,
+          parseError: {message: error}
+        });
+
         return false;
       }
 
-      this.trigger('parse-complete', {
-        data  : data,
-        name  : name,
-        schema: jtsInfer(data[0], _.rest(data)),
-        text  : string
-      });
+      schema = jtsInfer(data[0], _.rest(data));
+
+      this.goodTables.run(string, JSON.stringify(schema))
+        .then((function(result) {
+          var
+            errors = result.getValidationErrors();
+
+          this.trigger('parse-complete', {
+            data: data,
+            name: name,
+
+            parseError: !_.isEmpty(errors) && {
+              message: 'We encountered some problems with this file. Click here for a breakdown of the issues.',
+              verbose: result.getGroupedByRows()
+            },
+
+            schema: schema,
+            text: string
+          });
+        }).bind(this))
+
+        .catch(console.error);
     }).bind(this));
 
     return this;
