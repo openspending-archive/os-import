@@ -6,6 +6,7 @@ var
   backbone = require('backbone'),
   DataFilesEditor = require('./data-files-editor'),
   NameEditor = require('./name-editor'),
+  ValidationReportView = require('./validation-report'),
   UploadView = require('./upload');
 
 module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
@@ -48,6 +49,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   render: function() {
     backbone.Form.prototype.render.call(this);
     this.layout.upload = (new UploadView({el: this.$('[data-id=upload]'), parent: this})).render();
+    this.layout.validationReport = (new ValidationReportView({el: this.$('[data-id="validation-report"]')})).render();
     return this;
   },
 
@@ -63,8 +65,11 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       type: DataFilesEditor,
       validators: [{type: 'required', message: 'You need to upload at least one data file'}],
 
-      // Incapsulate editor upload routine in param to ensure generic use
-      uploader: function(file) { return window.APP.layout.createDp.layout.form.layout.upload.uploadLocalFile(file); }
+      // Incapsulate editor errors reporting routine in param to ensure generic use
+      reporter: function(errors) { window.APP.layout.createDp.layout.form.layout.validationReport.reset(errors).activate(); },
+
+      // Same for uploader — ensure generic use
+      uploader: function(file) { window.APP.layout.createDp.layout.form.layout.upload.uploadLocalFile(file); }
     }
   },
 

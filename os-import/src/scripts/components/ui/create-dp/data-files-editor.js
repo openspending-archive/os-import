@@ -17,6 +17,7 @@ module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototy
     attributes: {class: 'input'},
 
     events: {
+      'click [data-id=error]': function() { this.parent.schema.reporter(this.model.get('parseError').verbose); return false; },
       'click [data-id=replace]': function() { this.$('[data-id=file]').trigger('click'); },
       'click [data-id=remove]': function() { this.parent.collection.remove(this.model); },
 
