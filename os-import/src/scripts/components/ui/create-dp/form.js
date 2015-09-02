@@ -23,18 +23,25 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     this.layout.upload.on('validation-started', function(percents) { this.setMessage('Validating'); }, this);
 
     this.layout.upload.on('parse-complete', function(data) {
-      var
-        hasErrors;
-
       this.loading(false);
       this.fields.files.setValue((this.fields.files.getValue() || []).concat(data));
-      hasErrors = _.any(this.fields.files.getValue(), function(file) { return Boolean(file.parseError); });
-
-      // Allow submission if all files are valid
-      this.setMessage(hasErrors ? 'Fixes Required' : 'Next');
-
-      this.$('[data-id=submit]').toggleClass('form-button--disabled', hasErrors);
     }, this);
+
+    // Allow submission if all files are valid
+    this.on('change', (function(F, T, E) {
+      var
+        field = this.fields.files,
+        hasErrors = field.editor.hasValidationErrors();
+
+      if(_.isEmpty(field.getValue())) {
+        this.setMessage('Waiting for files');
+        this.$('[data-id=submit]').toggleClass('form-button--disabled', true);
+        return false;
+      }
+
+      this.setMessage(hasErrors ? 'Fixes Required' : 'Next');
+      this.$('[data-id=submit]').toggleClass('form-button--disabled', hasErrors);
+    }).bind(this) );
 
     return this;
   },

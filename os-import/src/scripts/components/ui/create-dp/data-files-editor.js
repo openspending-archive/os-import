@@ -7,6 +7,7 @@ var
 
 module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototype).extend({
   getValue: function() { return (this.collection && this.collection.length) ? this.collection.toJSON() : ''; },
+  hasValidationErrors: function() { return _.any(this.getValue(), function(file) { return Boolean(file.parseError); }) },
 
   initialize: function(options) {
     backbone.BaseListView.prototype.initialize.call(this, options);
@@ -33,6 +34,16 @@ module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototy
   }),
 
   render: function() { this.$el.html(this.template()); return this; },
+
+  reset: function(collection) {
+    if(this.collection)
+      this.collection.off(null, null, this);
+
+    backbone.BaseListView.prototype.reset.call(this, collection);
+    this.collection.on('add remove', function() { this.trigger('change', this.getValue()); }, this);
+    this.trigger('change', this.getValue());
+    return this;
+  },
 
   // Passed with array of objects
   setValue: function(files) {
