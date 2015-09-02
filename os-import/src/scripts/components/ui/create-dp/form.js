@@ -17,7 +17,10 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       this.render();
 
     // Do not allow child view (upload widget) to change parent — just catch its events
-    this.layout.upload.on('upload-started', this.loading, this);
+    this.layout.upload.on('upload-started', function() { this.loading(); this.setProgress('Uploading'); }, this);
+
+    this.layout.upload.on('parse-started', function(percents) { this.setProgress('Parsing'); }, this);
+    this.layout.upload.on('validation-started', function(percents) { this.setProgress('Validating'); }, this);
 
     this.layout.upload.on('parse-complete', function(csvData) {
       this.fields.files.setValue((this.fields.files.getValue() || []).concat(csvData))
@@ -41,7 +44,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       isLoading = _.isUndefined(state) || state;
 
     this.$('[data-id=submit]').toggleClass('form-button--loading', isLoading);
-    this.$('[data-id=upload-in-progress]').prop('hidden', !isLoading);
+    this.$('[data-id=progress]').prop('hidden', !isLoading);
     this.$('[data-id=create]').prop('hidden', isLoading);
     return this;
   },
@@ -76,6 +79,11 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       // Same for uploader — ensure generic use
       uploader: function(file) { window.APP.layout.createDp.layout.form.layout.upload.uploadLocalFile(file); }
     }
+  },
+
+  setProgress: function(message) {
+    this.$('[data-id=progress]').html(message).prop('hidden', !message);
+    return this;
   },
 
   template: window.TEMPLATES['create-dp/form.hbs']

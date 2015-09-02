@@ -70,6 +70,7 @@ module.exports = backbone.BaseView.extend({
       }
 
       schema = jtsInfer(data[0], _.rest(data));
+      this.trigger('validation-started');
 
       this.goodTables.run(string, JSON.stringify(schema))
         .then((function(result) {
@@ -104,10 +105,15 @@ module.exports = backbone.BaseView.extend({
     this.trigger('upload-started');
 
     FileAPI.readAsText(file, (function(fileEvent) {
-      if(fileEvent.type === 'load')
-        this.parseCSV(fileEvent.target.name, fileEvent.result);
+      if(fileEvent.type === 'load') {
+        this.trigger('parse-started');
+        setTimeout(this.parseCSV.bind(this, fileEvent.target.name, fileEvent.result), 100);
+      }
       
-      else if(fileEvent.type !== 'progress') {
+      else if(fileEvent.type === 'progress')
+        this.trigger('upload-progress', (fileEvent.loaded/fileEvent.total) * 100);
+
+      else {
         this.trigger('upload-error');
 
         // TODO Implement upload errors rendering
