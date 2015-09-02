@@ -2,16 +2,16 @@
   z-index: 256;
   position: absolute;
 
-  &.modal__validation-report:not([hidden]) {
+  &:not([hidden]) {
     display: block;
     position: fixed;
+  }
 
-    .modal-content {
-      width: 640px;
-      height: 480px;
-      background-color: white;
-      margin: 10% auto;
-    }
+  .modal-content {
+    max-width: 864px;
+    background-color: white;
+    margin: 5% auto;
+    padding: 32px;
   }
 }
 

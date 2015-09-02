@@ -49,7 +49,12 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   render: function() {
     backbone.Form.prototype.render.call(this);
     this.layout.upload = (new UploadView({el: this.$('[data-id=upload]'), parent: this})).render();
-    this.layout.validationReport = (new ValidationReportView({el: this.$('[data-id="validation-report"]')})).render();
+
+    this.layout.validationReport = (new ValidationReportView({
+      container: '[data-id=content]',
+      el: this.$('[data-id="validation-report"]')
+    })).render();
+
     return this;
   },
 
