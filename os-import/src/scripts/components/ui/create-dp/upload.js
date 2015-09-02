@@ -38,7 +38,7 @@ module.exports = backbone.BaseView.extend({
       // TODO Filter non-csv data with appropriate error message
       // Download data file and trigger event to let parent form to catch it up
       request.get(url)
-        .then((function(result) { this.parseCSV(_.last(url.split('/')), result.text); }).bind(this))
+        .then((function(result) { this.parseCSV(url, result.text, {isURL: true}); }).bind(this))
         .catch(function(error) { console.error('Error while downloading file from url: ' + error); });
 
       return false;
@@ -51,18 +51,20 @@ module.exports = backbone.BaseView.extend({
   },
 
   // Get CSV schema and validate text and schema over good tables
-  parseCSV: function(name, string) {
+  parseCSV: function(name, string, options) {
     csv.parse(string, (function(error, data) {
       var
         // https://github.com/gvidon/backbone-base/issues/2
         id = [name, (new Date()).getTime()].join(''),
 
+        isURL = (options || {}).isURL,
         schema;
 
       if(error) {
         this.trigger('parse-complete', {
-          id: id,
-          name: name,
+          id        : id,
+          isURL     : isURL,
+          name      : name,
           parseError: {message: error}
         });
 
@@ -78,9 +80,10 @@ module.exports = backbone.BaseView.extend({
             errors = result.getValidationErrors();
 
           this.trigger('parse-complete', {
-            data: data,
-            id: id,
-            name: name,
+            data : data,
+            id   : id,
+            isURL: isURL,
+            name : name,
 
             parseError: !_.isEmpty(errors) && {
               message: 'We encountered some problems with this file. Click here for a breakdown of the issues.',

@@ -3,7 +3,7 @@
 {{/if}}
 
 <div class="input__container">
-  <button data-id="replace" type="button" class="form-button form-button--inline">Replace file</button>
+  {{#unless isURL}}<button data-id="replace" type="button" class="form-button form-button--inline">Replace file</button>{{/unless}}
   <div class="input__file-label">{{ name }}</div>
   <input data-id="file" type="file" name="file" accept="text/csv" hidden>
 </div>
