@@ -16,7 +16,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     if((_.isUndefined(state) || state) && _.isEmpty(this.layout))
       this.render();
 
-    // Do not allow chuld view (upload widget) to change parent — just catch its events
+    // Do not allow child view (upload widget) to change parent — just catch its events
     this.layout.upload.on('upload-started', this.loading, this);
 
     this.layout.upload.on('parse-complete', function(csvData) {
