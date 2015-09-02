@@ -287,7 +287,7 @@
     }
   }
 
-  &--loading {
+  &--loading, &--disabled {
     background-color: #c2c2c2;
     cursor: default;
 
@@ -297,6 +297,12 @@
 
     .form-button__spinner {
       display: inline-block;
+    }
+  }
+
+  &--disabled {
+    .form-button__spinner {
+      display: none;
     }
   }
 

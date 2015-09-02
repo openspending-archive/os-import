@@ -17,21 +17,37 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       this.render();
 
     // Do not allow child view (upload widget) to change parent — just catch its events
-    this.layout.upload.on('upload-started', function() { this.loading(); this.setProgress('Uploading'); }, this);
+    this.layout.upload.on('upload-started', function() { this.loading(); this.setMessage('Uploading'); }, this);
 
-    this.layout.upload.on('parse-started', function(percents) { this.setProgress('Parsing'); }, this);
-    this.layout.upload.on('validation-started', function(percents) { this.setProgress('Validating'); }, this);
+    this.layout.upload.on('parse-started', function(percents) { this.setMessage('Parsing'); }, this);
+    this.layout.upload.on('validation-started', function(percents) { this.setMessage('Validating'); }, this);
 
-    this.layout.upload.on('parse-complete', function(csvData) {
-      this.fields.files.setValue((this.fields.files.getValue() || []).concat(csvData))
+    this.layout.upload.on('parse-complete', function(data) {
+      var
+        hasErrors;
+
       this.loading(false);
+      this.fields.files.setValue((this.fields.files.getValue() || []).concat(data));
+      hasErrors = _.any(this.fields.files.getValue(), function(file) { return Boolean(file.parseError); });
+
+      // Allow submission if all files are valid
+      this.setMessage(hasErrors ? 'Fixes Required' : 'Next');
+
+      this.$('[data-id=submit]').toggleClass('form-button--disabled', hasErrors);
     }, this);
 
     return this;
   },
 
   events: {
-    'click [data-id=create]': function() { this.validate(); return false; }
+    'click [data-id=submit]:not(.form-button--disabled):not(.form-button--loading)': function() {
+      this.validate();
+      return false;
+    },
+
+    'click [data-id=submit].form-button--disabled, [data-id=submit].form-button--loading': function() {
+      return false;
+    }
   },
 
   initialize: function(options) {
@@ -43,9 +59,8 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     var
       isLoading = _.isUndefined(state) || state;
 
+    this.$('[data-id=submit]').toggleClass('form-button--disabled', !isLoading);
     this.$('[data-id=submit]').toggleClass('form-button--loading', isLoading);
-    this.$('[data-id=progress]').prop('hidden', !isLoading);
-    this.$('[data-id=create]').prop('hidden', isLoading);
     return this;
   },
 
@@ -81,8 +96,8 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     }
   },
 
-  setProgress: function(message) {
-    this.$('[data-id=progress]').html(message).prop('hidden', !message);
+  setMessage: function(message) {
+    this.$('[data-id=submit-message]').html(message).prop('hidden', !message);
     return this;
   },
 
