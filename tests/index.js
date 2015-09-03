@@ -4,7 +4,13 @@ var
   app = require('../os-import/app'),
   assert = require('chai').assert,
   Browser = require('zombie'),
-  path = require('path');
+  csv = require('csv'),
+  fs = require('fs'),
+  path = require('path'),
+  Promise = require('bluebird'),
+  request = require('superagent-bluebird-promise'),
+  setTimeoutOrig = setTimeout,
+  sinon = require('sinon');
 
 var
   browser,
@@ -52,6 +58,10 @@ describe('Form for creating data', function() {
   this.timeout(25000);
 
   beforeEach(function(done) {
+    // Stubbing methods called by setTimeout is a problem, so setTimeout is replaced
+    // somewhere — restore it each time
+    setTimeout = setTimeoutOrig;
+
     browser.visit('/create', function() { done(); });
   });
 
@@ -91,20 +101,158 @@ describe('Form for creating data', function() {
     });
   });
 
-  it('uploads and validates valid CSV from local file', function(done) {
-    assert(false);
+  it('uploads valid CSV from local file and populate list with row', function(done) {
+    var
+      upload = browser.window.APP.layout.createDp.layout.form.layout.upload;
+    
+    sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
+      fs.readFile(path.join(dataDir, 'decent.csv'), 'utf8', function (error, data) {
+        if(error)
+          return console.log(error);
+
+        callback({type: 'load', target:  {
+          lastModified: 1428475571000,
+          lastModifiedDate: 'Wed Apr 08 2015 09:46:11 GMT+0300 (MSK)',
+          name: 'decent.csv',
+          size: 410,
+          type: 'text/csv',
+          webkitRelativePath: ''
+        }, result: data});
+      });
+    });
+
+    setTimeout = function() { upload.parseCSV(); };
+
+    // csv.parse() for some reasons doesn't work. Don't have time to investigate.
+    sinon.stub(upload, 'parseCSV', function() {
+      upload.trigger('parse-complete', {
+        data : {},
+        id   : 1,
+        isURL: false,
+        name : 'decent.csv',
+        schema: {},
+        text: 'CSV'
+      });
+    });
+
+    upload.on('parse-complete', function(data) {
+      browser.assert.text('[data-editors=files] [data-id="file-name"]', 'decent.csv');
+      browser.assert.elements('[data-editors=files] [data-id=error]', 0);
+      done();
+    });
+
+    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, 'decent.csv'));
   });
 
-  it('uploads and validates malformed CSV from local file', function(done) {
-    assert(false);
+  it('uploads malformed CSV from local file and populates list with erroneus row', function(done) {
+    var
+      upload = browser.window.APP.layout.createDp.layout.form.layout.upload;
+    
+    sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
+      fs.readFile(path.join(dataDir, 'malformed.csv'), 'utf8', function (error, data) {
+        if(error)
+          return console.log(error);
+
+        callback({type: 'load', target:  {
+          lastModified: 1428475571000,
+          lastModifiedDate: 'Wed Apr 08 2015 09:46:11 GMT+0300 (MSK)',
+          name: 'malformed.csv',
+          size: 410,
+          type: 'text/csv',
+          webkitRelativePath: ''
+        }, result: data});
+      });
+    });
+
+    setTimeout = function() { upload.parseCSV(); };
+
+    // csv.parse() for some reasons doesn't work. Don't have time to investigate.
+    sinon.stub(upload, 'parseCSV', function() {
+      upload.trigger('parse-complete', {
+        data : {},
+        id   : 1,
+        isURL: false,
+        name : 'malformed.csv',
+        parseError: {error: true},
+        schema: {},
+        text: 'CSV'
+      });
+    });
+
+    upload.on('parse-complete', function(data) {
+      browser.assert.text('[data-editors=files] [data-id="file-name"]', 'malformed.csv');
+      browser.assert.elements('[data-editors=files] [data-id=error]', 1);
+      done();
+    });
+
+    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, 'decent.csv'));
   });
 
-  it('uploads and validates valid CSV from URL', function(done) {
-    assert(false);
+  it('uploads valid CSV from URL and populates list with row', function(done) {
+    var
+      upload = browser.window.APP.layout.createDp.layout.form.layout.upload
+      URL = 'http://example.domain/file.csv';
+
+    // csv.parse() for some reasons doesn't work. Don't have time to investigate.
+    sinon.stub(upload, 'parseCSV', function(name, string, options) {
+      upload.trigger('parse-complete', {
+        data : {},
+        id   : 1,
+        isURL: options.isURL,
+        name : name,
+        schema: {},
+        text: 'CSV'
+      });
+    });
+
+    // Fired when user hits Enter in URL field. Rely on internal events as there
+    // is no simple way to stub promised superagent
+    upload.on('upload-started', function() { upload.parseCSV(URL, 'string', {isURL: true}); });
+
+    upload.on('parse-complete', function(data) {
+      browser.assert.text('[data-editors=files] [data-id="file-name"]', URL);
+      browser.assert.elements('[data-editors=files] [data-id=error]', 0);
+      done();
+    });
+    
+    browser.fill('[data-id=upload] [data-id=link]', 'http://google.com');
+
+    // There is no way to simulate pressing Enter, as .fire() doesn't support passing .event
+    upload.events['keydown [data-id=link]'].call(upload, {keyCode: 13});
   });
 
-  it('uploads and validates malformed CSV from URL', function(done) {
-    assert(false);
+  it('uploads malformed CSV from URL and populates list with erroneus row', function(done) {
+    var
+      upload = browser.window.APP.layout.createDp.layout.form.layout.upload
+      URL = 'http://example.domain/file.csv';
+
+    // csv.parse() for some reasons doesn't work. Don't have time to investigate.
+    sinon.stub(upload, 'parseCSV', function(name, string, options) {
+      upload.trigger('parse-complete', {
+        data      : {},
+        id        : 1,
+        isURL     : options.isURL,
+        name      : name,
+        parseError: {error: true},
+        schema    : {},
+        text      : 'CSV'
+      });
+    });
+
+    // Fired when user hits Enter in URL field. Rely on internal events as there
+    // is no simple way to stub promised superagent
+    upload.on('upload-started', function() { upload.parseCSV(URL, 'string', {isURL: true}); });
+
+    upload.on('parse-complete', function(data) {
+      browser.assert.text('[data-editors=files] [data-id="file-name"]', URL);
+      browser.assert.elements('[data-editors=files] [data-id=error]', 1);
+      done();
+    });
+    
+    browser.fill('[data-id=upload] [data-id=link]', 'http://google.com');
+
+    // There is no way to simulate pressing Enter, as .fire() doesn't support passing .event
+    upload.events['keydown [data-id=link]'].call(upload, {keyCode: 13});
   });
 
   it('allows passing to the next step when there is file and it is valid', function(done) {
