@@ -17,7 +17,9 @@ var
   dataDir = path.join('.', 'tests', 'data');
 
   submitLabels = {
-    default: 'Waiting for files'
+    default: 'Waiting for files',
+    fixesRequired: 'Fixes Required',
+    next: 'Next'
   };
 
 process.env.NODE_ENV = 'test';
@@ -101,7 +103,7 @@ describe('Form for creating data', function() {
     });
   });
 
-  it('uploads valid CSV from local file and populate list with row', function(done) {
+  it('uploads valid CSV from local file, populates list with row and allows next step', function(done) {
     var
       upload = browser.window.APP.layout.createDp.layout.form.layout.upload;
     
@@ -138,13 +140,15 @@ describe('Form for creating data', function() {
     upload.on('parse-complete', function(data) {
       browser.assert.text('[data-editors=files] [data-id="file-name"]', 'decent.csv');
       browser.assert.elements('[data-editors=files] [data-id=error]', 0);
+      browser.assert.elements('[data-id="submit"].form-button--disabled', 0);
+      browser.assert.text('[data-id="submit-message"]', submitLabels.next);
       done();
     });
 
     browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, 'decent.csv'));
   });
 
-  it('uploads malformed CSV from local file and populates list with erroneus row', function(done) {
+  it('uploads malformed CSV from local file, populates list with erroneus row and disallows next step', function(done) {
     var
       upload = browser.window.APP.layout.createDp.layout.form.layout.upload;
     
@@ -182,13 +186,15 @@ describe('Form for creating data', function() {
     upload.on('parse-complete', function(data) {
       browser.assert.text('[data-editors=files] [data-id="file-name"]', 'malformed.csv');
       browser.assert.elements('[data-editors=files] [data-id=error]', 1);
+      browser.assert.elements('[data-id="submit"].form-button--disabled', 1);
+      browser.assert.text('[data-id="submit-message"]', submitLabels.fixesRequired);
       done();
     });
 
     browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, 'decent.csv'));
   });
 
-  it('uploads valid CSV from URL and populates list with row', function(done) {
+  it('uploads valid CSV from URL, populates list with row and allows next step', function(done) {
     var
       upload = browser.window.APP.layout.createDp.layout.form.layout.upload
       URL = 'http://example.domain/file.csv';
@@ -212,6 +218,8 @@ describe('Form for creating data', function() {
     upload.on('parse-complete', function(data) {
       browser.assert.text('[data-editors=files] [data-id="file-name"]', URL);
       browser.assert.elements('[data-editors=files] [data-id=error]', 0);
+      browser.assert.elements('[data-id="submit"].form-button--disabled', 0);
+      browser.assert.text('[data-id="submit-message"]', submitLabels.next);
       done();
     });
     
@@ -221,7 +229,7 @@ describe('Form for creating data', function() {
     upload.events['keydown [data-id=link]'].call(upload, {keyCode: 13});
   });
 
-  it('uploads malformed CSV from URL and populates list with erroneus row', function(done) {
+  it('uploads malformed CSV from URL, populates list with erroneus row and disallows next step', function(done) {
     var
       upload = browser.window.APP.layout.createDp.layout.form.layout.upload
       URL = 'http://example.domain/file.csv';
@@ -246,6 +254,8 @@ describe('Form for creating data', function() {
     upload.on('parse-complete', function(data) {
       browser.assert.text('[data-editors=files] [data-id="file-name"]', URL);
       browser.assert.elements('[data-editors=files] [data-id=error]', 1);
+      browser.assert.elements('[data-id="submit"].form-button--disabled', 1);
+      browser.assert.text('[data-id="submit-message"]', submitLabels.fixesRequired);
       done();
     });
     
@@ -253,13 +263,5 @@ describe('Form for creating data', function() {
 
     // There is no way to simulate pressing Enter, as .fire() doesn't support passing .event
     upload.events['keydown [data-id=link]'].call(upload, {keyCode: 13});
-  });
-
-  it('allows passing to the next step when there is file and it is valid', function(done) {
-    assert(false);
-  });
-
-  it('disallows passing to the next step when there is no file or it is invalid', function(done) {
-    assert(false);
   });
 });
