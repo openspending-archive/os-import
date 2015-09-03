@@ -3,12 +3,14 @@ var
   _ = require('underscore'),
   app = require('../os-import/app'),
   assert = require('chai').assert,
-  Browser = require('zombie');
+  Browser = require('zombie'),
+  path = require('path');
 
 var
   browser,
+  dataDir = path.join('.', 'tests', 'data');
 
-  SUBMIT_LABELS = {
+  submitLabels = {
     default: 'Waiting for files'
   };
 
@@ -65,14 +67,28 @@ describe('Form for creating data', function() {
     done();
   });
 
-  it('has disabled submit button with default label reading "' + SUBMIT_LABELS.default + '"', function(done) {
-    browser.assert.text('[data-id="submit-message"]', SUBMIT_LABELS.default);
+  it('has disabled submit button with default label reading "' + submitLabels.default + '"', function(done) {
+    browser.assert.text('[data-id="submit-message"]', submitLabels.default);
     browser.assert.hasClass('[data-id="submit"]', 'form-button--disabled');
     done();
   });
 
   it('switches submit button into loading state when uploading a file/URL', function(done) {
-    assert(false);
+    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, 'decent.csv'));
+    browser.assert.hasClass('[data-id="submit"]', 'form-button--loading');
+
+    browser.visit('/create', function() {
+      var
+        upload = browser.window.APP.layout.createDp.layout.form.layout.upload;
+
+      browser.fill('[data-id=upload] [data-id=link]', 'http://google.com');
+
+      // There is no way to simulate pressing Enter, as .fire() doesn't support passing .event
+      upload.events['keydown [data-id=link]'].call(upload, {keyCode: 13});
+
+      browser.assert.hasClass('[data-id="submit"]', 'form-button--loading');
+      done();
+    });
   });
 
   it('uploads and validates valid CSV from local file', function(done) {
