@@ -31,13 +31,13 @@ body {
   }
 
   &__title {
-    font-size: 64px;
+    font-size: 32px;
     font-weight: 700;
     margin-top: 30px;
   }
 
   &__subtitle {
-    font-size: 40px;
+    font-size: 20px;
   }
 
   &__left,
@@ -59,6 +59,7 @@ body {
   }
 
   &__left {
+    z-index: 2;
     right: 0;
     transform: translate(-100px, 0px);
   }
@@ -97,7 +98,7 @@ body {
   background-color: #fff;
 
   &__title {
-    font-size: 52px;
+    font-size: 26px;
     margin-top: 40px;
     margin-bottom: 20px;
     text-align: center;
@@ -116,7 +117,7 @@ body {
 
     &-title {
       font-family: MfILoveGlitter;
-      font-size: 40px;
+      font-size: 20px;
       padding-left: 30px;
     }
 
@@ -158,12 +159,12 @@ body {
   }
 
   &__title {
-    font-size: 36px;
+    font-size: 28px;
     font-weight: 600;
   }
 
   &__step-title {
-    font-size: 20px;
+    font-size: 14px;
   }
 
   &__step-name {
@@ -175,10 +176,11 @@ body {
 
 .subheader-steps {
   width: 100%;
+  padding-top: 5px;
 
   &__item {
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 40px;
     opacity: .5;
     transition: opacity .3s ease;
 
@@ -188,22 +190,22 @@ body {
 
     &:nth-of-type(1) {
       svg {
-        width: 48px;
-        height: 48px;
+        width: 25px;
+        height: 25px;
       }
     }
 
     &:nth-of-type(2) {
       svg {
-        width: 47px;
-        height: 47px;
+        width: 25px;
+        height: 25px;
       }
     }
 
     &:nth-of-type(3) {
       svg {
-        width: 45px;
-        height: 45px;
+        width: 25px;
+        height: 25px;
       }
     }
   }
@@ -211,9 +213,9 @@ body {
   &__content {
     display: inline-block;
     vertical-align: top;
-    font-size: 20px;
-    line-height: 1.2;
-    padding-top: 13px;
+    font-size: 14px;
+    line-height: 1.4;
+    padding-top: 5px;
     margin-left: 10px;
   }
 
@@ -224,8 +226,8 @@ body {
 
 .subheader-icon {
   display: inline-flex;
-  width: 73px;
-  height: 73px;
+  width: 48px;
+  height: 48px;
   border-radius: 6px;
   border: 2px solid @green;
   background-color: #fff;
@@ -246,6 +248,10 @@ body {
 }
 
 .help-advice {
+  .form-button {
+    margin-top: 8px;
+  }
+
   &__icon {
     display: inline-block;
     padding: 5px;
@@ -256,14 +262,14 @@ body {
     svg {
       display: inline-block;
       vertical-align: top;
-      width: 66px;
-      height: 66px;
+      width: 33px;
+      height: 33px;
     }
   }
 
   &__label {
     display: inline-block;
-    line-height: 80px;
+    line-height: 47px;
     margin-left: 15px;
 
     strong {
