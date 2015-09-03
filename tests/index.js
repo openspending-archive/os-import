@@ -5,8 +5,16 @@ var
   app = require('../os-import/app'),
   assert = require('chai').assert;
 
+var
+  browser,
+
+  SUBMIT_LABELS = {
+    default: 'Waiting for files'
+  };
+
 process.env.NODE_ENV = 'test';
 Browser.localhost('127.0.0.1', process.env.PORT || 3000);
+browser = new Browser({maxWait: 30000});
 
 before(function(done) {
   // Run the server
@@ -14,9 +22,6 @@ before(function(done) {
 });
 
 describe('Core', function() {
-  var
-    browser = new Browser({maxWait: 30000});
-
   // Ensure we have time for request to reoslve, etc.
   this.timeout(25000);
 
@@ -38,5 +43,52 @@ describe('Core', function() {
         done();
       });
     });
+  });
+});
+
+describe('Form for creating data', function() {
+  this.timeout(25000);
+
+  it('is alive', function(done) {
+    browser.visit('/create', function() {
+      browser.assert.success();
+      done();
+    });
+  });
+
+  it('updates URL instantly when name field changes', function(done) {
+    assert(false);
+  });
+
+  it('has disabled submit button with default label reading "' + SUBMIT_LABELS.default + '"', function(done) {
+    assert(false);
+  });
+
+  it('switches submit button into loading state when uploading a file/URL', function(done) {
+    assert(false);
+  });
+
+  it('uploads and validates valid CSV from local file', function(done) {
+    assert(false);
+  });
+
+  it('uploads and validates malformed CSV from local file', function(done) {
+    assert(false);
+  });
+
+  it('uploads and validates valid CSV from URL', function(done) {
+    assert(false);
+  });
+
+  it('uploads and validates malformed CSV from URL', function(done) {
+    assert(false);
+  });
+
+  it('allows passing to the next step when there is file and it is valid', function(done) {
+    assert(false);
+  });
+
+  it('disallows passing to the next step when there is no file or it is invalid', function(done) {
+    assert(false);
   });
 });
