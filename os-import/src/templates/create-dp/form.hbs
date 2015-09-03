@@ -3,17 +3,22 @@
     <form action="/">
       <div data-editors="name"></div>
 
-      <div class="upload-form__files">
-        <div data-editors="files" class="input"></div>
-        <div data-id="upload" class="input input--doudle"></div>
+      <div class="input">
+          <label>Add one or more data file(s)</label>
+      </div>
 
-        <div class="input">
-          <!-- .form-button--loading to activate loading state -->
-          <button data-id="submit" class="form-button form-button--big form-button--disabled">
-            <span class="form-button__spinner"><svg viewBox="0 0 36 36"><use xlink:href="#spinner"></use></svg></span>
-            <span data-id="submit-message">Waiting for files</span>
-          </button>
-        </div>
+      <div class="upload-form__files">
+        <div data-editors="files"></div>
+      </div>
+
+      <div data-id="upload" class="input input--double"></div>
+
+      <div class="input">
+        <!-- .form-button--loading to activate loading state -->
+        <button data-id="submit" class="form-button form-button--big form-button--disabled">
+          <span class="form-button__spinner"><svg viewBox="0 0 36 36"><use xlink:href="#spinner"></use></svg></span>
+          <span data-id="submit-message">Waiting for files</span>
+        </button>
       </div>
     </form>
   </div>
