@@ -49,23 +49,23 @@ describe('Core', function() {
 describe('Form for creating data', function() {
   this.timeout(25000);
 
+  beforeEach(function(done) {
+    browser.visit('/create', function() { done(); });
+  });
+
   it('is alive', function(done) {
-    browser.visit('/create', function() {
-      browser.assert.success();
-      done();
-    });
+    browser.assert.success();
+    done();
   });
 
   it('updates URL instantly with slugged name when it changes', function(done) {
-    browser.visit('/create', function() {
-      browser.fill('[data-editors=name] input[name=name]', 'This is the name');
-      browser.fire('[data-editors=name] input[name=name]', 'keyup');
+    browser.fill('[data-editors=name] input[name=name]', 'This is the name');
+    browser.fire('[data-editors=name] input[name=name]', 'keyup');
 
-      setTimeout(function() {
-        browser.assert.text('[data-editors=name] [data-id=slug]', 'this-is-the-name');
-        done();
-      }, 1000);
-    });
+    setTimeout(function() {
+      browser.assert.text('[data-editors=name] [data-id=slug]', 'this-is-the-name');
+      done();
+    }, 1000);
   });
 
   it('has disabled submit button with default label reading "' + SUBMIT_LABELS.default + '"', function(done) {
