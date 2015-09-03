@@ -14,7 +14,7 @@ var
 
 process.env.NODE_ENV = 'test';
 Browser.localhost('127.0.0.1', process.env.PORT || 3000);
-browser = new Browser({maxWait: 30000});
+browser = new Browser({maxWait: 30000, silent: true});
 
 before(function(done) {
   // Run the server
