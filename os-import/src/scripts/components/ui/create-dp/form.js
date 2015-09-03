@@ -33,6 +33,9 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
         field = this.fields.files,
         hasErrors = field.editor.hasValidationErrors();
 
+      // Allow just single upload
+      this.layout.upload.activate(_.isEmpty(field.getValue()));
+
       if(_.isEmpty(field.getValue())) {
         this.setMessage('Waiting for files');
         this.$('[data-id=submit]').toggleClass('form-button--disabled', true);
