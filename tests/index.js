@@ -1,9 +1,9 @@
 var
   $ = require('jquery'),
   _ = require('underscore'),
-  Browser = require('zombie'),
   app = require('../os-import/app'),
-  assert = require('chai').assert;
+  assert = require('chai').assert,
+  Browser = require('zombie');
 
 var
   browser,
@@ -56,8 +56,16 @@ describe('Form for creating data', function() {
     });
   });
 
-  it('updates URL instantly when name field changes', function(done) {
-    assert(false);
+  it('updates URL instantly with slugged name when it changes', function(done) {
+    browser.visit('/create', function() {
+      browser.fill('[data-editors=name] input[name=name]', 'This is the name');
+      browser.fire('[data-editors=name] input[name=name]', 'keyup');
+
+      setTimeout(function() {
+        browser.assert.text('[data-editors=name] [data-id=slug]', 'this-is-the-name');
+        done();
+      }, 1000);
+    });
   });
 
   it('has disabled submit button with default label reading "' + SUBMIT_LABELS.default + '"', function(done) {
