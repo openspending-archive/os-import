@@ -61,11 +61,8 @@ describe('Form for creating data', function() {
   it('updates URL instantly with slugged name when it changes', function(done) {
     browser.fill('[data-editors=name] input[name=name]', 'This is the name');
     browser.fire('[data-editors=name] input[name=name]', 'keyup');
-
-    setTimeout(function() {
-      browser.assert.text('[data-editors=name] [data-id=slug]', 'this-is-the-name');
-      done();
-    }, 1000);
+    browser.assert.text('[data-editors=name] [data-id=slug]', 'this-is-the-name');
+    done();
   });
 
   it('has disabled submit button with default label reading "' + SUBMIT_LABELS.default + '"', function(done) {
