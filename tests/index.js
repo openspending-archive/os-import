@@ -66,7 +66,9 @@ describe('Form for creating data', function() {
   });
 
   it('has disabled submit button with default label reading "' + SUBMIT_LABELS.default + '"', function(done) {
-    assert(false);
+    browser.assert.text('[data-id="submit-message"]', SUBMIT_LABELS.default);
+    browser.assert.hasClass('[data-id="submit"]', 'form-button--disabled');
+    done();
   });
 
   it('switches submit button into loading state when uploading a file/URL', function(done) {
