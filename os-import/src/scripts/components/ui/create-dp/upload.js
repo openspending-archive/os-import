@@ -54,6 +54,7 @@ module.exports = backbone.BaseView.extend({
   parseCSV: function(name, string, options) {
     csv.parse(string, (function(error, data) {
       var
+
         // https://github.com/gvidon/backbone-base/issues/2
         id = [name, (new Date()).getTime()].join(''),
 
@@ -116,7 +117,7 @@ module.exports = backbone.BaseView.extend({
       else if(fileEvent.type === 'progress')
         this.trigger('upload-progress', (fileEvent.loaded/fileEvent.total) * 100);
 
-      else {
+      else{
         this.trigger('upload-error');
 
         // TODO Implement upload errors rendering

@@ -69,8 +69,8 @@ gulp.task('vendor-scripts', function() {
     vendorBundler = browserify({});
 
   frontendDependencies.forEach(function(id) {
+    // Avoid AMD version of backbone-forms
     if(id === 'backbone-forms')
-      // Avoid AMD version of backbone-forms
       vendorBundler.require(resolve.sync(id + '/distribution/backbone-forms'), {expose: id});
 
     else

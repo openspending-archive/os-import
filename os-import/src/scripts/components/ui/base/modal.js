@@ -1,7 +1,6 @@
 require('backbone-base');
 
 var
-  _ = require('lodash'),
   backbone = require('backbone');
 
 module.exports = backbone.BaseView.extend({

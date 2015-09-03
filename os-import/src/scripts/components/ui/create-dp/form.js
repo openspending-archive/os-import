@@ -6,8 +6,8 @@ var
   backbone = require('backbone'),
   DataFilesEditor = require('./data-files-editor'),
   NameEditor = require('./name-editor'),
-  ValidationReportView = require('./validation-report'),
-  UploadView = require('./upload');
+  UploadView = require('./upload'),
+  ValidationReportView = require('./validation-report');
 
 module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   activate: function(state) {
@@ -19,8 +19,8 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     // Do not allow child view (upload widget) to change parent — just catch its events
     this.layout.upload.on('upload-started', function() { this.loading(); this.setMessage('Uploading'); }, this);
 
-    this.layout.upload.on('parse-started', function(percents) { this.setMessage('Parsing'); }, this);
-    this.layout.upload.on('validation-started', function(percents) { this.setMessage('Validating'); }, this);
+    this.layout.upload.on('parse-started', function() { this.setMessage('Parsing'); }, this);
+    this.layout.upload.on('validation-started', function() { this.setMessage('Validating'); }, this);
 
     this.layout.upload.on('parse-complete', function(data) {
       this.loading(false);
@@ -28,7 +28,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     }, this);
 
     // Allow submission if there are files and all files are valid
-    this.on('change', (function(F, T, E) {
+    this.on('change', (function() {
       var
         field = this.fields.files,
         hasErrors = field.editor.hasValidationErrors();
