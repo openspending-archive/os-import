@@ -6,6 +6,7 @@ var
   backbone = require('backbone'),
   DataFilesEditor = require('./data-files-editor'),
   NameEditor = require('./name-editor'),
+  slug = require('slug'),
   UploadView = require('./upload'),
   ValidationReportView = require('./validation-report');
 
@@ -44,20 +45,44 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
 
       this.setMessage(hasErrors ? 'Fixes Required' : 'Next');
       this.$('[data-id=submit]').toggleClass('form-button--disabled', hasErrors);
-    }).bind(this) );
+    }).bind(this));
 
     return this;
   },
 
   events: {
     'click [data-id=submit]:not(.form-button--disabled):not(.form-button--loading)': function() {
-      this.validate();
+      if(_.isEmpty(this.validate()))
+        console.log(this.getDatapackage());
+
       return false;
     },
 
     'click [data-id=submit].form-button--disabled, [data-id=submit].form-button--loading': function() {
       return false;
     }
+  },
+
+  getDatapackage: function() {
+    var
+      value = this.getValue();
+
+    return JSON.parse(window.TEMPLATES['datapackage.hbs']({
+      name: slug(value.name).toLowerCase(),
+      title: value.name,
+
+      resources: _.map(value.files, function(file) {
+        var
+          filePath = file.isURL ? _.last(file.name.split('/')) : file.name;
+
+        return {
+          filename: _.initial(filePath.split('.')).join('.'),
+          schema  : JSON.stringify(file.schema),
+          path    : filePath,
+          size    : 0
+        };
+      })
+    }));
   },
 
   initialize: function(options) {

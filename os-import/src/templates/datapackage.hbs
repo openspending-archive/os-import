@@ -1,0 +1,13 @@
+{
+  "name": "{{ name }}",
+  "title": "{{ title }}",
+
+  "resources": [{{#each resources}}
+    {
+      "name": "{{ this.filename }}",
+      "schema": {{{ this.schema }}},
+      "path": "{{ this.path }}",
+      "bytes": {{ this.size }}
+    }{{#unless @last}},{{/unless}}
+  {{/each}}]
+}
