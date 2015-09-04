@@ -76,10 +76,10 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
           filePath = file.isURL ? _.last(file.name.split('/')) : file.name;
 
         return {
+          bytes   : file.size,
           filename: _.initial(filePath.split('.')).join('.'),
           schema  : JSON.stringify(file.schema),
-          path    : filePath,
-          size    : 0
+          path    : filePath
         };
       })
     }));

@@ -7,7 +7,7 @@
       "name": "{{ this.filename }}",
       "schema": {{{ this.schema }}},
       "path": "{{ this.path }}",
-      "bytes": {{ this.size }}
+      "bytes": {{ this.bytes }}
     }{{#unless @last}},{{/unless}}
   {{/each}}]
 }

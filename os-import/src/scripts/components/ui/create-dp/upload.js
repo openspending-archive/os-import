@@ -51,12 +51,12 @@ module.exports = backbone.BaseView.extend({
   },
 
   // Get CSV schema and validate text and schema over good tables
-  parseCSV: function(name, string, options) {
-    csv.parse(string, (function(error, data) {
+  parseCSV: function(file, options) {
+    csv.parse(file.content, (function(error, data) {
       var
 
         // https://github.com/gvidon/backbone-base/issues/2
-        id = [name, (new Date()).getTime()].join(''),
+        id = [file.name, (new Date()).getTime()].join(''),
 
         isURL = (options || {}).isURL,
         schema;
@@ -65,7 +65,7 @@ module.exports = backbone.BaseView.extend({
         this.trigger('parse-complete', {
           id        : id,
           isURL     : isURL,
-          name      : name,
+          name      : file.name,
           parseError: {message: error}
         });
 
@@ -75,7 +75,7 @@ module.exports = backbone.BaseView.extend({
       schema = jtsInfer(data[0], _.rest(data));
       this.trigger('validation-started');
 
-      this.goodTables.run(string, JSON.stringify(schema))
+      this.goodTables.run(file.content, JSON.stringify(schema))
         .then((function(result) {
           var
             errors = result.getValidationErrors();
@@ -84,7 +84,7 @@ module.exports = backbone.BaseView.extend({
             data : data,
             id   : id,
             isURL: isURL,
-            name : name,
+            name : file.name,
 
             parseError: !_.isEmpty(errors) && {
               message: 'We encountered some problems with this file. Click here for a breakdown of the issues.',
@@ -92,7 +92,8 @@ module.exports = backbone.BaseView.extend({
             },
 
             schema: schema,
-            text: string
+            size: file.size,
+            text: file.content
           });
         }).bind(this))
 
@@ -111,7 +112,12 @@ module.exports = backbone.BaseView.extend({
     FileAPI.readAsText(file, (function(fileEvent) {
       if(fileEvent.type === 'load') {
         this.trigger('parse-started');
-        setTimeout(this.parseCSV.bind(this, fileEvent.target.name, fileEvent.result), 100);
+
+        setTimeout(this.parseCSV.bind(this, {
+          content: fileEvent.result,
+          name: fileEvent.target.name,
+          size: fileEvent.target.size
+        }), 100);
       }
       
       else if(fileEvent.type === 'progress')
