@@ -38,7 +38,10 @@ module.exports = backbone.BaseView.extend({
       // TODO Filter non-csv data with appropriate error message
       // Download data file and trigger event to let parent form to catch it up
       request.get(url)
-        .then((function(result) { this.parseCSV(url, result.text, {isURL: true}); }).bind(this))
+        .then((function(result) {
+          this.parseCSV({name: url, content: result.text, size: result.header['content-length'] || 0}, {isURL: true});
+        }).bind(this))
+
         .catch(function(error) { console.error('Error while downloading file from url: ' + error); });
 
       return false;
