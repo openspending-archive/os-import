@@ -1,21 +1,10 @@
 require('browserify-handlebars');
 var _ = require('underscore');
+var backendDependencies = ['express', 'node-ssi'];
+var baseDir = './os-import';
 var browserify = require('browserify');
 var buffer = require('vinyl-buffer');
 var depcheck = require('depcheck');
-var gulp = require('gulp');
-var less = require('gulp-less');
-var minifyCss = require('gulp-minify-css');
-var path = require('path');
-var prefixer = require('gulp-autoprefixer');
-var rename = require('gulp-rename');
-var resolve = require('resolve');
-var source = require('vinyl-source-stream');
-var sourcemaps = require('gulp-sourcemaps');
-var uglify = require('gulp-uglify');
-var watchify = require('watchify');
-var backendDependencies = ['express', 'node-ssi'];
-var baseDir = './os-import';
 var distDir = baseDir + '/dist';
 
 var frontendDependencies = _.chain(require('./package.json').dependencies)
@@ -23,9 +12,15 @@ var frontendDependencies = _.chain(require('./package.json').dependencies)
   .keys()
   .value();
 
+var gulp = require('gulp');
+var less = require('gulp-less');
+var minifyCss = require('gulp-minify-css');
+var path = require('path');
+var prefixer = require('gulp-autoprefixer');
+var rename = require('gulp-rename');
+var resolve = require('resolve');
 var srcDir = baseDir + '/src';
 var scriptsDir = srcDir + '/scripts';
-var stylesDir = srcDir + '/styles';
 
 // Provide frontend app as a single bundle.
 var bundler = browserify({
@@ -37,7 +32,12 @@ var bundler = browserify({
   transform   : ['browserify-handlebars']
 });
 
- /*eslint-enable sort-vars */
+var source = require('vinyl-source-stream');
+var sourcemaps = require('gulp-sourcemaps');
+var stylesDir = srcDir + '/styles';
+var uglify = require('gulp-uglify');
+var watchify = require('watchify');
+
 // Don't include vendor dependencies in this bundle
 bundler.external(frontendDependencies);
 
