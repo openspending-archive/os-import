@@ -8,6 +8,7 @@ module.exports = {
   'datapackage.hbs'          : require('./datapackage.hbs'),
   'create-dp/form.hbs'       : require('./create-dp/form.hbs'),
   'create-dp/header.hbs'     : require('./create-dp/header.hbs'),
+  'create-dp/mapper.hbs'     : require('./create-dp/mapper.hbs'),
   'create-dp/name-editor.hbs': require('./create-dp/name-editor.hbs'),
 
   'create-dp/validation-report.hbs': require(
@@ -18,5 +19,6 @@ module.exports = {
     './create-dp/validation-report-item.hbs'
   ),
 
-  'create-dp/upload.hbs': require('./create-dp/upload.hbs')
+  'create-dp/upload.hbs': require('./create-dp/upload.hbs'),
+  'create-dp/user-data-item.hbs': require('./create-dp/user-data-item.hbs')
 };

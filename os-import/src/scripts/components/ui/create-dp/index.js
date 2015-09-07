@@ -3,6 +3,7 @@ var _ = require('lodash');
 var backbone = require('backbone');
 var FormView = require('./form');
 var HeaderView = require('./header');
+var MapperView = require('./mapper');
 
 module.exports = backbone.BaseView.extend({
   activate: function(state) {
@@ -25,6 +26,7 @@ module.exports = backbone.BaseView.extend({
       el: window.APP.$('#create-dp-header')
     })).render();
 
+    this.layout.mapper = (new MapperView()).render().deactivate();
     window.APP.$('#create-dp-form').append(this.layout.form.el);
     return this;
   }
