@@ -11,39 +11,13 @@
   <link rel="stylesheet" type="text/css" href="https://rawgit.com/okfn/app-theme/gh-pages/css/main.min.css">
   <link rel="stylesheet" href="http://okfnlabs.org/ok-panel/assets/css/frontend.css">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="landing.min.css">
+  <link rel="stylesheet" type="text/css" href="styles.min.css">
 </head>
 
 <body>
   <div class="wrapper">
     <div class="promo">
-      <header class="header">
-        <nav class="navbar navbar-static-top">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-      
-              <a class="navbar-brand has-icon" href="/">
-                <img src="images/logo.png" alt="" width="293" height="52">
-              </a>
-            </div>
-
-            <div class="collapse navbar-collapse" id="navbar">
-              <ul class="nav navbar-nav" style="margin-right: 132px;">
-                <li><a href="#">OpenSpending</a></li>
-                <li><a href="#">Community</a></li>
-                <li class="hidden-xs hidden-sm"><span>|</span></li>
-                <li><a href="#">Login</a></li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </header>
+      <!--# include file="_header.html" -->
 
       <div class="promo__wrapper">
         <div class="container">
@@ -71,7 +45,7 @@
                   (in 5 minutes!)
                 </div>
 
-                <a href="#" class="button button--promo">
+                <a href="/create" class="button button--promo">
                   Get Started
                 </a>
               </div>
@@ -139,47 +113,11 @@
       </div>
     </div>
 
-    <footer class="site-footer">
-      <div class="container">
-        <a class="footer-logo" href="https://okfn.org/">
-          <img src="https://bytebucket.org/okfn/assets.okfn.org/raw/88b24904b8ecded5e6d530739743162d1c5b3d93/p/okfn/img/okfn-logo-landscape-white.png" alt="Open Knowledge">
-        </a>
-  
-        <div class="footer-links">
-          <ul>
-            <li><a href="https://okfn.org/privacy-policy/">Privacy policy</a></li>
-            <li><a href="https://okfn.org/ip-policy/">IP policy</a></li>
-            <li><a href="https://okfn.org/cookie-policy/">Cookie policy</a></li>
-            <li><a href="https://okfn.org/terms-of-use/">Terms of use</a></li>
-          </ul>
-  
-          <ul class="footer-social">
-            <li><a href="https://facebook.com/OKFNetwork">
-              <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/facebook-logo-circle.png" alt="Facebook">
-            </a></li>
+    <!--# include file="_footer.html" --> 
 
-            <li>
-              <a href="https://twitter.com/okfn">
-                <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/twitter-logo-circle.png" alt="Twitter">
-              </a>
-            </li>
-
-            <li>
-              <a href="https://www.youtube.com/user/openknowledgefdn">
-                <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/youtube-logo-circle.png" alt="YouTube">
-              </a>
-            </li>
-          </ul>
-        </div>
-  
-        <hr>
-        <p>Open Knowledge Foundation is incorporated in England and Wales as a company Limited by guarantee. Company no. 05133759. Registered address: St. John’s Innovation Centre, Cowley Road, Cambridge, CB4 0WS, UK. VAT Registration no. GB 984404989.</p>
-      </div>
-    </footer>
+    <!-- Footer Scripts -->
+    <!-- Just visual representation -->
+    <script src="landing.min.js"></script>
   </div>
-
-  <!-- Footer Scripts -->
-  <!-- Just visual representation -->
-  <script src="landing.min.js"></script>
 </body>
 </html>

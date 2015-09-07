@@ -21,9 +21,14 @@ var
   watchify = require('watchify');
 
 var
+  backendDependencies = ['express', 'node-ssi'],
   baseDir = './os-import',
   distDir = baseDir + '/dist',
-  frontendDependencies = _.keys(require('./package.json').dependencies),
+
+  frontendDependencies = _.chain(require('./package.json').dependencies)
+    .omit(backendDependencies)
+    .keys()
+    .value(),
 
   /* eslint-disable sort-vars */
   srcDir = baseDir + '/src',
@@ -63,7 +68,15 @@ gulp.task('vendor-scripts', function() {
   var
     vendorBundler = browserify({});
 
-  frontendDependencies.forEach(function(id) { vendorBundler.require(resolve.sync(id), {expose: id}); });
+  frontendDependencies.forEach(function(id) {
+    // Avoid AMD version of backbone-forms
+    if(id === 'backbone-forms')
+      vendorBundler.require(resolve.sync(id + '/distribution/backbone-forms'), {expose: id});
+
+    else
+      vendorBundler.require(resolve.sync(id), {expose: id});
+  });
+
   return scriptPipeline(vendorBundler.bundle(), 'vendor.min.js', {uglify: true});
 });
 
@@ -109,7 +122,7 @@ gulp.task('landing-scripts', function() {
 // Provide frontend styles as a single bundle.
 gulp.task('styles', function() {
   // Style files dir structure may be comlicated, pick manually files to be compiled
-  gulp.src([path.join(stylesDir, 'app.less'), path.join(stylesDir, 'landing.less')])
+  gulp.src([path.join(stylesDir, 'styles.less')])
     .pipe(sourcemaps.init())
     .pipe(less())
     .pipe(prefixer({browsers: ['last 4 versions']}))

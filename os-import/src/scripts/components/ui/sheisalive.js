@@ -1,10 +1,26 @@
 // http://www.youtube.com/watch?v=OiBtx18jc4Q
-var
-  backbone = require('backbone'),
+require('backbone-base');
 
-  /* eslint-disable no-unused-vars */
-  backboneBase = require('backbone-base');
+var
+  _ = require('lodash'),
+  backbone = require('backbone'),
+  CreateDpView = require('./create-dp');
 
 module.exports = backbone.BaseView.extend({
-  render: function() { return this; }
+  activateOverlay: function(state) {
+    this.$('#modal-overlay').prop('hidden', !(_.isUndefined(state) || state));
+    return this;
+  },
+
+  events: {
+    /* eslint-disable lines-around-comment*/
+    // Share the click between all views
+    /* eslint-enable lines-around-comment*/
+    'click': function(event) { this.trigger('click', event.target); }
+  },
+
+  render: function() {
+    this.layout.createDp = new CreateDpView();
+    return this;
+  }
 });

@@ -1,0 +1,15 @@
+{{#if parseError}}
+	<div data-id="error" class="input__error clickable">{{ parseError.message }}</div>
+{{/if}}
+
+<div class="input__container">
+  {{#unless isURL}}<button data-id="replace" type="button" class="form-button form-button--inline">Replace file</button>{{/unless}}
+  <div data-id="file-name" class="input__file-label">{{ name }}</div>
+  <input data-id="file" type="file" name="file" accept="text/csv" hidden>
+</div>
+
+<div class="input__status {{#if parseError}}input__status--fail{{else}}input__status--done{{/if}}">
+	<i class="fa fa-check"></i>
+</div>
+
+<button data-id="remove" type="button" class="input__remove"><i class="fa fa-times"></i></button>
