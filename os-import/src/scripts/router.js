@@ -17,6 +17,7 @@ module.exports = backbone.Router.extend({
     logRoute('Create data package');
     this.deactivateAll();
     window.APP.layout.createDp.activate().layout.form.activate();
+    this.setCreateDpStep(1);
   },
 
   // Turn off all UI views except navigation bar which is part of base layout
@@ -30,6 +31,11 @@ module.exports = backbone.Router.extend({
   map: function() {
     logRoute('Manually map types, measures and dimensions');
     this.deactivateAll();
-    window.APP.layout.createDp.activate();
+    this.setCreateDpStep(2);
   },
+
+  setCreateDpStep: function(step) {
+    var createDp = window.APP.layout.createDp;
+    createDp.activate().layout.header.activate().setStep(step);
+  }
 });
