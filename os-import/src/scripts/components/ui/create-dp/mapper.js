@@ -8,6 +8,7 @@ module.exports = backbone.BaseView.extend({
     if((_.isUndefined(state) || state) && _.isEmpty(this.layout))
       this.render();
 
+    backbone.BaseView.prototype.activate.call(this, state);
     this.layout.userData.activate(state);
     return this;
   },

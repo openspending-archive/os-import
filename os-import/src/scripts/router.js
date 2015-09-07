@@ -16,6 +16,7 @@ module.exports = backbone.Router.extend({
   create: function() {
     logRoute('Create data package');
     this.deactivateAll();
+    window.APP.$('#create-dp-form').prop('hidden', false);
     window.APP.layout.createDp.activate().layout.form.activate();
     this.setCreateDpStep(1);
   },
@@ -31,6 +32,7 @@ module.exports = backbone.Router.extend({
   map: function() {
     logRoute('Manually map types, measures and dimensions');
     this.deactivateAll();
+    window.APP.layout.createDp.activate().layout.mapper.activate();
     this.setCreateDpStep(2);
   },
 

@@ -16,17 +16,21 @@ module.exports = backbone.BaseView.extend({
 
   deactivate: function() {
     _.invoke(_.values(this.layout), 'activate', false);
+    window.APP.$('#create-dp-form').prop('hidden', true);
     return this;
   },
 
   render: function() {
-    this.layout.form = (new FormView()).render().deactivate();
+    this.layout.form = (new FormView()).render();
 
     this.layout.header = (new HeaderView({
       el: window.APP.$('#create-dp-header')
     })).render();
 
-    this.layout.mapper = (new MapperView()).render().deactivate();
+    this.layout.mapper = (new MapperView({
+      el: window.APP.$('#create-dp-map')
+    })).render().deactivate();
+
     window.APP.$('#create-dp-form').append(this.layout.form.el);
     return this;
   }
