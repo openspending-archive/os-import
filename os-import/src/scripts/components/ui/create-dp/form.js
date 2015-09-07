@@ -1,14 +1,12 @@
 require('backbone-base');
 require('backbone-forms');
-
-var
-  _ = require('lodash'),
-  backbone = require('backbone'),
-  DataFilesEditor = require('./data-files-editor'),
-  NameEditor = require('./name-editor'),
-  slug = require('slug'),
-  UploadView = require('./upload'),
-  ValidationReportView = require('./validation-report');
+var _ = require('lodash');
+var backbone = require('backbone');
+var DataFilesEditor = require('./data-files-editor');
+var NameEditor = require('./name-editor');
+var slug = require('slug');
+var UploadView = require('./upload');
+var ValidationReportView = require('./validation-report');
 
 module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   activate: function(state) {
@@ -18,21 +16,30 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       this.render();
 
     // Do not allow child view (upload widget) to change parent — just catch its events
-    this.layout.upload.on('upload-started', function() { this.loading(); this.setMessage('Uploading'); }, this);
+    this.layout.upload.on('upload-started', function() {
+      this.loading(); this.setMessage('Uploading');
+    }, this);
 
-    this.layout.upload.on('parse-started', function() { this.setMessage('Parsing'); }, this);
-    this.layout.upload.on('validation-started', function() { this.setMessage('Validating'); }, this);
+    this.layout.upload.on('parse-started', function() {
+      this.setMessage('Parsing');
+    }, this);
+
+    this.layout.upload.on('validation-started', function() {
+      this.setMessage('Validating');
+    }, this);
 
     this.layout.upload.on('parse-complete', function(data) {
       this.loading(false);
-      this.fields.files.setValue((this.fields.files.getValue() || []).concat(data));
+
+      this.fields.files.setValue(
+        (this.fields.files.getValue() || []).concat(data)
+      );
     }, this);
 
     // Allow submission if there are files and all files are valid
     this.on('change', (function() {
-      var
-        field = this.fields.files,
-        hasErrors = field.editor.hasValidationErrors();
+      var field = this.fields.files;
+      var hasErrors = field.editor.hasValidationErrors();
 
       // Allow just single upload
       this.layout.upload.activate(_.isEmpty(field.getValue()));
@@ -44,12 +51,15 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       }
 
       this.setMessage(hasErrors ? 'Fixes Required' : 'Next');
-      this.$('[data-id=submit]').toggleClass('form-button--disabled', hasErrors);
+
+      this.$('[data-id=submit]')
+        .toggleClass('form-button--disabled', hasErrors);
     }).bind(this));
 
     return this;
   },
 
+  /*eslint-disable max-len*/
   events: {
     'click [data-id=submit]:not(.form-button--disabled):not(.form-button--loading)': function() {
       if(_.isEmpty(this.validate()))
@@ -63,17 +73,16 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     }
   },
 
+  /*eslint-enable max-len*/
   getDatapackage: function() {
-    var
-      value = this.getValue();
+    var value = this.getValue();
 
     return JSON.parse(window.TEMPLATES['datapackage.hbs']({
       name: slug(value.name).toLowerCase(),
       title: value.name,
 
       resources: _.map(value.files, function(file) {
-        var
-          filePath = file.isURL ? _.last(file.name.split('/')) : file.name;
+        var filePath = file.isURL ? _.last(file.name.split('/')) : file.name;
 
         return {
           bytes   : file.size,
@@ -91,9 +100,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   },
 
   loading: function(state) {
-    var
-      isLoading = _.isUndefined(state) || state;
-
+    var isLoading = _.isUndefined(state) || state;
     this.$('[data-id=submit]').toggleClass('form-button--disabled', !isLoading);
     this.$('[data-id=submit]').toggleClass('form-button--loading', isLoading);
     return this;
@@ -101,7 +108,11 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
 
   render: function() {
     backbone.Form.prototype.render.call(this);
-    this.layout.upload = (new UploadView({el: this.$('[data-id=upload]'), parent: this})).render();
+
+    this.layout.upload = (new UploadView({
+      el: this.$('[data-id=upload]'),
+      parent: this
+    })).render();
 
     this.layout.validationReport = (new ValidationReportView({
       container: '[data-id=content]',
@@ -115,19 +126,38 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     name: {
       label: 'Name your Data Package',
       type: NameEditor,
-      validators: [{type: 'required', message: 'Your data package should have a name'}],
+
+      validators: [{
+        type: 'required',
+        message: 'Your data package should have a name'
+      }],
+
       urlBase: 'https://openspending.org/'
     },
 
     files: {
-      type: DataFilesEditor,
-      validators: [{type: 'required', message: 'You need to upload at least one data file'}],
+      reporter: function(errors) {
+        // Incapsulate editor errors reporting routine in param to ensure generic use
+        window.APP
+          .layout.createDp
+            .layout.form
+              .layout.validationReport.reset(errors).activate();
+      },
 
-      // Incapsulate editor errors reporting routine in param to ensure generic use
-      reporter: function(errors) { window.APP.layout.createDp.layout.form.layout.validationReport.reset(errors).activate(); },
+      type: DataFilesEditor,
+
+      validators: [{
+        message: 'You need to upload at least one data file',
+        type: 'required'
+      }],
 
       // Same for uploader — ensure generic use
-      uploader: function(file) { window.APP.layout.createDp.layout.form.layout.upload.uploadLocalFile(file); }
+      uploader: function(file) {
+        window.APP
+          .layout.createDp
+            .layout.form
+              .layout.upload.uploadLocalFile(file);
+      }
     }
   },
 
