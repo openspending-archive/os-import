@@ -16,6 +16,7 @@ module.exports = backbone.BaseView.extend({
   render: function() {
     this.$el.html(this.template());
 
+    // First two rows of user data
     this.layout.userData = new UserDataView({
       el: this.$('[data-id="user-data"]')
     });
