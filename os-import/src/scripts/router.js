@@ -9,13 +9,14 @@ function logRoute(msg) {
 module.exports = backbone.Router.extend({
   routes: {
     'create(/)': 'create',
+    'map(/)': 'map',
     '(/)': 'index'
   },
 
   create: function() {
     logRoute('Create data package');
     this.deactivateAll();
-    window.APP.layout.createDp.activate();
+    window.APP.layout.createDp.activate().layout.form.activate();
   },
 
   // Turn off all UI views except navigation bar which is part of base layout
@@ -24,5 +25,11 @@ module.exports = backbone.Router.extend({
     return this;
   },
 
-  index: function() { this.deactivateAll(); }
+  index: function() { this.deactivateAll(); },
+
+  map: function() {
+    logRoute('Manually map types, measures and dimensions');
+    this.deactivateAll();
+    window.APP.layout.createDp.activate();
+  },
 });

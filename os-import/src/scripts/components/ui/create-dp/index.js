@@ -9,12 +9,17 @@ module.exports = backbone.BaseView.extend({
     if((_.isUndefined(state) || state) && _.isEmpty(this.layout))
       this.render();
 
-    _.invoke(_.values(this.layout), 'activate', state);
+    this.layout.header.activate(state);
+    return this;
+  },
+
+  deactivate: function() {
+    _.invoke(_.values(this.layout), 'activate', false);
     return this;
   },
 
   render: function() {
-    this.layout.form = (new FormView()).render();
+    this.layout.form = (new FormView()).render().deactivate();
 
     this.layout.header = (new HeaderView({
       el: window.APP.$('#create-dp-header')
