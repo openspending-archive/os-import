@@ -1,10 +1,8 @@
 require('backbone-base');
-
-var
-  _ = require('lodash'),
-  backbone = require('backbone'),
-  FormView = require('./form'),
-  HeaderView = require('./header');
+var _ = require('lodash');
+var backbone = require('backbone');
+var FormView = require('./form');
+var HeaderView = require('./header');
 
 module.exports = backbone.BaseView.extend({
   activate: function(state) {
@@ -17,7 +15,11 @@ module.exports = backbone.BaseView.extend({
 
   render: function() {
     this.layout.form = (new FormView()).render();
-    this.layout.header = (new HeaderView({el: window.APP.$('#create-dp-header')})).render();
+
+    this.layout.header = (new HeaderView({
+      el: window.APP.$('#create-dp-header')
+    })).render();
+
     window.APP.$('#create-dp-form').append(this.layout.form.el);
     return this;
   }

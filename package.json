@@ -71,7 +71,7 @@
   },
   "scripts": {
     "build": "gulp",
-    "lint_js": "eslint -c ./.eslintrc gulpfile.js os-import/src",
+    "lint_js": "eslint -c ./.eslintrc gulpfile.js os-import/app.js os-import/index.js os-import/src",
     "test": "mocha tests --recursive --reporter spec",
     "start": "node os-import",
     "start_dev": "gulp dev & node os-import",

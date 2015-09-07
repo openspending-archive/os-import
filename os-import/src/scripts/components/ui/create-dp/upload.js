@@ -1,14 +1,12 @@
 require('backbone-base');
 require('fileapi');
-
-var
-  _ = require('lodash'),
-  backbone = require('backbone'),
-  csv = require('csv'),
-  GoodTables = require('goodtables'),
-  jtsInfer = require('json-table-schema').infer,
-  request = require('superagent-bluebird-promise'),
-  validator = require('validator');
+var _ = require('lodash');
+var backbone = require('backbone');
+var csv = require('csv');
+var GoodTables = require('goodtables');
+var jtsInfer = require('json-table-schema').infer;
+var request = require('superagent-bluebird-promise');
+var validator = require('validator');
 
 module.exports = backbone.BaseView.extend({
   events: {
@@ -17,11 +15,12 @@ module.exports = backbone.BaseView.extend({
       this.$(event.currentTarget).val('');
     },
 
-    'click [data-id=select-file]': function() { this.$('[data-id=file]').trigger('click'); },
+    'click [data-id=select-file]': function() {
+      this.$('[data-id=file]').trigger('click');
+    },
 
     'keydown [data-id=link]': function(event) {
-      var
-        url = this.$('[data-id=link]').val();
+      var url = this.$('[data-id=link]').val();
 
       if(event.keyCode !== 13)
         return true;
@@ -39,10 +38,16 @@ module.exports = backbone.BaseView.extend({
       // Download data file and trigger event to let parent form to catch it up
       request.get(url)
         .then((function(result) {
-          this.parseCSV({name: url, content: result.text, size: result.header['content-length'] || 0}, {isURL: true});
+          this.parseCSV({
+            content: result.text,
+            name: url,
+            size: result.header['content-length'] || 0
+          }, {isURL: true});
         }).bind(this))
 
-        .catch(function(error) { console.error('Error while downloading file from url: ' + error); });
+        .catch(function(error) {
+          console.error('Error while downloading file from url: ' + error);
+        });
 
       return false;
     }
@@ -56,13 +61,11 @@ module.exports = backbone.BaseView.extend({
   // Get CSV schema and validate text and schema over good tables
   parseCSV: function(file, options) {
     csv.parse(file.content, (function(error, data) {
-      var
+      // https://github.com/gvidon/backbone-base/issues/2
+      var id = [file.name, (new Date()).getTime()].join('');
 
-        // https://github.com/gvidon/backbone-base/issues/2
-        id = [file.name, (new Date()).getTime()].join(''),
-
-        isURL = (options || {}).isURL,
-        schema;
+      var isURL = (options || {}).isURL;
+      var schema;
 
       if(error) {
         this.trigger('parse-complete', {
@@ -80,8 +83,7 @@ module.exports = backbone.BaseView.extend({
 
       this.goodTables.run(file.content, JSON.stringify(schema))
         .then((function(result) {
-          var
-            errors = result.getValidationErrors();
+          var errors = result.getValidationErrors();
 
           this.trigger('parse-complete', {
             data : data,
@@ -90,7 +92,9 @@ module.exports = backbone.BaseView.extend({
             name : file.name,
 
             parseError: !_.isEmpty(errors) && {
-              message: 'We encountered some problems with this file. Click here for a breakdown of the issues.',
+              message: 'We encountered some problems with this file. Click ' +
+                'here for a breakdown of the issues.',
+
               verbose: result.getGroupedByRows()
             },
 
@@ -124,7 +128,10 @@ module.exports = backbone.BaseView.extend({
       }
       
       else if(fileEvent.type === 'progress')
-        this.trigger('upload-progress', (fileEvent.loaded/fileEvent.total) * 100);
+        this.trigger(
+          'upload-progress',
+          (fileEvent.loaded/fileEvent.total) * 100
+        );
 
       else{
         this.trigger('upload-error');

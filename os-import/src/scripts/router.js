@@ -1,8 +1,9 @@
-var
-  _ = require('underscore'),
-  backbone = require('backbone');
+var _ = require('underscore');
+var backbone = require('backbone');
 
-function logRoute(msg) { console.log('%c' + msg, 'font-weight: bold; font-size: 1.5em;'); }
+function logRoute(msg) {
+  console.log('%c' + msg, 'font-weight: bold; font-size: 1.5em;');
+}
 
 // Application state changed here
 module.exports = backbone.Router.extend({

@@ -1,10 +1,8 @@
 // http://www.youtube.com/watch?v=OiBtx18jc4Q
 require('backbone-base');
-
-var
-  _ = require('lodash'),
-  backbone = require('backbone'),
-  CreateDpView = require('./create-dp');
+var _ = require('lodash');
+var backbone = require('backbone');
+var CreateDpView = require('./create-dp');
 
 module.exports = backbone.BaseView.extend({
   activateOverlay: function(state) {

@@ -1,7 +1,8 @@
-var
-	$ = require('jquery');
+var $ = require('jquery');
 
-function adjustWidth() { $('.promo__arrow-wrapper').width($('.promo__main').width()); }
+function adjustWidth() {
+  $('.promo__arrow-wrapper').width($('.promo__main').width());
+}
 
 $('[data-delay]').each(function() {
   setTimeout(

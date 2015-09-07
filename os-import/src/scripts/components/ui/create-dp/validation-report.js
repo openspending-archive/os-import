@@ -1,9 +1,7 @@
 require('backbone-base');
-
-var
-  _ = require('lodash'),
-  backbone = require('backbone'),
-  BaseModalView = require('../base/modal');
+var _ = require('lodash');
+var backbone = require('backbone');
+var BaseModalView = require('../base/modal');
 
 module.exports = backbone.BaseListView.extend(BaseModalView.prototype).extend({
   ItemView: backbone.BaseView.extend({
@@ -20,7 +18,10 @@ module.exports = backbone.BaseListView.extend(BaseModalView.prototype).extend({
     template: window.TEMPLATES['create-dp/validation-report-item.hbs']
   }),
 
-  render: function() { this.$el.html(this.template(this.errors)); return this; },
+  render: function() {
+    this.$el.html(this.template(this.errors));
+    return this;
+  },
 
   reset: function(errors) {
     this.errors = errors;

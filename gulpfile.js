@@ -1,52 +1,43 @@
-var
-  _ = require('underscore'),
-  browserify = require('browserify'),
+require('browserify-handlebars');
+var _ = require('underscore');
+var backendDependencies = ['express', 'node-ssi'];
+var baseDir = './os-import';
+var browserify = require('browserify');
+var buffer = require('vinyl-buffer');
+var depcheck = require('depcheck');
+var distDir = baseDir + '/dist';
 
-  /* eslint-disable no-unused-vars */
-  browserifyHandlebars = require('browserify-handlebars'),
+var frontendDependencies = _.chain(require('./package.json').dependencies)
+  .omit(backendDependencies)
+  .keys()
+  .value();
 
-  /* eslint-enable no-unused-vars */
-  buffer = require('vinyl-buffer'),
-  depcheck = require('depcheck'),
-  gulp = require('gulp'),
-  less = require('gulp-less'),
-  minifyCss = require('gulp-minify-css'),
-  path = require('path'),
-  prefixer = require('gulp-autoprefixer'),
-  rename = require('gulp-rename'),
-  resolve = require('resolve'),
-  source = require('vinyl-source-stream'),
-  sourcemaps = require('gulp-sourcemaps'),
-  uglify = require('gulp-uglify'),
-  watchify = require('watchify');
+var gulp = require('gulp');
+var less = require('gulp-less');
+var minifyCss = require('gulp-minify-css');
+var path = require('path');
+var prefixer = require('gulp-autoprefixer');
+var rename = require('gulp-rename');
+var resolve = require('resolve');
+var srcDir = baseDir + '/src';
+var scriptsDir = srcDir + '/scripts';
 
-var
-  backendDependencies = ['express', 'node-ssi'],
-  baseDir = './os-import',
-  distDir = baseDir + '/dist',
+// Provide frontend app as a single bundle.
+var bundler = browserify({
+  cache       : {},
+  debug       : true,
+  entries     : [scriptsDir + '/app.js'],
+  fullPaths   : true,
+  packageCache: {},
+  transform   : ['browserify-handlebars']
+});
 
-  frontendDependencies = _.chain(require('./package.json').dependencies)
-    .omit(backendDependencies)
-    .keys()
-    .value(),
+var source = require('vinyl-source-stream');
+var sourcemaps = require('gulp-sourcemaps');
+var stylesDir = srcDir + '/styles';
+var uglify = require('gulp-uglify');
+var watchify = require('watchify');
 
-  /* eslint-disable sort-vars */
-  srcDir = baseDir + '/src',
-
-  scriptsDir = srcDir + '/scripts',
-  stylesDir = srcDir + '/styles',
-
-  // Provide frontend app as a single bundle.
-  bundler = browserify({
-    cache       : {},
-    debug       : true,
-    entries     : [scriptsDir + '/app.js'],
-    fullPaths   : true,
-    packageCache: {},
-    transform   : ['browserify-handlebars']
-  });
-
- /*eslint-enable sort-vars */
 // Don't include vendor dependencies in this bundle
 bundler.external(frontendDependencies);
 
@@ -71,13 +62,17 @@ gulp.task('vendor-scripts', function() {
   frontendDependencies.forEach(function(id) {
     // Avoid AMD version of backbone-forms
     if(id === 'backbone-forms')
-      vendorBundler.require(resolve.sync(id + '/distribution/backbone-forms'), {expose: id});
+      vendorBundler.require(resolve.sync(id + '/distribution/backbone-forms'), {
+        expose: id
+      });
 
     else
       vendorBundler.require(resolve.sync(id), {expose: id});
   });
 
-  return scriptPipeline(vendorBundler.bundle(), 'vendor.min.js', {uglify: true});
+  return scriptPipeline(vendorBundler.bundle(), 'vendor.min.js', {
+    uglify: true
+  });
 });
 
 gulp.task('app-scripts', function() {
@@ -88,26 +83,40 @@ gulp.task('app-scripts-watched', function() {
   var
     watcher = watchify(bundler);
 
-  watcher.on('update', function() { scriptPipeline(watcher.bundle(), 'app.min.js'); });
+  watcher.on('update', function() {
+    scriptPipeline(watcher.bundle(), 'app.min.js');
+  });
+
   return scriptPipeline(watcher.bundle(), 'app.min.js');
 });
 
 // List unused dependencies in stderr.
 gulp.task('check-deps', function() {
-  depcheck(path.resolve('./'), {withoutDev: false, ignoreDirs: ['dist', 'node_modules']}, function(unused) {
+  depcheck(path.resolve('./'), {
+    withoutDev: false,
+    ignoreDirs: ['dist', 'node_modules']
+  }, function(unused) {
     if(!_.isEmpty(unused.dependencies))
       console.error('Unused dependencies: ', unused.dependencies.join(', '));
 
     if(!_.isEmpty(unused.devDependencies))
-      console.error('Unused dev dependencies: ', unused.devDependencies.join(', '));
+      console.error(
+        'Unused dev dependencies: ',
+        unused.devDependencies.join(', ')
+      );
 
     if(!_.isEmpty(unused.invalidFiles))
-      console.error('JS files that couldn\'t be parsed: ', unused.invalidFiles.join(', '));
+      console.error(
+        'JS files that couldn\'t be parsed: ',
+        unused.invalidFiles.join(', ')
+      );
   });
 });
 
 gulp.task('copy-static', function() {
-  return gulp.src([path.join(baseDir, 'src', 'static', '/**/*')]).pipe(gulp.dest(distDir));
+  return gulp.src([
+    path.join(baseDir, 'src', 'static', '/**/*')
+  ]).pipe(gulp.dest(distDir));
 });
 
 gulp.task('landing-scripts', function() {
@@ -132,5 +141,11 @@ gulp.task('styles', function() {
     .pipe(gulp.dest(distDir));
 });
 
-gulp.task('default', ['vendor-scripts', 'app-scripts', 'landing-scripts', 'styles', 'copy-static']);
-gulp.task('dev', ['vendor-scripts', 'app-scripts-watched', 'landing-scripts', 'styles', 'copy-static']);
+gulp.task('default', [
+  'vendor-scripts', 'app-scripts', 'landing-scripts', 'styles', 'copy-static'
+]);
+
+gulp.task('dev', [
+  'vendor-scripts', 'app-scripts-watched', 'landing-scripts', 'styles',
+  'copy-static'
+]);
