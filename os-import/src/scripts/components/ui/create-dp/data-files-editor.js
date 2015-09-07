@@ -1,13 +1,21 @@
 require('backbone-base');
 require('backbone-forms');
+var _ = require('lodash');
+var backbone = require('backbone');
 
-var
-  _ = require('lodash'),
-  backbone = require('backbone');
+module.exports = backbone.BaseListView.extend(
+  backbone.Form.editors.Base.prototype
+).extend({
+  getValue: function() {
+    return (this.collection && this.collection.length)
+      ? this.collection.toJSON()
+      : '';
+  },
 
-module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototype).extend({
-  getValue: function() { return (this.collection && this.collection.length) ? this.collection.toJSON() : ''; },
-  hasValidationErrors: function() { return _.any(this.getValue(), function(file) { return Boolean(file.parseError); }) },
+  hasValidationErrors: function() { return _.any(
+    this.getValue(),
+    function(file) { return Boolean(file.parseError); });
+  },
 
   initialize: function(options) {
     backbone.BaseListView.prototype.initialize.call(this, options);
@@ -18,9 +26,18 @@ module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototy
     attributes: {class: 'input'},
 
     events: {
-      'click [data-id=error]': function() { this.parent.schema.reporter(this.model.get('parseError').verbose); return false; },
-      'click [data-id=replace]': function() { this.$('[data-id=file]').trigger('click'); },
-      'click [data-id=remove]': function() { this.parent.collection.remove(this.model); },
+      'click [data-id=error]': function() {
+        this.parent.schema.reporter(this.model.get('parseError').verbose);
+        return false;
+      },
+
+      'click [data-id=replace]': function() {
+        this.$('[data-id=file]').trigger('click');
+      },
+
+      'click [data-id=remove]': function() {
+        this.parent.collection.remove(this.model);
+      },
 
       // Replace current file and upload new on when Replace button clicked
       'change [data-id=file]': function(event) {
@@ -29,7 +46,11 @@ module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototy
       }
     },
 
-    render: function() { this.$el.html(this.template(this.model.toJSON())); return this; },
+    render: function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      return this;
+    },
+
     template: window.TEMPLATES['create-dp/data-file-editor-item.hbs']
   }),
 
@@ -40,7 +61,11 @@ module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototy
       this.collection.off(null, null, this);
 
     backbone.BaseListView.prototype.reset.call(this, collection);
-    this.collection.on('add remove', function() { this.trigger('change', this.getValue()); }, this);
+
+    this.collection.on('add remove', function() {
+      this.trigger('change', this.getValue());
+    }, this);
+
     this.trigger('change', this.getValue());
     return this;
   },
@@ -59,7 +84,10 @@ module.exports = backbone.BaseListView.extend(backbone.Form.editors.Base.prototy
       error = backbone.Form.editors.Base.prototype.validate.call(this);
 
     if(!_.isEmpty(error)) {
-      this.$('[data-id="generic-error"]').prop('hidden', false).html(error.message);
+      this.$('[data-id="generic-error"]')
+        .prop('hidden', false)
+        .html(error.message);
+
       return error;
     }
 
