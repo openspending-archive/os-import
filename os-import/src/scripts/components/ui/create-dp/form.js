@@ -63,7 +63,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   events: {
     'click [data-id=submit]:not(.form-button--disabled):not(.form-button--loading)': function() {
       if(_.isEmpty(this.validate()))
-        console.log(this.getDatapackage());
+        window.ROUTER.navigate('/map', {trigger: true});
 
       return false;
     },
