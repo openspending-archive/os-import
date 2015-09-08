@@ -1,6 +1,7 @@
 require('backbone-base');
 var _ = require('lodash');
 var backbone = require('backbone');
+var ColumnFormView = require('./column-form');
 var UserDataView = require('./user-data');
 
 module.exports = backbone.BaseView.extend({
@@ -11,6 +12,11 @@ module.exports = backbone.BaseView.extend({
     backbone.BaseView.prototype.activate.call(this, state);
     this.layout.userData.activate(state);
     return this;
+  },
+
+  initialize: function(options) {
+    backbone.BaseView.prototype.initialize.call(this, options);
+    this.layout.forms = [];
   },
 
   render: function() {
@@ -24,8 +30,24 @@ module.exports = backbone.BaseView.extend({
     return this;
   },
 
-  reset: function(userDataCollection, datapackage) {
+  reset: function(userDataCollection, fieldsSchema) {
+    // Clean up previous state
+    _.each(this.layout.forms, function(form, index) {
+      form.remove();
+      delete(this.layout.forms[index]);
+    });
+
     this.layout.userData.reset(userDataCollection);
+
+    // One column — one form
+    _.each(userDataCollection.at(0).get('columns'), function(column, index) {
+      this.$('[data-id=forms]').append(_.last(
+        this.layout.forms = this.layout.forms.concat((new ColumnFormView({
+          data: fieldsSchema[index]
+        })).render())
+      ).el);
+    }, this);
+
     return this;
   },
 

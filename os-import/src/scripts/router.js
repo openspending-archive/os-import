@@ -41,7 +41,7 @@ module.exports = backbone.Router.extend({
           .value()
       ),
 
-      form.getDatapackage()
+      _.first(form.getDatapackage().resources).schema.fields
     ).activate();
 
     this.setCreateDpStep(2);

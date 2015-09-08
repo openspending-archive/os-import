@@ -1,4 +1,5 @@
 module.exports = {
+  'create-dp/column-form.hbs': require('./create-dp/column-form.hbs'),
   'create-dp/data-file-editor.hbs': require('./create-dp/data-file-editor.hbs'),
 
   'create-dp/data-file-editor-item.hbs': require(
