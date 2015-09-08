@@ -10,11 +10,18 @@ var ValidationReportView = require('./validation-report');
 
 module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   activate: function(state) {
+    var isActivating = _.isUndefined(state) || state;
     backbone.BaseView.prototype.activate.call(this, state);
     window.APP.$('#create-dp-form').prop('hidden', !(_.isUndefined(state) || state));
 
-    if((_.isUndefined(state) || state) && _.isEmpty(this.layout))
+    if(isActivating && _.isEmpty(this.layout))
       this.render();
+
+    this.layout.upload.off(null, null, this);
+    this.off(null, null, this);
+
+    if(!isActivating)
+      return this;
 
     // Do not allow child view (upload widget) to change parent — just catch its events
     this.layout.upload.on('upload-started', function() {
