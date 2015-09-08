@@ -11,6 +11,7 @@ var ValidationReportView = require('./validation-report');
 module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   activate: function(state) {
     backbone.BaseView.prototype.activate.call(this, state);
+    window.APP.$('#create-dp-form').prop('hidden', !(_.isUndefined(state) || state));
 
     if((_.isUndefined(state) || state) && _.isEmpty(this.layout))
       this.render();

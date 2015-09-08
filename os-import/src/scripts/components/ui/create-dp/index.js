@@ -16,7 +16,6 @@ module.exports = backbone.BaseView.extend({
 
   deactivate: function() {
     _.invoke(_.values(this.layout), 'activate', false);
-    window.APP.$('#create-dp-form').prop('hidden', true);
     return this;
   },
 

@@ -24,6 +24,10 @@ module.exports = backbone.BaseView.extend({
     return this;
   },
 
-  reset: function(data) { return this; },
+  reset: function(userDataCollection, datapackage) {
+    this.layout.userData.reset(userDataCollection);
+    return this;
+  },
+
   template: window.TEMPLATES['create-dp/mapper.hbs']
 });
