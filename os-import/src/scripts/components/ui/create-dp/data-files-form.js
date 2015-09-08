@@ -174,5 +174,5 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     return this;
   },
 
-  template: window.TEMPLATES['create-dp/form.hbs']
+  template: window.TEMPLATES['create-dp/data-files-form.hbs']
 });
