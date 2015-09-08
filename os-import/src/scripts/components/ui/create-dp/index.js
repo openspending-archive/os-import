@@ -1,7 +1,7 @@
 require('backbone-base');
 var _ = require('lodash');
 var backbone = require('backbone');
-var FormView = require('./form');
+var DataFilesFormView = require('./data-files-form');
 var HeaderView = require('./header');
 var MapperView = require('./mapper');
 
@@ -20,7 +20,7 @@ module.exports = backbone.BaseView.extend({
   },
 
   render: function() {
-    this.layout.form = (new FormView()).render();
+    this.layout.form = (new DataFilesFormView()).render();
 
     this.layout.header = (new HeaderView({
       el: window.APP.$('#create-dp-header')
