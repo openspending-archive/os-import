@@ -1,0 +1,40 @@
+.user-data-table {
+  margin-left: 116px;
+
+  tr:first-child {
+    font-weight: bold;
+  }
+
+  td { 
+    display: inline-block;
+    text-align: center;
+    width: 196px;
+    margin-right: 32px;
+  }
+}
+
+.column-form-labels {
+  display: flex;
+  flex-flow: column;
+
+  & > label {
+    margin: 0 0 8px 0;
+  }
+}
+
+.columns-forms,
+.columns-mapper {
+  display: flex;
+  flex-flow: row;
+}
+
+.column-form {
+  margin: 0 32px;
+
+  & > input,
+  & > select,
+  & > textarea {
+    display: block;
+    margin: 0 0 8px 0;
+  }
+}
