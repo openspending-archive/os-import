@@ -6,14 +6,14 @@ var backbone = require('backbone');
 module.exports = backbone.Form.extend({
   schema: {
     concept: {options: [
-      {label: 'Amount', title: 'mapping.measures.amount'},
-      {label: 'Date/Time', title: 'mapping.date.properties.year'},
-      {label: 'Classification', title: 'mapping.classification.properties.id'},
-      {label: 'Classification > ID', title: 'mapping.classification.properties.id'},
-      {label: 'Classification > Label', title: 'mapping.classification.properties.label'},
-      {label: 'Entity', title: 'mapping.entity.properties.id (not an attribute group)'},
-      {label: 'Entity > ID', title: 'mapping.entity.properties.id'},
-      {label: 'Entity > Label', title: 'mapping.entity.properties.label'}
+      {label: 'Amount', val: 'mapping.measures.amount'},
+      {label: 'Date/Time', val: 'mapping.date.properties.year'},
+      {label: 'Classification', val: 'mapping.classification.properties.id'},
+      {label: 'Classification > ID', val: 'mapping.classification.properties.id'},
+      {label: 'Classification > Label', val: 'mapping.classification.properties.label'},
+      {label: 'Entity', val: 'mapping.entity.properties.id (not an attribute group)'},
+      {label: 'Entity > ID', val: 'mapping.entity.properties.id'},
+      {label: 'Entity > Label', val: 'mapping.entity.properties.label'}
     ], type: 'Select'},
 
     description: {type: 'TextArea'},
