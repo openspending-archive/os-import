@@ -2,6 +2,7 @@ require('backbone-base');
 var _ = require('lodash');
 var backbone = require('backbone');
 var ColumnFormView = require('./column-form');
+var inflect = require('i')();
 var UserDataView = require('./user-data');
 
 module.exports = backbone.BaseView.extend({
@@ -41,9 +42,11 @@ module.exports = backbone.BaseView.extend({
 
     // One column — one form
     _.each(userDataCollection.at(0).get('columns'), function(column, index) {
+      var schema = fieldsSchema[index];
+
       this.$('[data-id=forms]').append(_.last(
         this.layout.forms = this.layout.forms.concat((new ColumnFormView({
-          data: fieldsSchema[index]
+          data: _.extend(schema, {title: inflect.titleize(schema.name)})
         })).render())
       ).el);
     }, this);
