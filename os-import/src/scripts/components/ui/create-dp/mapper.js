@@ -16,7 +16,7 @@ module.exports = backbone.BaseView.extend({
   },
 
   events: {
-    'click [data-id=next]': function() {
+    'click [data-id="submit-button"]': function() {
       _.invoke(this.layout.forms, 'validate');
     }
   },
@@ -40,6 +40,7 @@ module.exports = backbone.BaseView.extend({
   reset: function(userDataCollection, fieldsSchema) {
     // Clean up previous state
     _.each(this.layout.forms, function(form, index) {
+      form.off(null, null, this);
       form.remove();
       delete(this.layout.forms[index]);
     });
@@ -55,6 +56,26 @@ module.exports = backbone.BaseView.extend({
           data: _.extend(schema, {title: inflect.titleize(schema.name)})
         })).render())
       ).el);
+    }, this);
+
+    // When any form changed enable Next button if there are Amount and
+    // Date/Time mappings
+    _.each(this.layout.forms, function(form) {
+      form.on('concept:change', function(value) {
+        var hasAmount;
+        var hasDateTime;
+
+        _.each(this.layout.forms, function(form) {
+          if(form.getValue().concept === 'mapping.measures.amount')
+            hasAmount = true;
+
+          if(form.getValue().concept === 'mapping.date.properties.year')
+            hasDateTime = true;
+        });
+
+        this.$('[data-id="submit-button"]')
+          .toggleClass('form-button--disabled', !(hasAmount && hasDateTime));
+      }, this);
     }, this);
 
     return this;
