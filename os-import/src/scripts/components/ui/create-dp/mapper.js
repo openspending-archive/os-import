@@ -15,6 +15,12 @@ module.exports = backbone.BaseView.extend({
     return this;
   },
 
+  events: {
+    'click [data-id=next]': function() {
+      _.invoke(this.layout.forms, 'validate');
+    }
+  },
+
   initialize: function(options) {
     backbone.BaseView.prototype.initialize.call(this, options);
     this.layout.forms = [];

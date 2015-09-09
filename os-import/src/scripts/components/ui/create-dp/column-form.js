@@ -34,9 +34,19 @@ module.exports = backbone.Form.extend({
       {label: 'Any', val: 'any'},
     ], type: 'Select'},
 
-    name: {},
-    title: {}
+    title: {validators: ['required']}
   },
 
-  template: window.TEMPLATES['create-dp/column-form.hbs']
+  template: window.TEMPLATES['create-dp/column-form.hbs'],
+
+  validate: function() {
+    var errors = backbone.Form.prototype.validate.call(this);
+    this.$('[data-editors] [data-id=error]').html('');
+
+    _.each(errors, function(V, K) {
+      this.$('[data-editors="' + K + '"] [data-id=error]').html(V.message);
+    }, this);
+
+    return errors;
+  }
 });
