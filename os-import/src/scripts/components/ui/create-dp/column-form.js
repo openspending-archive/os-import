@@ -6,6 +6,7 @@ var backbone = require('backbone');
 module.exports = backbone.Form.extend({
   schema: {
     concept: {options: [
+      {label: '', val: ''},
       {label: 'Amount', val: 'mapping.measures.amount'},
       {label: 'Date/Time', val: 'mapping.date.properties.year'},
       {label: 'Classification', val: 'mapping.classification.properties.id'},
