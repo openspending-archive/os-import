@@ -29,19 +29,19 @@ module.exports = backbone.Router.extend({
   index: function() { this.deactivateAll(); },
 
   map: function() {
-    var form = window.APP.layout.createDp.layout.form;
+    var createDp = window.APP.layout.createDp;
     logRoute('Manually map types, measures and dimensions');
     this.deactivateAll();
 
-    window.APP.layout.createDp.activate().layout.mapper.reset(
+    createDp.activate().layout.mapper.reset(
       new backbone.Collection(
-        _.chain(_.first(form.getValue().files).data)
+        _.chain(_.first(createDp.layout.form.getValue().files).data)
           .slice(0, 3)
           .map(function(row) { return {columns: row}; })
           .value()
       ),
 
-      _.first(form.getDatapackage().resources).schema.fields
+      _.first(createDp.getDatapackage().resources).schema.fields
     ).activate();
 
     this.setCreateDpStep(2);

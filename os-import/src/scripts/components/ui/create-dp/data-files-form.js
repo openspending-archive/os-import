@@ -4,7 +4,6 @@ var _ = require('lodash');
 var backbone = require('backbone');
 var DataFilesEditor = require('./data-files-editor');
 var NameEditor = require('./name-editor');
-var slug = require('slug');
 var UploadView = require('./upload');
 var ValidationReportView = require('./validation-report');
 
@@ -82,26 +81,6 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   },
 
   /*eslint-enable max-len*/
-  getDatapackage: function() {
-    var value = this.getValue();
-
-    return JSON.parse(window.TEMPLATES['datapackage.hbs']({
-      name: slug(value.name).toLowerCase(),
-      title: value.name,
-
-      resources: _.map(value.files, function(file) {
-        var filePath = file.isURL ? _.last(file.name.split('/')) : file.name;
-
-        return {
-          bytes   : file.size,
-          filename: _.initial(filePath.split('.')).join('.'),
-          schema  : JSON.stringify(file.schema),
-          path    : filePath
-        };
-      })
-    }));
-  },
-
   initialize: function(options) {
     backbone.BaseView.prototype.initialize.call(this, options);
     backbone.Form.prototype.initialize.call(this, options);
