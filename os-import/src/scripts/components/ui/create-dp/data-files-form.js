@@ -11,7 +11,9 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   activate: function(state) {
     var isActivating = _.isUndefined(state) || state;
     backbone.BaseView.prototype.activate.call(this, state);
-    window.APP.$('#create-dp-form').prop('hidden', !(_.isUndefined(state) || state));
+
+    window.APP.$('#create-dp-form')
+      .prop('hidden', !(_.isUndefined(state) || state));
 
     if(isActivating && _.isEmpty(this.layout))
       this.render();

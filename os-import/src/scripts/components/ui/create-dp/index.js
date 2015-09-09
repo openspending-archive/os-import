@@ -20,10 +20,12 @@ module.exports = backbone.BaseView.extend({
     return this;
   },
 
+  // TODO This possible should be separated from UI
   getDatapackage: function() {
+    var mapper = this.layout.mapper;
     var value = this.layout.form.getValue();
 
-    return JSON.parse(window.TEMPLATES['datapackage.hbs']({
+    return JSON.parse(window.TEMPLATES['datapackage.hbs'](_.extend({
       name: slug(value.name).toLowerCase(),
       title: value.name,
 
@@ -37,7 +39,27 @@ module.exports = backbone.BaseView.extend({
           path    : filePath
         };
       })
-    }));
+
+    // Mappings
+    }, mapper.isComplete() && {
+      amountsource: (mapper.getAmount() || {}).name,
+      datetimesource: (mapper.getDateTime() || {}).name,
+
+      // Mappings with common patterns
+      mappings: [
+        {
+          idsource: (mapper.getEntity().id || {}).name,
+          labelsource: (mapper.getEntity().label || {}).name,
+          name: 'entity'
+        },
+
+        {
+          idsource: (mapper.getClassification().id || {}).name,
+          labelsource: (mapper.getClassification().label || {}).name,
+          name: 'classification'
+        }
+      ]
+    })));
   },
 
   render: function() {
@@ -48,7 +70,8 @@ module.exports = backbone.BaseView.extend({
     })).render();
 
     this.layout.mapper = (new MapperView({
-      el: window.APP.$('#create-dp-map')
+      el: window.APP.$('#create-dp-map'),
+      parent: this
     })).render().deactivate();
 
     window.APP.$('#create-dp-form').append(this.layout.form.el);

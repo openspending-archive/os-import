@@ -18,12 +18,59 @@ module.exports = backbone.BaseView.extend({
   events: {
     'click [data-id="submit-button"]': function() {
       _.invoke(this.layout.forms, 'validate');
+      console.log(this.parent.getDatapackage());
     }
+  },
+
+  getAmount: function() {
+    return this.getMapped('mapping.measures.amount');
+  },
+
+  getClassification: function() { return {
+    id: this.getMapped('mapping.classification.properties.id'),
+    label: this.getMapped('mapping.classification.properties.label')
+  }; },
+
+  getDateTime: function() {
+    return this.getMapped('mapping.date.properties.year');
+  },
+
+  getEntity: function() { return {
+    id: this.getMapped('mapping.entity.properties.id'),
+    label: this.getMapped('mapping.entity.properties.label')
+  }; },
+
+  // Returns form of a column which maps into logical entity <value>
+  getMapped: function(value) {
+    var valueForm = _.find(this.layout.forms, function(form) {
+      return form.getValue().concept === value;
+    });
+
+    if(valueForm)
+      return valueForm.getValue();
+
+    return null;
   },
 
   initialize: function(options) {
     backbone.BaseView.prototype.initialize.call(this, options);
     this.layout.forms = [];
+  },
+
+  // Check up if required mappings are done
+  isComplete: function() {
+    var hasAmount;
+    var hasDateTime;
+
+    _.each(this.layout.forms, function(form) {
+      if(form.getValue().concept === 'mapping.measures.amount')
+        hasAmount = true;
+
+      if(form.getValue().concept === 'mapping.date.properties.year')
+        hasDateTime = true;
+    });
+
+    return hasAmount && hasDateTime;
   },
 
   render: function() {
@@ -61,20 +108,9 @@ module.exports = backbone.BaseView.extend({
     // When any form changed enable Next button if there are Amount and
     // Date/Time mappings
     _.each(this.layout.forms, function(form) {
-      form.on('concept:change', function(value) {
-        var hasAmount;
-        var hasDateTime;
-
-        _.each(this.layout.forms, function(form) {
-          if(form.getValue().concept === 'mapping.measures.amount')
-            hasAmount = true;
-
-          if(form.getValue().concept === 'mapping.date.properties.year')
-            hasDateTime = true;
-        });
-
+      form.on('concept:change', function() {
         this.$('[data-id="submit-button"]')
-          .toggleClass('form-button--disabled', !(hasAmount && hasDateTime));
+          .toggleClass('form-button--disabled', !this.isComplete());
       }, this);
     }, this);
 

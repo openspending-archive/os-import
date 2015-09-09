@@ -33,6 +33,7 @@ module.exports = backbone.Router.extend({
     logRoute('Manually map types, measures and dimensions');
     this.deactivateAll();
 
+    // Pass user data and resource fields schemas into mapper view
     createDp.activate().layout.mapper.reset(
       new backbone.Collection(
         _.chain(_.first(createDp.layout.form.getValue().files).data)
