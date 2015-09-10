@@ -32,6 +32,18 @@ before(function(done) {
   });
 });
 
+describe('Columns mapping form', function() {
+  it(
+    'has a method that returns column mapped into Amount concept',
+    function(done) { done(); }
+  );
+
+  it(
+    'has a method that returns column mapped into Date/Time concept',
+    function(done) { done(); }
+  );
+});
+
 describe('Manual mapping of types', function() {
   this.timeout(25000);
 
