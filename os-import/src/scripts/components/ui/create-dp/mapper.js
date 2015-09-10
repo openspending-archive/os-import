@@ -90,8 +90,9 @@ module.exports = backbone.BaseView.extend({
       form.off(null, null, this);
       form.remove();
       delete(this.layout.forms[index]);
-    });
+    }, this);
 
+    this.layout.forms = [];
     this.layout.userData.reset(userDataCollection);
 
     // One column — one form
