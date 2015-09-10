@@ -19,6 +19,15 @@ process.env.NODE_ENV = 'test';
 Browser.localhost('127.0.0.1', process.env.PORT || 3000);
 browser = new Browser({maxWait: 30000, silent: true});
 
+function triggerColumnFormChange() {
+  _.first(
+    browser.window.APP
+      .layout.createDp
+        .layout.mapper
+          .layout.forms
+  ).trigger('concept:change');
+}
+
 // Get parsed data to feed to testing methods
 before(function(done) {
   fs.readFile(path.join(dataDir, 'decent.csv'), 'utf8', function (error, text) {
@@ -156,31 +165,57 @@ describe('Manual mapping of types', function() {
     function(done) {
       // Button should be disabled when no Amount and/or no Date/Time concepts defined
       browser.window.APP.$('.column-form [name="concept"]').val('');
-      _.first(browser.window.APP.layout.createDp.layout.mapper.layout.forms).trigger('concept:change');
+      triggerColumnFormChange();
       browser.assert.element('[data-id="submit-button"].form-button--disabled');
 
       // Button should be disabled when no Date/Time concepts mapped
       browser.window.APP.$('.column-form [name="concept"]').val('');
       browser.window.APP.$('.column-form:eq(0) [name="concept"]').val('mapping.measures.amount');
-      _.first(browser.window.APP.layout.createDp.layout.mapper.layout.forms).trigger('concept:change');
+      triggerColumnFormChange();
       browser.assert.element('[data-id="submit-button"].form-button--disabled');
 
       // Button should be disabled when no Amount concepts mapped
       browser.window.APP.$('.column-form [name="concept"]').val('');
       browser.window.APP.$('.column-form:eq(0) [name="concept"]').val('mapping.date.properties.year');
-      _.first(browser.window.APP.layout.createDp.layout.mapper.layout.forms).trigger('concept:change');
+      triggerColumnFormChange();
       browser.assert.element('[data-id="submit-button"].form-button--disabled');
 
       // Enabled in other cases
       browser.window.APP.$('.column-form:eq(0) [name="concept"]').val('mapping.measures.amount');
       browser.window.APP.$('.column-form:eq(1) [name="concept"]').val('mapping.date.properties.year');
-      _.first(browser.window.APP.layout.createDp.layout.mapper.layout.forms).trigger('concept:change');
+      triggerColumnFormChange();
       browser.assert.element('[data-id="submit-button"]:not(.form-button--disabled)');
 
       done();
     }
   );
 
-  it('doesn\'t allow to pick more than one Amount or Date/Time', function(done) {});
-  it('properly maps columns into concepts', function(done) {});
+  it('doesn\'t allow to pick more than one Amount or Date/Time', function(done) {
+    _.each([
+      {name: 'mapping.measures.amount', title: 'Amount'},
+      {name: 'mapping.date.properties.year', title: 'Date/Time'}
+    ], function(concept) {
+      browser.window.APP.$('.column-form:eq(0) [name="concept"]').val(concept.name);
+      triggerColumnFormChange();
+
+      assert(
+        browser.window.APP.$('.column-form option[value="' + concept.name + '"]').size() === 1,
+        'User allowed to pick more than one ' + concept.title
+      );
+
+      browser.window.APP.$('.column-form [name="concept"]').val('');
+      triggerColumnFormChange();
+
+      assert(
+        browser.window.APP.$('.column-form option[value="' + concept.name + '"]').size() === parsedData[0].length,
+        'Not all forms repopulated with ' + concept.title + ' option after it is unselected'
+      );
+    });
+
+    done();
+  });
+
+  it('properly maps columns into concepts', function(done) {
+
+  });
 });
