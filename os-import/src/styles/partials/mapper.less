@@ -1,6 +1,4 @@
 .user-data-table {
-  margin-left: 116px;
-
   tr:first-child {
     font-weight: bold;
   }
@@ -9,13 +7,14 @@
     display: inline-block;
     text-align: center;
     width: 196px;
-    margin-right: 32px;
+    margin-right: 48px;
   }
 }
 
 .column-form-labels {
   display: flex;
   flex-flow: column;
+  margin-top: 72px;
 
   & > label {
     margin: 0 0 8px 0;
@@ -26,6 +25,12 @@
 .columns-mapper {
   display: flex;
   flex-flow: row;
+}
+
+.columns-wrapper {
+  width: 720px;
+  white-space: nowrap;
+  overflow: scroll;
 }
 
 .column-form {
