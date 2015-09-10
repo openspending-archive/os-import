@@ -137,6 +137,52 @@ describe('Columns mapping view', function() {
       conceptTitle: 'Date/Time'
     }); }
   );
+
+  it(
+    'has a method that return true if there is Amount and Date/Time and false in other cases',
+
+    function(done) {
+      var mapper = browser.window.APP.layout.createDp.activate().layout.mapper;
+
+      mapper.reset(
+        new backbone.Collection(
+          _.chain(parsedData)
+            .slice(0, 3)
+            .map(function(row) { return {columns: row}; })
+            .value()
+        ),
+
+        parsedSchema.fields
+      );
+
+      // Button should be disabled when no Amount and/or no Date/Time concepts defined
+      browser.window.APP.$('.column-form [name="concept"]').val('');
+      triggerColumnFormChange();
+      assert(!mapper.isComplete());
+
+      // Button should be disabled when no Date/Time concepts mapped
+      browser.window.APP.$('.column-form [name="concept"]').val('');
+      browser.window.APP.$('.column-form:eq(0) [name="concept"]').val('mapping.measures.amount');
+      triggerColumnFormChange();
+      assert(!mapper.isComplete());
+
+      // Button should be disabled when no Amount concepts mapped
+      browser.window.APP.$('.column-form [name="concept"]').val('');
+      browser.window.APP.$('.column-form:eq(0) [name="concept"]').val('mapping.date.properties.year');
+      triggerColumnFormChange();
+      assert(!mapper.isComplete());
+
+      // Enabled in other cases
+      browser.window.APP.$('.column-form:eq(0) [name="concept"]').val('mapping.measures.amount');
+      browser.window.APP.$('.column-form:eq(1) [name="concept"]').val('mapping.date.properties.year');
+      triggerColumnFormChange();
+      assert(mapper.isComplete());
+
+      done();
+
+
+    }
+  );
 });
 
 describe('Manual mapping of types', function() {
