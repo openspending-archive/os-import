@@ -150,8 +150,35 @@ describe('Manual mapping of types', function() {
   });
 
   it(
-    'requires to map at least an Amount and a Date/Time in order' +
-    'to proceed to the next step', function(done) {}
+    'requires to map at least an Amount and a Date/Time in order ' +
+    'to proceed to the next step',
+
+    function(done) {
+      // Button should be disabled when no Amount and/or no Date/Time concepts defined
+      browser.window.APP.$('.column-form [name="concept"]').val('');
+      _.first(browser.window.APP.layout.createDp.layout.mapper.layout.forms).trigger('concept:change');
+      browser.assert.element('[data-id="submit-button"].form-button--disabled');
+
+      // Button should be disabled when no Date/Time concepts mapped
+      browser.window.APP.$('.column-form [name="concept"]').val('');
+      browser.window.APP.$('.column-form:eq(0) [name="concept"]').val('mapping.measures.amount');
+      _.first(browser.window.APP.layout.createDp.layout.mapper.layout.forms).trigger('concept:change');
+      browser.assert.element('[data-id="submit-button"].form-button--disabled');
+
+      // Button should be disabled when no Amount concepts mapped
+      browser.window.APP.$('.column-form [name="concept"]').val('');
+      browser.window.APP.$('.column-form:eq(0) [name="concept"]').val('mapping.date.properties.year');
+      _.first(browser.window.APP.layout.createDp.layout.mapper.layout.forms).trigger('concept:change');
+      browser.assert.element('[data-id="submit-button"].form-button--disabled');
+
+      // Enabled in other cases
+      browser.window.APP.$('.column-form:eq(0) [name="concept"]').val('mapping.measures.amount');
+      browser.window.APP.$('.column-form:eq(1) [name="concept"]').val('mapping.date.properties.year');
+      _.first(browser.window.APP.layout.createDp.layout.mapper.layout.forms).trigger('concept:change');
+      browser.assert.element('[data-id="submit-button"]:not(.form-button--disabled)');
+
+      done();
+    }
   );
 
   it('doesn\'t allow to pick more than one Amount or Date/Time', function(done) {});
