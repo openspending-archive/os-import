@@ -216,6 +216,29 @@ describe('Manual mapping of types', function() {
   });
 
   it('properly maps columns into concepts', function(done) {
+    var mapper = browser.window.APP.layout.createDp.layout.mapper;
+    var index = _.random(mapper.layout.forms.length);
 
+    browser.window.APP.$('.column-form:eq(' + index + ') [name="concept"]')
+      .val('mapping.measures.amount');
+
+    assert(
+      mapper.getAmount().name === parsedData[0][index],
+      'Mapping view returns incorrect Amount column'
+    );
+
+    // Clear state
+    browser.window.APP.$('.column-form [name="concept"]').val('');
+    index = _.random(mapper.layout.forms.length);
+
+    browser.window.APP.$('.column-form:eq(' + index + ') [name="concept"]')
+      .val('mapping.date.properties.year');
+
+    assert(
+      mapper.getDateTime().name === parsedData[0][index],
+      'Mapping view returns incorrect Date/Time column'
+    );
+
+    done();
   });
 });
