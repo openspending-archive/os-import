@@ -156,5 +156,4 @@ describe('Manual mapping of types', function() {
 
   it('doesn\'t allow to pick more than one Amount or Date/Time', function(done) {});
   it('properly maps columns into concepts', function(done) {});
-  it('properly defines columns types', function(done) {});
 });
