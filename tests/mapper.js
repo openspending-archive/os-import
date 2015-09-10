@@ -4,6 +4,7 @@ var assert = require('chai').assert;
 var Browser = require('zombie');
 var browser;
 var csv = require('csv');
+var inflect = require('i')();
 var path = require('path');
 var dataDir = path.join('.', 'tests', 'data');
 var fs = require('fs');
@@ -124,7 +125,29 @@ describe('Manual mapping of types', function() {
     done();
   });
 
-  it('shows a form of certain properties for each column', function(done) {});
+  it('shows a populated form of certain properties for each column', function(done) {
+    // Return certain form field value
+    function value(index, name) {
+      return browser.window.APP.$(
+        '.column-form:eq(' + index + ') [name="' + name + '"]'
+      ).val()
+    }
+
+    assert(
+      _.every(_.first(parsedData), function(column, index) {
+        var schema = parsedSchema.fields[index];
+
+        return value(index, 'title') === inflect.titleize(schema.name) &&
+          value(index, 'description') === '' &&
+          value(index, 'type') === schema.type &&
+          value(index, 'concept') === '';
+      }),
+
+      'Columns forms do not correspond to user data'
+    );
+
+    done()
+  });
 
   it(
     'requires to map at least an Amount and a Date/Time in order' +
