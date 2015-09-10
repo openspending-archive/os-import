@@ -93,7 +93,23 @@ describe('Manual mapping of types', function() {
   });
 
   it('shows header and first two rows of user data', function(done) {
+    assert(_.chain(parsedData)
+      .slice(0, 3)
 
+      .every(function(row, rIndex) {
+        return _.every(row, function(column, cIndex) {
+          return column = browser.window.APP.$(
+            '[data-id="user-data"] tr:eq(' + rIndex + ') td:eq(' + cIndex + ')'
+          ).html()
+        });
+      })
+
+      .value(),
+
+      'User data table do not correspond to uploaded data'
+    );
+
+    done();
   });
 
   it('shows a form of certain properties for each column', function(done) {});
