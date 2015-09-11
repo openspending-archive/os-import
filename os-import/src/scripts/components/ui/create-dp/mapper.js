@@ -106,12 +106,21 @@ module.exports = backbone.BaseView.extend({
       ).el);
     }, this);
 
-    // When any form changed enable Next button if there are Amount and
-    // Date/Time mappings
     _.each(this.layout.forms, function(form) {
-      form.on('concept:change', function() {
+      form.on('concept:change', function(thisForm) {
+        // When any form changed enable Next button if there are Amount and
+        // Date/Time mappings
         this.$('[data-id="submit-button"]')
           .toggleClass('form-button--disabled', !this.isComplete());
+
+        // Do not allow more one than concept of each type
+        _.each(this.layout.forms, function(otherForm) {
+          if(
+            otherForm.getValue().concept === thisForm.getValue().concept &&
+            otherForm.cid !== thisForm.cid
+          )
+            otherForm.setValue('concept', '');
+        });
       }, this);
     }, this);
 
