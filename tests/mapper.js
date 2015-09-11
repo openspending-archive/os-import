@@ -94,8 +94,8 @@ function testMappingMethod(done, method, options) {
   done();
 }
 
-function triggerColumnFormChange() {
-  var form =  _.first(
+function triggerColumnFormChange(userForm) {
+  var form = userForm || _.first(
     browser.window.APP.layout.createDp.layout.mapper.layout.forms
   );
 
@@ -275,22 +275,35 @@ describe('Manual mapping of types', function() {
   it('doesn\'t allow to pick more than one Amount or Date/Time', function(done) {
     _.each([
       {name: 'mapping.measures.amount', title: 'Amount'},
-      {name: 'mapping.date.properties.year', title: 'Date/Time'}
+      {name: 'mapping.date.properties.year', title: 'Date/Time'},
+      {name: 'mapping.classification.properties.id', title: 'Classification'},
+
+      {
+        name: 'mapping.classification.properties.id',
+        title: 'Classification > ID'
+      },
+
+      {
+        name: 'mapping.classification.properties.label',
+        title: 'Classification > Label'
+      },
+
+      {name: 'mapping.entity.properties.id', title: 'Entity'},
+      {name: 'mapping.entity.properties.id', title: 'Entity > ID'},
+      {name: 'mapping.entity.properties.label', title: 'Entity > Label'}
     ], function(concept) {
       browser.window.APP.$('.column-form:eq(0) [name="concept"]').val(concept.name);
       triggerColumnFormChange();
 
-      assert(
-        browser.window.APP.$('.column-form option[value="' + concept.name + '"]').size() === 1,
-        'User allowed to pick more than one ' + concept.title
+      browser.window.APP.$('.column-form:eq(1) [name="concept"]').val(concept.name);
+
+      triggerColumnFormChange(
+        browser.window.APP.layout.createDp.layout.mapper.layout.forms[1]
       );
 
-      browser.window.APP.$('.column-form [name="concept"]').val('');
-      triggerColumnFormChange();
-
       assert(
-        browser.window.APP.$('.column-form option[value="' + concept.name + '"]').size() === parsedData[0].length,
-        'Not all forms repopulated with ' + concept.title + ' option after it is unselected'
+        browser.window.APP.$('.column-form option[value="' + concept.name + '"]:selected').size() === 1,
+        'User allowed to pick more than one ' + concept.title
       );
     });
 
