@@ -95,12 +95,11 @@ function testMappingMethod(done, method, options) {
 }
 
 function triggerColumnFormChange() {
-  _.first(
-    browser.window.APP
-      .layout.createDp
-        .layout.mapper
-          .layout.forms
-  ).trigger('concept:change');
+  var form =  _.first(
+    browser.window.APP.layout.createDp.layout.mapper.layout.forms
+  );
+
+  form.trigger('concept:change', form);
 }
 
 // Get parsed data to feed to testing methods
