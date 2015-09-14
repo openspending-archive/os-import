@@ -17,7 +17,10 @@ module.exports = backbone.BaseView.extend({
     'click': function(event) { this.trigger('click', event.target); },
 
     'click [data-push-state]': function(event) {
-      window.ROUTER.navigate(event.currentTarget.attributes.href.nodeValue, {trigger: true});
+      window.ROUTER.navigate(event.currentTarget.attributes.href.nodeValue, {
+        trigger: true
+      });
+
       return false;
     }
   },

@@ -55,6 +55,7 @@ module.exports = backbone.Router.extend({
 
       && mapperFields.length === fields.length
     ))
+
       // Pass user data and resource fields schemas into mapper view
       mapper.reset(
         new backbone.Collection(
