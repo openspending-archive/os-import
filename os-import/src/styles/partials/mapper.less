@@ -1,3 +1,6 @@
+@editor-height: 56px;
+@description-height: 86px;
+
 .user-data-table {
   tr:first-child {
     font-weight: bold;
@@ -14,15 +17,18 @@
 .column-form-labels {
   display: flex;
   flex-flow: column;
-  margin-top: 72px;
+  margin-top: 68px;
 
   & > label {
-    margin: 0 0 8px 0;
-    height: 32px;
+    margin: 0;
+    height: @editor-height;
+    border-bottom: 1px solid;
+    padding: 16px 0;
   }
 
   & > label.--description {
-    height: 56px;
+    height: @description-height;
+    padding: 32px 0;
   }
 }
 
@@ -39,15 +45,16 @@
 }
 
 .column-form {
-  margin: 0 32px;
+  margin: 0;
 
   & > [data-editors] {
     display: block;
-    margin: 0 0 8px 0;
-    height: 32px;
+    height: @editor-height;
+    padding: 16px 32px;
+    border-bottom: 1px solid;
   }
 
   & > [data-editors="description"] {
-    height: 56px;
+    height: @description-height;
   }
 }
