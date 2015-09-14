@@ -69,6 +69,7 @@ function completeStep1(done) {
   });
 }
 
+// Common method for testing if concept returned correctly
 function testMappingMethod(done, method, options) {
   var index = _.random(parsedData[0].length - 1);
   var mapper = browser.window.APP.layout.createDp.activate().layout.mapper;
