@@ -340,4 +340,70 @@ describe('Manual mapping of types', function() {
 
     done();
   });
+
+  it('Step 2 is reset only if data changed on Step 1', function(done) {
+    var app = browser.window.APP;
+
+    var concept = _.sample([
+      'mapping.measures.amount',
+      'mapping.entity.properties.id',
+      'mapping.classification.properties.id'
+    ]);
+
+    var router = browser.window.ROUTER;
+
+    // Get back to Step 1, change nothing and proceed to Step 2
+    app.$('.column-form [name="concept"]').val('');
+    app.$('.column-form:eq(0) [name="concept"]').val(concept);
+    router.navigate('/create', {trigger: true});
+
+    setTimeout(function() {
+      router.navigate('/map', {trigger: true});
+
+      setTimeout(function() {
+        assert(app.$(
+          '.column-form:eq(0) [name="concept"] option[value="' + concept +
+          '"]:selected'
+        ).size() === 1);
+
+        assert(app.$(
+          '.column-form [name="concept"] option:not([value=""]):selected'
+        ).size() === 1);
+
+        // Get back to Step 1, upload new valid file with different schema and proceed to Step 2
+        app.$('.column-form [name="concept"]').val('');
+        app.$('.column-form:eq(0) [name="concept"]').val(concept);
+        router.navigate('/create', {trigger: true});
+
+        setTimeout(function() {
+          app.layout.createDp.layout.form.setValue('files', {
+            data: [['name', 'age'], ['John', 33]],
+            name: 'another.csv',
+
+            schema: {fields: [
+              {name: 'name', type: 'string'},
+              {name: 'age', type: 'integer'}
+            ]},
+
+            size: 1
+          });
+
+          router.navigate('/map', {trigger: true});
+
+          setTimeout(function() {
+            assert(app.$(
+              '.column-form:eq(0) [name="concept"] option[value="' + concept +
+              '"]:selected'
+            ).size() === 0);
+
+            assert(app.$(
+              '.column-form [name="concept"] option:not([value=""]):selected'
+            ).size() === 0);
+
+            done();
+          });
+        }, 300);
+      }, 300);
+    }, 300);    
+  });
 });

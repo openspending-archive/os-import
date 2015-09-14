@@ -49,11 +49,11 @@ module.exports = backbone.Router.extend({
     // TODO Replace this condition with data package object when design architecture
     // refactoring is done
     if(!(
-      _.every(mapperFields, function(field, i) {
+      mapperFields.length === fields.length
+
+      && _.every(mapperFields, function(field, i) {
         return field.name === fields[i].name && field.type === fields[i].type;
       })
-
-      && mapperFields.length === fields.length
     ))
 
       // Pass user data and resource fields schemas into mapper view
