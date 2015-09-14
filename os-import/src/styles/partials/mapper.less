@@ -18,6 +18,11 @@
 
   & > label {
     margin: 0 0 8px 0;
+    height: 32px;
+  }
+
+  & > label.--description {
+    height: 56px;
   }
 }
 
@@ -36,10 +41,13 @@
 .column-form {
   margin: 0 32px;
 
-  & > input,
-  & > select,
-  & > textarea {
+  & > [data-editors] {
     display: block;
     margin: 0 0 8px 0;
+    height: 32px;
+  }
+
+  & > [data-editors="description"] {
+    height: 56px;
   }
 }
