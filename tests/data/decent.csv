@@ -1,3 +1,7 @@
-name,age
-John,33
-Jane,22
+name,age,title,occupation,gender
+John,22,Mr,military,M
+Jane,33,Mrs,scientist,M
+Andrew,31,Dr,scientist,M
+Sally,45,Sr,taecher,F
+Pamela,23,Ms,doctor,F
+Frank,55,Mr,cpation,M

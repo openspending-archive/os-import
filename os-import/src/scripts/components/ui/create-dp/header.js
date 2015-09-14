@@ -7,5 +7,13 @@ module.exports = backbone.BaseView.extend({
     return this;
   },
 
+  // Mark active step
+  setStep: function(step) {
+    this.$('[data-step-id="' + step + '"]').addClass('is-active')
+      .siblings().removeClass('is-active');
+
+    return this;
+  },
+
   template: window.TEMPLATES['create-dp/header.hbs']
 });

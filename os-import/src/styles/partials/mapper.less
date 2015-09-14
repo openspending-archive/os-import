@@ -1,0 +1,60 @@
+@editor-height: 56px;
+@description-height: 86px;
+
+.user-data-table {
+  tr:first-child {
+    font-weight: bold;
+  }
+
+  td { 
+    display: inline-block;
+    text-align: center;
+    width: 196px;
+    margin-right: 48px;
+  }
+}
+
+.column-form-labels {
+  display: flex;
+  flex-flow: column;
+  margin-top: 68px;
+
+  & > label {
+    margin: 0;
+    height: @editor-height;
+    border-bottom: 1px solid;
+    padding: 16px 0;
+  }
+
+  & > label.--description {
+    height: @description-height;
+    padding: 32px 0;
+  }
+}
+
+.columns-forms,
+.columns-mapper {
+  display: flex;
+  flex-flow: row;
+}
+
+.columns-wrapper {
+  max-width: 1280px;
+  white-space: nowrap;
+  overflow: scroll;
+}
+
+.column-form {
+  margin: 0;
+
+  & > [data-editors] {
+    display: block;
+    height: @editor-height;
+    padding: 16px 32px;
+    border-bottom: 1px solid;
+  }
+
+  & > [data-editors="description"] {
+    height: @description-height;
+  }
+}

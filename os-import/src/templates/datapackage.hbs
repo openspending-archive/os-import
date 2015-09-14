@@ -9,5 +9,30 @@
       "path": "{{ this.path }}",
       "bytes": {{ this.bytes }}
     }{{#unless @last}},{{/unless}}
-  {{/each}}]
+  {{/each}}],
+
+  "mapping": {
+    {{#if amountsource}}"measures": {
+      "amount": {
+        "currency": "USD",
+        "source": "{{ amountsource }}"
+      }
+    },{{/if}}
+
+    {{#if datetimesource}}"date": {
+      "properties": {
+        "year": {"source": "{{ datetimesource }}"}
+      }
+    },{{/if}}
+
+    {{#each mappings}}"{{ name }}": {
+      "properties": {
+        {{#if idsource}}
+          "id": {"source": "{{ idsource }}"}{{#if labelsource}},{{/if}}
+        {{/if}}
+
+        {{#if labelsource}}"label": {"source": "{{ labelsource }}"}{{/if}}
+      }
+    }{{#unless @last}},{{/unless}}{{/each}}
+  }
 }

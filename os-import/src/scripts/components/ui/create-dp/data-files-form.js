@@ -4,16 +4,25 @@ var _ = require('lodash');
 var backbone = require('backbone');
 var DataFilesEditor = require('./data-files-editor');
 var NameEditor = require('./name-editor');
-var slug = require('slug');
 var UploadView = require('./upload');
 var ValidationReportView = require('./validation-report');
 
 module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   activate: function(state) {
+    var isActivating = _.isUndefined(state) || state;
     backbone.BaseView.prototype.activate.call(this, state);
 
-    if((_.isUndefined(state) || state) && _.isEmpty(this.layout))
+    window.APP.$('#create-dp-form')
+      .prop('hidden', !(_.isUndefined(state) || state));
+
+    if(isActivating && _.isEmpty(this.layout))
       this.render();
+
+    this.layout.upload.off(null, null, this);
+    this.off(null, null, this);
+
+    if(!isActivating)
+      return this;
 
     // Do not allow child view (upload widget) to change parent — just catch its events
     this.layout.upload.on('upload-started', function() {
@@ -63,7 +72,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   events: {
     'click [data-id=submit]:not(.form-button--disabled):not(.form-button--loading)': function() {
       if(_.isEmpty(this.validate()))
-        console.log(this.getDatapackage());
+        window.ROUTER.navigate('/map', {trigger: true});
 
       return false;
     },
@@ -74,26 +83,6 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   },
 
   /*eslint-enable max-len*/
-  getDatapackage: function() {
-    var value = this.getValue();
-
-    return JSON.parse(window.TEMPLATES['datapackage.hbs']({
-      name: slug(value.name).toLowerCase(),
-      title: value.name,
-
-      resources: _.map(value.files, function(file) {
-        var filePath = file.isURL ? _.last(file.name.split('/')) : file.name;
-
-        return {
-          bytes   : file.size,
-          filename: _.initial(filePath.split('.')).join('.'),
-          schema  : JSON.stringify(file.schema),
-          path    : filePath
-        };
-      })
-    }));
-  },
-
   initialize: function(options) {
     backbone.BaseView.prototype.initialize.call(this, options);
     backbone.Form.prototype.initialize.call(this, options);
@@ -166,5 +155,5 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     return this;
   },
 
-  template: window.TEMPLATES['create-dp/form.hbs']
+  template: window.TEMPLATES['create-dp/data-files-form.hbs']
 });

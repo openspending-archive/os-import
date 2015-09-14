@@ -14,7 +14,15 @@ module.exports = backbone.BaseView.extend({
     /* eslint-disable lines-around-comment*/
     // Share the click between all views
     /* eslint-enable lines-around-comment*/
-    'click': function(event) { this.trigger('click', event.target); }
+    'click': function(event) { this.trigger('click', event.target); },
+
+    'click [data-push-state]': function(event) {
+      window.ROUTER.navigate(event.currentTarget.attributes.href.nodeValue, {
+        trigger: true
+      });
+
+      return false;
+    }
   },
 
   render: function() {

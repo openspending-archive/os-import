@@ -256,6 +256,14 @@
   transition: opacity .3s ease;
   outline: none;
 
+  .form-button__label {
+    display: inline-block;
+  }
+
+  .form-button__label-disabled {
+    display: none;
+  }
+
   &:hover {
     color: #fff;
     opacity: .7;
@@ -304,6 +312,14 @@
   &--disabled {
     .form-button__spinner {
       display: none;
+    }
+
+    .form-button__label {
+      display: none;
+    }
+
+    .form-button__label-disabled {
+      display: inline-block;
     }
   }
 
