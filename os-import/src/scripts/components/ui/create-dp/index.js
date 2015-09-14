@@ -8,15 +8,25 @@ var slug = require('slug');
 
 module.exports = backbone.BaseView.extend({
   activate: function(state) {
-    if((_.isUndefined(state) || state) && _.isEmpty(this.layout))
+    if(_.isEmpty(this.layout))
       this.render();
 
     this.layout.header.activate(state);
+
+    if(state === false)
+      this.activateEmptyState(false);
+
+    return this;
+  },
+
+  activateEmptyState: function(state) {
+    window.APP.$('#direct-to-step-1').prop('hidden', !state);
     return this;
   },
 
   deactivate: function() {
     _.invoke(_.values(this.layout), 'activate', false);
+    this.activate(false);
     return this;
   },
 
