@@ -30,27 +30,44 @@ module.exports = backbone.Router.extend({
 
   map: function() {
     var createDp;
+    var fields;
+    var mapperFields;
+    var mapper;
     logRoute('Manually map types, measures and dimensions');
     this.deactivateAll();
     createDp = window.APP.layout.createDp.activate();
+    mapper = createDp.layout.mapper;
 
     if(_.isEmpty(createDp.layout.form.getValue().files)) {
       createDp.activateEmptyState(true);
       return false;
     }
 
-    // Pass user data and resource fields schemas into mapper view
-    createDp.layout.mapper.reset(
-      new backbone.Collection(
-        _.chain(_.first(createDp.layout.form.getValue().files).data)
-          .slice(0, 3)
-          .map(function(row) { return {columns: row}; })
-          .value()
-      ),
+    fields = _.first(createDp.getDatapackage().resources).schema.fields;
+    mapperFields = mapper.getValue();
 
-      _.first(createDp.getDatapackage().resources).schema.fields
-    ).activate();
+    // TODO Replace this condition with data package object when design architecture
+    // refactoring is done
+    if(!(
+      _.every(mapperFields, function(field, i) {
+        return field.name === fields[i].name && field.type === fields[i].type;
+      })
 
+      && mapperFields.length === fields.length
+    ))
+      // Pass user data and resource fields schemas into mapper view
+      mapper.reset(
+        new backbone.Collection(
+          _.chain(_.first(createDp.layout.form.getValue().files).data)
+            .slice(0, 3)
+            .map(function(row) { return {columns: row}; })
+            .value()
+        ),
+
+        fields
+      );
+
+    mapper.activate();
     this.setCreateDpStep(2);
   },
 

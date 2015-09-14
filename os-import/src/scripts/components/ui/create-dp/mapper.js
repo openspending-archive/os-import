@@ -52,6 +52,8 @@ module.exports = backbone.BaseView.extend({
     return null;
   },
 
+  getValue: function() { return _.invoke(this.layout.forms, 'getValue'); },
+
   initialize: function(options) {
     backbone.BaseView.prototype.initialize.call(this, options);
     this.layout.forms = [];
