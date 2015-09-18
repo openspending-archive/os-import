@@ -42,5 +42,5 @@ describe('Core', function() {
   });
 });
 
-require('./data-files');
-require('./mapper');
+require('./step1');
+require('./step2');
