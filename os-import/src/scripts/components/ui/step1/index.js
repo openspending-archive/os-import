@@ -1,19 +1,14 @@
 require('backbone-base');
-require('backbone-forms');
 var _ = require('lodash');
 var backbone = require('backbone');
-var DataFilesEditor = require('./data-files-editor');
-var NameEditor = require('./name-editor');
+var DataFilesFormView = require('../../forms/data-files-form');
 var UploadView = require('./upload');
 var ValidationReportView = require('./validation-report');
 
-module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
+module.exports = backbone.BaseView.extend({
   activate: function(state) {
     var isActivating = _.isUndefined(state) || state;
     backbone.BaseView.prototype.activate.call(this, state);
-
-    window.APP.$('#create-dp-form')
-      .prop('hidden', !(_.isUndefined(state) || state));
 
     if(isActivating && _.isEmpty(this.layout))
       this.render();
@@ -38,16 +33,13 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     }, this);
 
     this.layout.upload.on('parse-complete', function(data) {
-      this.loading(false);
-
-      this.fields.files.setValue(
-        (this.fields.files.getValue() || []).concat(data)
-      );
-    }, this);
+      this.parent.loading(false);
+      this.setValue('files', (this.getValue().files || []).concat(data));
+    }, this.layout.form);
 
     // Allow submission if there are files and all files are valid
-    this.on('change', (function() {
-      var field = this.fields.files;
+    this.layout.form.on('change', (function() {
+      var field = this.layout.form.fields.files;
       var hasErrors = field.editor.hasValidationErrors();
 
       // Allow just single upload
@@ -71,7 +63,7 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   /*eslint-disable max-len*/
   events: {
     'click [data-id=submit]:not(.form-button--disabled):not(.form-button--loading)': function() {
-      if(_.isEmpty(this.validate()))
+      if(_.isEmpty(this.layout.form.validate()))
         window.ROUTER.navigate('/map', {trigger: true});
 
       return false;
@@ -83,11 +75,6 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   },
 
   /*eslint-enable max-len*/
-  initialize: function(options) {
-    backbone.BaseView.prototype.initialize.call(this, options);
-    backbone.Form.prototype.initialize.call(this, options);
-  },
-
   loading: function(state) {
     var isLoading = _.isUndefined(state) || state;
     this.$('[data-id=submit]').toggleClass('form-button--disabled', !isLoading);
@@ -96,7 +83,8 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
   },
 
   render: function() {
-    backbone.Form.prototype.render.call(this);
+    this.$el.html(this.template());
+    this.layout.form = (new DataFilesFormView({parent: this})).render();
 
     this.layout.upload = (new UploadView({
       el: this.$('[data-id=upload]'),
@@ -108,44 +96,8 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       el: this.$('[data-id="validation-report"]')
     })).render();
 
+    this.$('[data-id=form]').prepend(this.layout.form.el);
     return this;
-  },
-
-  schema: {
-    name: {
-      label: 'Name your Data Package',
-      type: NameEditor,
-
-      validators: [{
-        type: 'required',
-        message: 'Your data package should have a name'
-      }],
-
-      urlBase: 'https://openspending.org/'
-    },
-
-    files: {
-      reporter: function(errors) {
-        // Incapsulate editor errors reporting routine in param to ensure generic use
-        window.APP
-          .layout.form
-            .layout.validationReport.reset(errors).activate();
-      },
-
-      type: DataFilesEditor,
-
-      validators: [{
-        message: 'You need to upload at least one data file',
-        type: 'required'
-      }],
-
-      // Same for uploader — ensure generic use
-      uploader: function(file) {
-        window.APP
-          .layout.form
-            .layout.upload.uploadLocalFile(file);
-      }
-    }
   },
 
   setMessage: function(message) {
@@ -153,5 +105,5 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
     return this;
   },
 
-  template: window.TEMPLATES['create-dp/data-files-form.hbs']
+  template: window.TEMPLATES['step1/index.hbs']
 });

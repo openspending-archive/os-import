@@ -15,7 +15,7 @@ module.exports = backbone.BaseListView.extend(BaseModalView.prototype).extend({
       return this;
     },
 
-    template: window.TEMPLATES['create-dp/validation-report-item.hbs']
+    template: window.TEMPLATES['step1/validation-report-item.hbs']
   }),
 
   render: function() {
@@ -33,5 +33,5 @@ module.exports = backbone.BaseListView.extend(BaseModalView.prototype).extend({
     return this;
   },
 
-  template: window.TEMPLATES['create-dp/validation-report.hbs']
+  template: window.TEMPLATES['step1/validation-report.hbs']
 });

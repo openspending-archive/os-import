@@ -16,7 +16,7 @@ module.exports = backbone.Router.extend({
   create: function() {
     logRoute('Create data package');
     window.APP.deactivate();
-    window.APP.activate().layout.form.activate();
+    window.APP.activate().layout.step1.activate();
     this.setStep(1);
   },
 
@@ -30,7 +30,7 @@ module.exports = backbone.Router.extend({
     window.APP.deactivate();
     mapper = window.APP.activate().layout.mapper;
 
-    if(_.isEmpty(window.APP.layout.form.getValue().files)) {
+    if(_.isEmpty(window.APP.layout.step1.layout.form.getValue().files)) {
       window.APP.activateEmptyState(true);
       return false;
     }
@@ -51,7 +51,7 @@ module.exports = backbone.Router.extend({
       // Pass user data and resource fields schemas into mapper view
       mapper.reset(
         new backbone.Collection(
-          _.chain(_.first(window.APP.layout.form.getValue().files).data)
+          _.chain(_.first(window.APP.layout.step1.layout.form.getValue().files).data)
             .slice(0, 3)
             .map(function(row) { return {columns: row}; })
             .value()

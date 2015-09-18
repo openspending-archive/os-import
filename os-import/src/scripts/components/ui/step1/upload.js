@@ -111,7 +111,7 @@ module.exports = backbone.BaseView.extend({
   },
 
   render: function() { this.$el.html(this.template({})); return this; },
-  template: window.TEMPLATES['create-dp/upload.hbs'],
+  template: window.TEMPLATES['step1/upload.hbs'],
 
   uploadLocalFile: function(file) {
     this.trigger('upload-started');

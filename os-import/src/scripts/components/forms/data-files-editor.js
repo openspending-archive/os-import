@@ -51,7 +51,7 @@ module.exports = backbone.BaseListView.extend(
       return this;
     },
 
-    template: window.TEMPLATES['create-dp/data-file-editor-item.hbs']
+    template: window.TEMPLATES['forms/data-files-editor-item.hbs']
   }),
 
   render: function() { this.$el.html(this.template()); return this; },
@@ -77,7 +77,7 @@ module.exports = backbone.BaseListView.extend(
     return this;
   },
 
-  template: window.TEMPLATES['create-dp/data-file-editor.hbs'],
+  template: window.TEMPLATES['forms/data-files-editor.hbs'],
 
   validate: function() {
     var

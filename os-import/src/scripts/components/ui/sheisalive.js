@@ -1,7 +1,7 @@
 // http://www.youtube.com/watch?v=OiBtx18jc4Qrequire('backbone-base');
 var _ = require('lodash');
 var backbone = require('backbone');
-var DataFilesFormView = require('./step1/data-files-form');
+var Step1View = require('./step1');
 var HeaderView = require('./header');
 var MapperView = require('./step2/mapper');
 var slug = require('slug');
@@ -53,7 +53,7 @@ module.exports = backbone.BaseView.extend({
   // TODO This possible should be separated from UI
   getDatapackage: function() {
     var mapper = this.layout.mapper;
-    var value = this.layout.form.getValue();
+    var value = this.layout.step1.layout.form.getValue();
 
     return JSON.parse(window.TEMPLATES['datapackage.hbs'](_.extend({
       name: slug(value.name).toLowerCase(),
@@ -93,7 +93,7 @@ module.exports = backbone.BaseView.extend({
   },
 
   render: function() {
-    this.layout.form = (new DataFilesFormView()).render();
+    this.layout.step1 = (new Step1View({el: this.$('#step1')})).render();
 
     this.layout.header = (new HeaderView({
       el: window.APP.$('#create-dp-header')
@@ -104,7 +104,6 @@ module.exports = backbone.BaseView.extend({
       parent: this
     })).render().deactivate();
 
-    window.APP.$('#create-dp-form').append(this.layout.form.el);
     return this;
   }
 });

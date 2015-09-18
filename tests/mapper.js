@@ -21,7 +21,7 @@ browser = new Browser({maxWait: 30000, silent: true});
 
 function completeStep1(done) {
   browser.visit('/create', function() {
-    var upload = browser.window.APP.layout.form.layout.upload;
+    var upload = browser.window.APP.layout.step1.layout.upload;
     browser.fill('[data-editors=name] input[name=name]', 'This is the name');
 
     sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
@@ -376,7 +376,7 @@ describe('Manual mapping of types', function() {
         router.navigate('/create', {trigger: true});
 
         setTimeout(function() {
-          app.layout.form.setValue('files', {
+          app.layout.step1.layout.form.setValue('files', {
             data: [['name', 'age'], ['John', 33]],
             name: 'another.csv',
 

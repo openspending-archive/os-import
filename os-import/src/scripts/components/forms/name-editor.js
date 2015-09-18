@@ -27,7 +27,7 @@ module.exports = backbone.Form.editors.Base.extend({
     return this;
   },
 
-  template: window.TEMPLATES['create-dp/name-editor.hbs'],
+  template: window.TEMPLATES['forms/name-editor.hbs'],
 
   validate: function() {
     var error = backbone.Form.editors.Base.prototype.validate.call(this);
