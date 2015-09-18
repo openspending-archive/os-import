@@ -21,7 +21,7 @@ browser = new Browser({maxWait: 30000, silent: true});
 
 function completeStep1(done) {
   browser.visit('/create', function() {
-    var upload = browser.window.APP.layout.createDp.layout.form.layout.upload;
+    var upload = browser.window.APP.layout.form.layout.upload;
     browser.fill('[data-editors=name] input[name=name]', 'This is the name');
 
     sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
@@ -72,7 +72,7 @@ function completeStep1(done) {
 // Common method for testing if concept returned correctly
 function testMappingMethod(done, method, options) {
   var index = _.random(parsedData[0].length - 1);
-  var mapper = browser.window.APP.layout.createDp.activate().layout.mapper;
+  var mapper = browser.window.APP.activate().layout.mapper;
   var schema = _.extend({}, parsedSchema.fields);
   schema[index].concept = options.conceptName;
 
@@ -97,7 +97,7 @@ function testMappingMethod(done, method, options) {
 
 function triggerColumnFormChange(userForm) {
   var form = userForm || _.first(
-    browser.window.APP.layout.createDp.layout.mapper.layout.forms
+    browser.window.APP.layout.mapper.layout.forms
   );
 
   form.trigger('concept:change', form);
@@ -142,7 +142,7 @@ describe('Columns mapping view', function() {
     'has a method that return true if there is Amount and Date/Time and false in other cases',
 
     function(done) {
-      var mapper = browser.window.APP.layout.createDp.activate().layout.mapper;
+      var mapper = browser.window.APP.activate().layout.mapper;
 
       mapper.reset(
         new backbone.Collection(
@@ -299,7 +299,7 @@ describe('Manual mapping of types', function() {
       browser.window.APP.$('.column-form:eq(1) [name="concept"]').val(concept.name);
 
       triggerColumnFormChange(
-        browser.window.APP.layout.createDp.layout.mapper.layout.forms[1]
+        browser.window.APP.layout.mapper.layout.forms[1]
       );
 
       assert(
@@ -312,7 +312,7 @@ describe('Manual mapping of types', function() {
   });
 
   it('properly maps columns into concepts', function(done) {
-    var mapper = browser.window.APP.layout.createDp.layout.mapper;
+    var mapper = browser.window.APP.layout.mapper;
     var index = _.random(mapper.layout.forms.length - 1);
     browser.window.APP.$('.column-form [name="concept"]').val('');
 
@@ -376,7 +376,7 @@ describe('Manual mapping of types', function() {
         router.navigate('/create', {trigger: true});
 
         setTimeout(function() {
-          app.layout.createDp.layout.form.setValue('files', {
+          app.layout.form.setValue('files', {
             data: [['name', 'age'], ['John', 33]],
             name: 'another.csv',
 

@@ -128,9 +128,8 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       reporter: function(errors) {
         // Incapsulate editor errors reporting routine in param to ensure generic use
         window.APP
-          .layout.createDp
-            .layout.form
-              .layout.validationReport.reset(errors).activate();
+          .layout.form
+            .layout.validationReport.reset(errors).activate();
       },
 
       type: DataFilesEditor,
@@ -143,9 +142,8 @@ module.exports = backbone.BaseView.extend(backbone.Form.prototype).extend({
       // Same for uploader — ensure generic use
       uploader: function(file) {
         window.APP
-          .layout.createDp
-            .layout.form
-              .layout.upload.uploadLocalFile(file);
+          .layout.form
+            .layout.upload.uploadLocalFile(file);
       }
     }
   },

@@ -15,35 +15,27 @@ module.exports = backbone.Router.extend({
 
   create: function() {
     logRoute('Create data package');
-    this.deactivateAll();
-    window.APP.layout.createDp.activate().layout.form.activate();
-    this.setCreateDpStep(1);
+    window.APP.deactivate();
+    window.APP.activate().layout.form.activate();
+    this.setStep(1);
   },
 
-  // Turn off all UI views except navigation bar which is part of base layout
-  deactivateAll: function() {
-    _.chain(window.APP.layout).values().invoke('deactivate').value();
-    return this;
-  },
-
-  index: function() { this.deactivateAll(); },
+  index: function() { window.APP.deactivate(); },
 
   map: function() {
-    var createDp;
     var fields;
     var mapperFields;
     var mapper;
     logRoute('Manually map types, measures and dimensions');
-    this.deactivateAll();
-    createDp = window.APP.layout.createDp.activate();
-    mapper = createDp.layout.mapper;
+    window.APP.deactivate();
+    mapper = window.APP.activate().layout.mapper;
 
-    if(_.isEmpty(createDp.layout.form.getValue().files)) {
-      createDp.activateEmptyState(true);
+    if(_.isEmpty(window.APP.layout.form.getValue().files)) {
+      window.APP.activateEmptyState(true);
       return false;
     }
 
-    fields = _.first(createDp.getDatapackage().resources).schema.fields;
+    fields = _.first(window.APP.getDatapackage().resources).schema.fields;
     mapperFields = mapper.getValue();
 
     // TODO Replace this condition with data package object when design architecture
@@ -59,7 +51,7 @@ module.exports = backbone.Router.extend({
       // Pass user data and resource fields schemas into mapper view
       mapper.reset(
         new backbone.Collection(
-          _.chain(_.first(createDp.layout.form.getValue().files).data)
+          _.chain(_.first(window.APP.layout.form.getValue().files).data)
             .slice(0, 3)
             .map(function(row) { return {columns: row}; })
             .value()
@@ -69,11 +61,10 @@ module.exports = backbone.Router.extend({
       );
 
     mapper.activate();
-    this.setCreateDpStep(2);
+    this.setStep(2);
   },
 
-  setCreateDpStep: function(step) {
-    var createDp = window.APP.layout.createDp;
-    createDp.activate().layout.header.activate().setStep(step);
+  setStep: function(step) {
+    window.APP.activate().layout.header.activate().setStep(step);
   }
 });

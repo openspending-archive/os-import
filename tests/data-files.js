@@ -53,7 +53,7 @@ describe('Form for creating data', function() {
 
     browser.visit('/create', function() {
       var
-        upload = browser.window.APP.layout.createDp.layout.form.layout.upload;
+        upload = browser.window.APP.layout.form.layout.upload;
 
       browser.fill('[data-id=upload] [data-id=link]', 'http://google.com');
 
@@ -67,7 +67,7 @@ describe('Form for creating data', function() {
 
   it('uploads valid CSV from local file, populates list with row and allows next step', function(done) {
     var
-      upload = browser.window.APP.layout.createDp.layout.form.layout.upload;
+      upload = browser.window.APP.layout.form.layout.upload;
     
     sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
       fs.readFile(path.join(dataDir, 'decent.csv'), 'utf8', function (error, data) {
@@ -112,7 +112,7 @@ describe('Form for creating data', function() {
 
   it('uploads malformed CSV from local file, populates list with erroneus row and disallows next step', function(done) {
     var
-      upload = browser.window.APP.layout.createDp.layout.form.layout.upload;
+      upload = browser.window.APP.layout.form.layout.upload;
     
     sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
       fs.readFile(path.join(dataDir, 'malformed.csv'), 'utf8', function (error, data) {
@@ -158,7 +158,7 @@ describe('Form for creating data', function() {
 
   it('uploads valid CSV from URL, populates list with row and allows next step', function(done) {
     var
-      upload = browser.window.APP.layout.createDp.layout.form.layout.upload
+      upload = browser.window.APP.layout.form.layout.upload
       URL = 'http://example.domain/file.csv';
 
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.
@@ -193,7 +193,7 @@ describe('Form for creating data', function() {
 
   it('uploads malformed CSV from URL, populates list with erroneus row and disallows next step', function(done) {
     var
-      upload = browser.window.APP.layout.createDp.layout.form.layout.upload
+      upload = browser.window.APP.layout.form.layout.upload
       URL = 'http://example.domain/file.csv';
 
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.

@@ -1,9 +1,9 @@
 // Required during objects init below
-window.TEMPLATES = require('../templates');
+window.TEMPLATES = require('../../../templates');
 
 var backbone = require('backbone');
 var Router = require('./router');
-var SheIsAliveView = require('./components/ui/sheisalive');
+var SheIsAliveView = require('./sheisalive');
 window.APP = new SheIsAliveView({el: 'body'});
 window.ROUTER = new Router();
 window.APP.render();

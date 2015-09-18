@@ -26,7 +26,7 @@ var scriptsDir = srcDir + '/scripts';
 var bundler = browserify({
   cache       : {},
   debug       : true,
-  entries     : [scriptsDir + '/app.js'],
+  entries     : [scriptsDir + '/components/ui/index.js'],
   fullPaths   : true,
   packageCache: {},
   transform   : ['browserify-handlebars']
@@ -122,7 +122,7 @@ gulp.task('copy-static', function() {
 gulp.task('landing-scripts', function() {
   return scriptPipeline(browserify({
     cache       : {},
-    entries     : [scriptsDir + '/components/ui/landing.js'],
+    entries     : [scriptsDir + '/components/landing.js'],
     fullPaths   : true,
     packageCache: {}
   }).bundle(), 'landing.min.js', {uglify: true});
