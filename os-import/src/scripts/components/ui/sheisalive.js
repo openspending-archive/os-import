@@ -1,6 +1,7 @@
 // http://www.youtube.com/watch?v=OiBtx18jc4Qrequire('backbone-base');
 var _ = require('lodash');
 var backbone = require('backbone');
+var DatapackageModel = require('../models/datapackage');
 var Step1View = require('./step1');
 var HeaderView = require('./header');
 var MapperView = require('./step2/mapper');
@@ -90,6 +91,11 @@ module.exports = backbone.BaseView.extend({
         }
       ]
     })));
+  },
+
+  initialize: function(options) {
+    backbone.BaseView.prototype.initialize.call(this, options);
+    this.datapackage = new DatapackageModel();
   },
 
   render: function() {

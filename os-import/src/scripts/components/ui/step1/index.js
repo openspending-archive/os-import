@@ -63,9 +63,11 @@ module.exports = backbone.BaseView.extend({
   /*eslint-disable max-len*/
   events: {
     'click [data-id=submit]:not(.form-button--disabled):not(.form-button--loading)': function() {
-      if(_.isEmpty(this.layout.form.validate()))
-        window.ROUTER.navigate('/map', {trigger: true});
-
+      if(!_.isEmpty(this.layout.form.validate()))
+        return false;
+      
+      window.APP.datapackage.setTitle(this.layout.form.getValue().name);
+      window.ROUTER.navigate('/map', {trigger: true});
       return false;
     },
 

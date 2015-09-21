@@ -10,6 +10,7 @@
     "backbone": "^1.2.0",
     "backbone-base": "^0.0.2",
     "backbone-forms": "^0.14.0",
+    "backbone-nested": "^2.0.4",
     "bluebird": "^2.9.31",
     "bootstrap": "^3.3.5",
     "csv": "^0.4.6",
