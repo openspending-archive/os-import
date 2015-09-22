@@ -52,9 +52,7 @@ describe('Form for creating data', function() {
     browser.assert.hasClass('[data-id="submit"]', 'form-button--loading');
 
     browser.visit('/create', function() {
-      var
-        upload = browser.window.APP.layout.step1.layout.upload;
-
+      var upload = browser.window.APP.layout.step1.layout.upload;
       browser.fill('[data-id=upload] [data-id=link]', 'http://google.com');
 
       // There is no way to simulate pressing Enter, as .fire() doesn't support passing .event
@@ -66,8 +64,7 @@ describe('Form for creating data', function() {
   });
 
   it('uploads valid CSV from local file, populates list with row and allows next step', function(done) {
-    var
-      upload = browser.window.APP.layout.step1.layout.upload;
+    var upload = browser.window.APP.layout.step1.layout.upload;
     
     sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
       fs.readFile(path.join(dataDir, 'decent.csv'), 'utf8', function (error, data) {
@@ -111,8 +108,7 @@ describe('Form for creating data', function() {
   });
 
   it('uploads malformed CSV from local file, populates list with erroneus row and disallows next step', function(done) {
-    var
-      upload = browser.window.APP.layout.step1.layout.upload;
+    var upload = browser.window.APP.layout.step1.layout.upload;
     
     sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
       fs.readFile(path.join(dataDir, 'malformed.csv'), 'utf8', function (error, data) {
@@ -157,9 +153,8 @@ describe('Form for creating data', function() {
   });
 
   it('uploads valid CSV from URL, populates list with row and allows next step', function(done) {
-    var
-      upload = browser.window.APP.layout.step1.layout.upload
-      URL = 'http://example.domain/file.csv';
+    var upload = browser.window.APP.layout.step1.layout.upload;
+    var URL = 'http://example.domain/file.csv';
 
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.
     sinon.stub(upload, 'parseCSV', function(name, string, options) {
@@ -192,9 +187,8 @@ describe('Form for creating data', function() {
   });
 
   it('uploads malformed CSV from URL, populates list with erroneus row and disallows next step', function(done) {
-    var
-      upload = browser.window.APP.layout.step1.layout.upload
-      URL = 'http://example.domain/file.csv';
+    var upload = browser.window.APP.layout.step1.layout.upload;
+    var URL = 'http://example.domain/file.csv';
 
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.
     sinon.stub(upload, 'parseCSV', function(name, string, options) {

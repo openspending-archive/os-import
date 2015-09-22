@@ -96,10 +96,7 @@ function testMappingMethod(done, method, options) {
 }
 
 function triggerColumnFormChange(userForm) {
-  var form = userForm || _.first(
-    browser.window.APP.layout.mapper.layout.forms
-  );
-
+  var form = userForm || _.first(browser.window.APP.layout.mapper.layout.forms);
   form.trigger('concept:change', form);
 }
 
@@ -179,8 +176,6 @@ describe('Columns mapping view', function() {
       assert(mapper.isComplete());
 
       done();
-
-
     }
   );
 });

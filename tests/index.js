@@ -1,13 +1,9 @@
-var
-  $ = require('jquery'),
-  _ = require('underscore'),
-  app = require('../os-import/app'),
-  assert = require('chai').assert,
-  Browser = require('zombie');
-
-var
-  browser;
-
+var $ = require('jquery');
+var _ = require('underscore');
+var app = require('../os-import/app');
+var assert = require('chai').assert;
+var Browser = require('zombie');
+var browser;
 process.env.NODE_ENV = 'test';
 Browser.localhost('127.0.0.1', process.env.PORT || 3000);
 browser = new Browser({maxWait: 30000, silent: true});
