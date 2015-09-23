@@ -1,17 +1,17 @@
 require('backbone-base');
-require('fileapi');
 var _ = require('lodash');
 var backbone = require('backbone');
-var csv = require('csv');
-var GoodTables = require('goodtables');
-var jtsInfer = require('json-table-schema').infer;
 var request = require('superagent-bluebird-promise');
+var TabularFileManager = require('../../tabularfilemanager');
 var validator = require('validator');
 
 module.exports = backbone.BaseView.extend({
   events: {
     'change [data-id=file]': function(event) {
-      this.uploadLocalFile(FileAPI.getFiles(event.currentTarget)[0]);
+      this.fileManager.fromBlob(event.currentTarget.files[0], (function(data) {
+        this.setValue('files', (this.getValue().files || []).concat(data));
+      }).bind(this.parent.layout.form));
+
       this.$(event.currentTarget).val('');
     },
 
@@ -55,92 +55,9 @@ module.exports = backbone.BaseView.extend({
 
   initialize: function(options) {
     backbone.BaseView.prototype.initialize.call(this, options);
-    this.goodTables = new GoodTables({method: 'post', report_type: 'grouped'});
-  },
-
-  // Get CSV schema and validate text and schema over good tables
-  parseCSV: function(file, options) {
-    csv.parse(file.content, (function(error, data) {
-      // https://github.com/gvidon/backbone-base/issues/2
-      var id = [file.name, (new Date()).getTime()].join('');
-
-      var isURL = (options || {}).isURL;
-      var schema;
-
-      if(error) {
-        this.trigger('parse-complete', {
-          id        : id,
-          isURL     : isURL,
-          name      : file.name,
-          parseError: {message: error}
-        });
-
-        return false;
-      }
-
-      schema = jtsInfer(data[0], _.rest(data));
-      this.trigger('validation-started');
-
-      this.goodTables.run(file.content, JSON.stringify(schema))
-        .then((function(result) {
-          var errors = result.getValidationErrors();
-
-          this.trigger('parse-complete', {
-            data : data,
-            id   : id,
-            isURL: isURL,
-            name : file.name,
-
-            parseError: !_.isEmpty(errors) && {
-              message: 'We encountered some problems with this file. Click ' +
-                'here for a breakdown of the issues.',
-
-              verbose: result.getGroupedByRows()
-            },
-
-            schema: schema,
-            size: file.size,
-            text: file.content
-          });
-        }).bind(this))
-
-        .catch(console.error);
-    }).bind(this));
-
-    return this;
+    this.fileManager = new TabularFileManager();
   },
 
   render: function() { this.$el.html(this.template({})); return this; },
-  template: window.TEMPLATES['step1/upload.hbs'],
-
-  uploadLocalFile: function(file) {
-    this.trigger('upload-started');
-
-    FileAPI.readAsText(file, (function(fileEvent) {
-      if(fileEvent.type === 'load') {
-        this.trigger('parse-started');
-
-        setTimeout(this.parseCSV.bind(this, {
-          content: fileEvent.result,
-          name: fileEvent.target.name,
-          size: fileEvent.target.size
-        }), 100);
-      }
-      
-      else if(fileEvent.type === 'progress')
-        this.trigger(
-          'upload-progress',
-          (fileEvent.loaded/fileEvent.total) * 100
-        );
-
-      else{
-        this.trigger('upload-error');
-
-        // TODO Implement upload errors rendering
-        this.setError('File upload failed');
-      }
-    }).bind(this));
-
-    return this;
-  }
+  template: window.TEMPLATES['step1/upload.hbs']
 });

@@ -20,22 +20,21 @@ module.exports = backbone.BaseView.extend({
       return this;
 
     // Do not allow child view (upload widget) to change parent — just catch its events
-    this.layout.upload.on('upload-started', function() {
+    this.layout.upload.fileManager.on('upload-started', (function() {
       this.loading(); this.setMessage('Uploading');
-    }, this);
+    }).bind(this));
 
-    this.layout.upload.on('parse-started', function() {
+    this.layout.upload.fileManager.on('parse-started', (function() {
       this.setMessage('Parsing');
-    }, this);
+    }).bind(this));
 
-    this.layout.upload.on('validation-started', function() {
+    this.layout.upload.fileManager.on('validation-started', (function() {
       this.setMessage('Validating');
-    }, this);
+    }).bind(this));
 
-    this.layout.upload.on('parse-complete', function(data) {
-      this.parent.loading(false);
-      this.setValue('files', (this.getValue().files || []).concat(data));
-    }, this.layout.form);
+    this.layout.upload.fileManager.on('parse-complete', (function(data) {
+      this.loading(false);
+    }).bind(this));
 
     // Allow submission if there are files and all files are valid
     this.layout.form.on('change', (function() {
