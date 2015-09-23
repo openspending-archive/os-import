@@ -9,7 +9,6 @@ module.exports = function(url, doneCb, errorCb) {
   this.emit('upload-started');
 
   // TODO Filter non-csv data with appropriate error message
-  // Download data file and trigger event to let parent form to catch it up
   return require('superagent-bluebird-promise').get(url)
     .then((function(result) {
       return this.parse({
