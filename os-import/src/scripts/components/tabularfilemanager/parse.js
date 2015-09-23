@@ -29,12 +29,16 @@ module.exports = function(file, options) {
         return false;
       }
 
-      schema = require('json-table-schema').infer(data[0], _.rest(data));
       this.emit('validation-started');
 
-      this.goodTables.run(file.content, JSON.stringify(schema))
+      this.goodTables.run(file.content)
         .then((function(result) {
           var errors = result.getValidationErrors();
+          var isValid = _.isEmpty(errors);
+
+          // Get schema for only valid CSVs
+          if(isValid)
+            schema = require('json-table-schema').infer(data[0], _.rest(data));
 
           this.emit('parse-complete', this.file = {
             data : data,
