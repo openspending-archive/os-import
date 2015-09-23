@@ -14,10 +14,8 @@ module.exports = backbone.BaseView.extend({
   events: {
     'change [data-id=file]': function(event) {
       // When file uploaded add it to the Step 1 form
-      this.fileManager.fromBlob(
-        event.currentTarget.files[0],
-        this.addFile.bind(this)
-      );
+      this.fileManager.fromBlob(event.currentTarget.files[0])
+        .then(this.addFile.bind(this));
 
       this.$(event.currentTarget).val('');
     },
@@ -32,8 +30,8 @@ module.exports = backbone.BaseView.extend({
       if(event.keyCode !== 13)
         return true;
 
+      this.fileManager.fromURL(url).then(this.addFile.bind(this));
       this.$('[data-id=link]').val('');
-      this.fileManager.fromURL(url, this.addFile.bind(this));
       return false;
     }
   },
