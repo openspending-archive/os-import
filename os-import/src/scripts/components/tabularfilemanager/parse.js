@@ -25,7 +25,7 @@ module.exports = function(file, options) {
       var schema;
 
       if(error) {
-        reject(this.result = emitError.call(this, error));
+        reject(this.file = emitError.call(this, error));
         return false;
       }
 
@@ -36,7 +36,7 @@ module.exports = function(file, options) {
         .then((function(result) {
           var errors = result.getValidationErrors();
 
-          this.emit('parse-complete', this.result = {
+          this.emit('parse-complete', this.file = {
             data : data,
             id   : id,
             isURL: isURL,
@@ -54,11 +54,11 @@ module.exports = function(file, options) {
             text: file.content
           });
 
-          resolve(this.result);
+          resolve(this.file);
         }).bind(this))
 
         .catch((function(error) {
-          reject(this.result = emitError.call(this, error));
+          reject(this.file = emitError.call(this, error));
         }).bind(this));
     }).bind(this));
   }).bind(this));
