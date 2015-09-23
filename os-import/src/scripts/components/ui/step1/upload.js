@@ -13,10 +13,7 @@ module.exports = backbone.BaseView.extend({
 
   events: {
     'change [data-id=file]': function(event) {
-      // When file uploaded add it to the Step 1 form
-      this.fileManager.fromBlob(event.currentTarget.files[0])
-        .then(this.addFile.bind(this));
-
+      this.uploadLocalFile(event.currentTarget.files[0]);
       this.$(event.currentTarget).val('');
     },
 
@@ -42,5 +39,12 @@ module.exports = backbone.BaseView.extend({
   },
 
   render: function() { this.$el.html(this.template({})); return this; },
-  template: window.TEMPLATES['step1/upload.hbs']
+  template: window.TEMPLATES['step1/upload.hbs'],
+
+  uploadLocalFile: function(file) {
+    // When file uploaded add it to the Step 1 form
+    this.fileManager.fromBlob(file).then(this.addFile.bind(this));
+
+    return this;
+  }
 });

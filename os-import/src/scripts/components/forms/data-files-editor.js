@@ -42,7 +42,7 @@ module.exports = backbone.BaseListView.extend(
       // Replace current file and upload new on when Replace button clicked
       'change [data-id=file]': function(event) {
         this.parent.collection.remove(this.model);
-        this.parent.schema.uploader(FileAPI.getFiles(event.currentTarget)[0]);
+        this.parent.schema.uploader(event.currentTarget.files[0]);
       }
     },
 
