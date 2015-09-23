@@ -1,6 +1,20 @@
 var _ = require('lodash');
 var Promise = require('bluebird');
 
+// Emit data with critical error message
+function emitError(error) {
+  var result;
+
+  this.emit('parse-complete', result = {
+    id        : id,
+    isURL     : isURL,
+    name      : file.name,
+    parseError: {message: error}
+  });
+
+  return result;
+}
+
 module.exports = function(file, options) {
   return new Promise((function(resolve, reject) {
     require('csv').parse(file.content, (function(error, data) {
@@ -11,14 +25,7 @@ module.exports = function(file, options) {
       var schema;
 
       if(error) {
-        this.emit('parse-complete', this.result = {
-          id        : id,
-          isURL     : isURL,
-          name      : file.name,
-          parseError: {message: error}
-        });
-
-        reject(error);
+        reject(this.result = emitError.call(this, error));
         return false;
       }
 
@@ -50,7 +57,9 @@ module.exports = function(file, options) {
           resolve(this.result);
         }).bind(this))
 
-        .catch(reject);
+        .catch((function(error) {
+          reject(this.result = emitError.call(this, error));
+        }).bind(this));
     }).bind(this));
   }).bind(this));
 }
