@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 
-module.exports = function(url, doneCb, errorCb) {
+module.exports = function(url, options) {
   if(!require('validator').isURL(url))
     return new Promise(function(resolve, reject) {
       reject('URL has worng format: ' + url);
