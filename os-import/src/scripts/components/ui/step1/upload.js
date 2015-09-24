@@ -1,6 +1,7 @@
 require('backbone-base');
 var _ = require('lodash');
 var backbone = require('backbone');
+var config = require('../../../config');
 var TabularFileManager = require('../../tabularfilemanager');
 
 module.exports = backbone.BaseView.extend({
@@ -43,7 +44,8 @@ module.exports = backbone.BaseView.extend({
 
   uploadLocalFile: function(file) {
     // When file uploaded add it to the Step 1 form
-    this.fileManager.fromBlob(file).then(this.addFile.bind(this));
+    this.fileManager.fromBlob(file, {maxSize: config.csvMaxSize})
+      .then(this.addFile.bind(this));
 
     return this;
   }
