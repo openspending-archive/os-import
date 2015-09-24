@@ -16,6 +16,7 @@
     "bootstrap": "^3.3.5",
     "csv": "^0.4.6",
     "datapackage-from-remote": "0.0.2",
+    "datapackage-init": "^0.2.1",
     "datapackage-outfile": "^0.1.0",
     "datapackage-registry": "^0.1.0",
     "datapackage-validate": "git+https://github.com/okfn/datapackage-validate.git",
