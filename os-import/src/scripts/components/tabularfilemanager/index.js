@@ -9,7 +9,7 @@ var TabularFileManager = function() {
 };
 
 _.extend(TabularFileManager.prototype, EventEmitter.prototype, {
-  // Read data from File object
+  // Read data from File object, suitable only for in-browser usage
   fromBlob: require('./from-blob'),
 
   // TODO To be implemented
