@@ -1,8 +1,9 @@
 var _ = require('lodash');
 
 module.exports = function(file, options) {
-  var blob = file.slice(0, _.min([file.size, options.maxSize]));
+  var blob;
   this.emit('upload-started');
+  blob = file.slice(0, _.min([file.size, options.maxSize]));
 
   return require('blob-util').blobToBinaryString(blob).then((function(string) {
     // Avoid incomplete last string
