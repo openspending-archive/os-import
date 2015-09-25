@@ -21,51 +21,32 @@ browser = new Browser({maxWait: 30000, silent: true});
 
 function completeStep1(done) {
   browser.visit('/create', function() {
+    var fileData = {
+      data  : '',
+      id    : 1,
+      isURL : false,
+      name  : 'decent.csv',
+      schema: parsedSchema,
+      size  : 230,
+      text  : 'CSV'
+    };
+
     var upload = browser.window.APP.layout.step1.layout.upload;
     browser.fill('[data-editors=name] input[name=name]', 'This is the name');
 
-    sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
-      fs.readFile(path.join(dataDir, 'decent.csv'), 'utf8', function (error, data) {
-        if(error)
-          return console.log(error);
-
-        callback({type: 'load', target:  {
-          lastModified: 1428475571000,
-          lastModifiedDate: 'Wed Apr 08 2015 09:46:11 GMT+0300 (MSK)',
-          name: 'decent.csv',
-          size: 410,
-          type: 'text/csv',
-          webkitRelativePath: ''
-        }, result: data});
-      });
+    sinon.stub(upload.fileManager, 'fromBlob', function(file) {
+      upload.fileManager.emit('parse-complete', fileData);
+      return new Promise(function(resolve, reject) { resolve(fileData); });
     });
 
-    setTimeout = function() { upload.parseCSV(); };
-
-    // csv.parse() for some reasons doesn't work. Don't have time to investigate.
-    sinon.stub(upload, 'parseCSV', function() {
-      upload.trigger('parse-complete', {
-        data  : parsedData,
-        id    : 1,
-        isURL : false,
-        name  : 'decent.csv',
-        schema: parsedSchema,
-        size  : 230,
-        text  : 'CSV'
-      });
+    upload.fileManager.on('parse-complete', function() {
+      setTimeout(function() {
+        browser.window.APP.$('[data-id=submit]').click();
+        done();
+      }, 300);
     });
 
-    upload.on('parse-complete', function() {
-      browser.window.APP.$('[data-id=submit]').click();
-
-      // Stubbing methods called by setTimeout is a problem, so setTimeout is replaced
-      // somewhere — restore it each time
-      setTimeout = setTimeoutOrig;
-
-      done();
-    });
-
-    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, 'decent.csv'));
+    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, fileData.name));
   });
 }
 
