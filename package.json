@@ -14,6 +14,7 @@
     "blob-util": "^1.1.2",
     "bluebird": "^2.9.31",
     "bootstrap": "^3.3.5",
+    "charset": "^1.0.0",
     "csv": "^0.4.6",
     "datapackage-from-remote": "0.0.2",
     "datapackage-init": "^0.2.1",

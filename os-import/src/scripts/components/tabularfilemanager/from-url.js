@@ -1,6 +1,15 @@
+var _ = require('lodash');
 var Promise = require('bluebird');
+var request = require('http');
 
+function byteLen(string, encoding) {
+  return Buffer.byteLength(string, encoding);
+}
+
+// Get file from URL. Git first transfer chunks until their size exceeds options param.
 module.exports = function(url, options) {
+  var parsedURL = require('url').parse(url);
+
   if(!require('validator').isURL(url))
     return new Promise(function(resolve, reject) {
       reject('URL has worng format: ' + url);
@@ -8,13 +17,53 @@ module.exports = function(url, options) {
 
   this.emit('upload-started');
 
-  // TODO Filter non-csv data with appropriate error message
-  return require('superagent-bluebird-promise').get(url)
-    .then((function(result) {
-      return this.parse({
-        content: result.text,
-        name: url,
-        size: result.header['content-length'] || 0
-      }, {isURL: true});
-    }).bind(this));
+  return new Promise(function(resolve, reject) {
+    request.get({
+      hostname: parsedURL.hostname,
+      method: 'GET',
+      path: parsedURL.path,
+      port: parsedURL.port || 80,
+
+      // Avoid CORS
+      withCredentials: false
+    }, function(response) {
+      var data = '';
+      var encoding = require('charset')(response.headers['content-type']);
+      var hasSizeLimit = _.result(options, 'maxSize');
+
+      response.on('data', function(chunk) {
+        if(hasSizeLimit && byteLen(data, encoding) >= options.maxSize)
+          return;
+
+        data += chunk;
+
+        if(!hasSizeLimit)
+          return;
+
+        if(byteLen(data, encoding) <= options.maxSize)
+          return;
+
+        // If data exceed bytes limit then cut it. Remove last line as it can be incomplete.
+        data = _.initial(
+          (new Buffer(data, encoding))
+            .slice(0, options.maxSize)
+            .toString()
+            .split('\n')
+        ).join('\n')
+      });
+
+      response.on('end', function() {
+        resolve(data, byteLen(data, encoding));
+      });
+    });
+  }).then((function(data, size) {
+    this.emit('parse-started');
+
+    // TODO Filter non-csv data with appropriate error message
+    return this.parse({
+      content: data,
+      name: url,
+      size: size
+    }, {isURL: true});
+  }).bind(this));
 }

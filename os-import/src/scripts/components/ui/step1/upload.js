@@ -28,7 +28,9 @@ module.exports = backbone.BaseView.extend({
       if(event.keyCode !== 13)
         return true;
 
-      this.fileManager.fromURL(url).then(this.addFile.bind(this));
+      this.fileManager.fromURL(url, {maxSize: config.csvMaxSize})
+        .then(this.addFile.bind(this));
+
       this.$('[data-id=link]').val('');
       return false;
     }
