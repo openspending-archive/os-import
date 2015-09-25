@@ -64,47 +64,33 @@ describe('Form for creating data', function() {
   });
 
   it('uploads valid CSV from local file, populates list with row and allows next step', function(done) {
+    var fileData = {
+      data : {},
+      id   : 1,
+      isURL: false,
+      name : 'decent.csv',
+      schema: {},
+      text: 'CSV'
+    };
+
     var upload = browser.window.APP.layout.step1.layout.upload;
-    
-    sinon.stub(browser.window.FileAPI, 'readAsText', function(file, callback) {
-      fs.readFile(path.join(dataDir, 'decent.csv'), 'utf8', function (error, data) {
-        if(error)
-          return console.log(error);
 
-        callback({type: 'load', target:  {
-          lastModified: 1428475571000,
-          lastModifiedDate: 'Wed Apr 08 2015 09:46:11 GMT+0300 (MSK)',
-          name: 'decent.csv',
-          size: 410,
-          type: 'text/csv',
-          webkitRelativePath: ''
-        }, result: data});
-      });
+    sinon.stub(upload.fileManager, 'fromBlob', function(file) {
+      upload.fileManager.emit('parse-complete', fileData);
+      return new Promise(function(resolve, reject) { resolve(fileData); });
     });
 
-    setTimeout = function() { upload.parseCSV(); };
-
-    // csv.parse() for some reasons doesn't work. Don't have time to investigate.
-    sinon.stub(upload, 'parseCSV', function() {
-      upload.trigger('parse-complete', {
-        data : {},
-        id   : 1,
-        isURL: false,
-        name : 'decent.csv',
-        schema: {},
-        text: 'CSV'
-      });
+    upload.fileManager.on('parse-complete', function(data) {
+      setTimeout(function() {
+        browser.assert.text('[data-editors=files] [data-id="file-name"]', fileData.name);
+        browser.assert.elements('[data-editors=files] [data-id=error]', 0);
+        browser.assert.elements('[data-id="submit"].form-button--disabled', 0);
+        browser.assert.text('[data-id="submit-message"]', submitLabels.next);
+        done();
+      }, 100);
     });
 
-    upload.on('parse-complete', function(data) {
-      browser.assert.text('[data-editors=files] [data-id="file-name"]', 'decent.csv');
-      browser.assert.elements('[data-editors=files] [data-id=error]', 0);
-      browser.assert.elements('[data-id="submit"].form-button--disabled', 0);
-      browser.assert.text('[data-id="submit-message"]', submitLabels.next);
-      done();
-    });
-
-    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, 'decent.csv'));
+    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, fileData.name));
   });
 
   it('uploads malformed CSV from local file, populates list with erroneus row and disallows next step', function(done) {
