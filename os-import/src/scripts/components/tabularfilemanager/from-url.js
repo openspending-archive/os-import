@@ -57,8 +57,6 @@ module.exports = function(url, options) {
       });
     });
   }).then((function(data, size) {
-    this.emit('parse-started');
-
     // TODO Filter non-csv data with appropriate error message
     return this.parse({
       content: data,

@@ -16,6 +16,8 @@ function emitError(error) {
 }
 
 module.exports = function(file, options) {
+  this.emit('parse-started');
+
   return new Promise((function(resolve, reject) {
     require('csv').parse(file.content, (function(error, data) {
       // https://github.com/gvidon/backbone-base/issues/2

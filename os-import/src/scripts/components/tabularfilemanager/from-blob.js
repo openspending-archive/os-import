@@ -5,8 +5,6 @@ module.exports = function(file, options) {
   this.emit('upload-started');
 
   return require('blob-util').blobToBinaryString(blob).then((function(string) {
-    this.emit('parse-started');
-
     // Avoid incomplete last string
     if(blob.size < file.size)
       string = _.initial(string.split('\n')).join('\n');
