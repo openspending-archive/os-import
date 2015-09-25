@@ -125,69 +125,74 @@ describe('Form for creating data', function() {
   });
 
   it('uploads valid CSV from URL, populates list with row and allows next step', function(done) {
-    var upload = browser.window.APP.layout.step1.layout.upload;
     var URL = 'http://example.domain/file.csv';
 
+    var fileData = {
+      data : {},
+      id   : 1,
+      isURL: true,
+      name : URL,
+      schema: {},
+      text: 'CSV'
+    };
+
+    var upload = browser.window.APP.layout.step1.layout.upload;
+
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.
-    sinon.stub(upload, 'parseCSV', function(name, string, options) {
-      upload.trigger('parse-complete', {
-        data : {},
-        id   : 1,
-        isURL: options.isURL,
-        name : name,
-        schema: {},
-        text: 'CSV'
-      });
+    sinon.stub(upload.fileManager, 'fromURL', function() {
+      upload.fileManager.emit('parse-complete', fileData);
+      return new Promise(function(resolve, reject) { resolve(fileData); });
     });
 
-    // Fired when user hits Enter in URL field. Rely on internal events as there
-    // is no simple way to stub promised superagent
-    upload.on('upload-started', function() { upload.parseCSV(URL, 'string', {isURL: true}); });
-
-    upload.on('parse-complete', function(data) {
-      browser.assert.text('[data-editors=files] [data-id="file-name"]', URL);
-      browser.assert.elements('[data-editors=files] [data-id=error]', 0);
-      browser.assert.elements('[data-id="submit"].form-button--disabled', 0);
-      browser.assert.text('[data-id="submit-message"]', submitLabels.next);
-      done();
+    upload.fileManager.on('parse-complete', function(data) {
+      setTimeout(function() {
+        browser.assert.text('[data-editors=files] [data-id="file-name"]', URL);
+        browser.assert.elements('[data-editors=files] [data-id=error]', 0);
+        browser.assert.elements('[data-id="submit"].form-button--disabled', 0);
+        browser.assert.text('[data-id="submit-message"]', submitLabels.next);
+        done();
+      }, 100);
     });
     
-    browser.fill('[data-id=upload] [data-id=link]', 'http://google.com');
+    browser.fill('[data-id=upload] [data-id=link]', URL);
 
     // There is no way to simulate pressing Enter, as .fire() doesn't support passing .event
     upload.events['keydown [data-id=link]'].call(upload, {keyCode: 13});
   });
 
   it('uploads malformed CSV from URL, populates list with erroneus row and disallows next step', function(done) {
-    var upload = browser.window.APP.layout.step1.layout.upload;
+
     var URL = 'http://example.domain/file.csv';
 
+    var fileData = {
+      data      : {},
+      id        : 1,
+      isURL     : true,
+      name      : URL,
+      parseError: {error: true},
+      schema    : {},
+      text      : 'CSV'
+    };
+
+    var upload = browser.window.APP.layout.step1.layout.upload;
+
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.
-    sinon.stub(upload, 'parseCSV', function(name, string, options) {
-      upload.trigger('parse-complete', {
-        data      : {},
-        id        : 1,
-        isURL     : options.isURL,
-        name      : name,
-        parseError: {error: true},
-        schema    : {},
-        text      : 'CSV'
-      });
+    sinon.stub(upload.fileManager, 'fromURL', function() {
+      upload.fileManager.emit('parse-complete', fileData);
+      return new Promise(function(resolve, reject) { resolve(fileData); });
     });
 
-    // Fired when user hits Enter in URL field. Rely on internal events as there
-    // is no simple way to stub promised superagent
-    upload.on('upload-started', function() { upload.parseCSV(URL, 'string', {isURL: true}); });
-
-    upload.on('parse-complete', function(data) {
-      browser.assert.text('[data-editors=files] [data-id="file-name"]', URL);
-      browser.assert.elements('[data-editors=files] [data-id=error]', 1);
-      browser.assert.elements('[data-id="submit"].form-button--disabled', 1);
-      browser.assert.text('[data-id="submit-message"]', submitLabels.fixesRequired);
-      done();
+    upload.fileManager.on('parse-complete', function(data) {
+      setTimeout(function() {
+        browser.assert.text('[data-editors=files] [data-id="file-name"]', URL);
+        browser.assert.elements('[data-editors=files] [data-id=error]', 1);
+        browser.assert.elements('[data-id="submit"].form-button--disabled', 1);
+        browser.assert.text('[data-id="submit-message"]', submitLabels.fixesRequired);
+        done();
+      }, 100);
     });
     
-    browser.fill('[data-id=upload] [data-id=link]', 'http://google.com');
+    browser.fill('[data-id=upload] [data-id=link]', URL);
 
     // There is no way to simulate pressing Enter, as .fire() doesn't support passing .event
     upload.events['keydown [data-id=link]'].call(upload, {keyCode: 13});
