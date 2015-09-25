@@ -161,7 +161,6 @@ describe('Form for creating data', function() {
   });
 
   it('uploads malformed CSV from URL, populates list with erroneus row and disallows next step', function(done) {
-
     var URL = 'http://example.domain/file.csv';
 
     var fileData = {
