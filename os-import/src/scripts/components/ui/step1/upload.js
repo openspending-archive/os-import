@@ -7,6 +7,7 @@ var TabularFileManager = require('../../tabularfilemanager');
 module.exports = backbone.BaseView.extend({
   // Append data to the data files list of the Step 1 form
   addFile: function(data) {
+    console.log(data);
     var form = this.parent.layout.form;
     form.setValue('files',(form.getValue().files || []).concat(data));
     return this;
