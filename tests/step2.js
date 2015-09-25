@@ -22,7 +22,7 @@ browser = new Browser({maxWait: 30000, silent: true});
 function completeStep1(done) {
   browser.visit('/create', function() {
     var fileData = {
-      data  : '',
+      data  : parsedData,
       id    : 1,
       isURL : false,
       name  : 'decent.csv',
