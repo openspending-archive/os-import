@@ -10,7 +10,7 @@ var diff = require('deep-diff').diff;
 var FileManager = require('../');
 var fileManager;
 var fs = require('fs');
-var GTResponses = require('./data/GT-responses.js');
+var GTResponses = require('./data/gt-responses.js');
 var malformedCSV = path.join('.', 'tests', 'data', 'malformed.csv');
 var nock = require('nock');
 var url = require('url');
