@@ -6,7 +6,7 @@ function byteLen(string, encoding) {
   return Buffer.byteLength(string, encoding);
 }
 
-// Get file from URL. Git first transfer chunks until their size exceeds options param.
+// Get file from URL. Get first transfer chunks until their size exceeds options param.
 module.exports = function(url, options) {
   var parsedURL = require('url').parse(url);
 
