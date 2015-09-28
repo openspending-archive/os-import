@@ -40,4 +40,4 @@ describe('Core', function() {
 
 require('./step1');
 require('./step2');
-require('../os-import/src/scripts/components/tabularfilemanager/test.js');
+require('../os-import/src/scripts/components/tabularfilemanager/tests');

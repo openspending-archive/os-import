@@ -28,7 +28,10 @@ module.exports = function(url, options) {
       withCredentials: false
     }, function(response) {
       var data = '';
-      var encoding = require('charset')(response.headers['content-type']);
+
+      var encoding = require('charset')(response.headers['content-type'])
+        || 'utf8';
+
       var hasSizeLimit = _.result(options, 'maxSize');
 
       response.on('data', function(chunk) {
