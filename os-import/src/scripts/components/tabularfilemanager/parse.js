@@ -15,6 +15,11 @@ function emitError(error) {
   return result;
 }
 
+/*
+  Translate CSV file into js object, validate and infer the scehma.
+  @param {object} file — {content: <CSV file itself, string>, name: <name to be displayed>, size: <in bytes>}
+  @param {object} options — {isURL: <true if file was downloaded from URL>}
+*/
 module.exports = function(file, options) {
   this.emit('parse-started');
 
