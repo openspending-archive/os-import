@@ -19,9 +19,11 @@ function emitError(error) {
 /*
   Translate CSV file into js object, validate and infer the scehma.
   @param {object} file — {content: <CSV file itself, string>, name: <name to be displayed>, size: <in bytes>}
-  @param {object} options — {isURL: <true if file was downloaded from URL>}
+  @param {object} options — {isURL: <true if file was downloaded from URL>, <noSchemaInfer>: Boolean, noValidation: <Boolean>}
 */
 module.exports = function(file, options) {
+  var noSchemaInfer = _.result(options, 'noSchemaInfer');
+  var noValidation = _.result(options, 'noValidation');
   this.emit('parse-started');
 
   return new Promise((function(resolve, reject) {
@@ -36,6 +38,20 @@ module.exports = function(file, options) {
         return false;
       }
 
+      // Save options for later use — check if there was validation or infering
+      this.file = _.extend({
+        data : data,
+        id   : id,
+        name : file.name,
+        size : file.size,
+        text : file.content
+      }, options);
+
+      if(noValidation) {
+        resolve(this.file);
+        return false;
+      }
+
       this.emit('validation-started');
 
       this.goodTables.run(file.content)
@@ -43,12 +59,7 @@ module.exports = function(file, options) {
           var errors = result.getValidationErrors();
           var isValid = _.isEmpty(errors);
 
-          this.emit('parse-complete', this.file = {
-            data : data,
-            id   : id,
-            isURL: isURL,
-            name : file.name,
-
+          this.emit('parse-complete', this.file = _.extend(this.file, {
             parseError: !isValid && {
               message: 'We encountered some problems with this file. Click ' +
                 'here for a breakdown of the issues.',
@@ -56,10 +67,9 @@ module.exports = function(file, options) {
               verbose: result.getGroupedByRows()
             },
 
-            schema: isValid && JSONSchema.infer(data[0], _.rest(data)),
-            size: file.size,
-            text: file.content
-          });
+            schema: !noSchemaInfer && isValid
+              && JSONSchema.infer(data[0], _.rest(data))
+          }));
 
           resolve(this.file);
         }).bind(this))
