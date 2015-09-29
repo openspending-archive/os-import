@@ -16,6 +16,8 @@ function emitError(error) {
   return result;
 }
 
+function infer(data) { return JSONSchema.infer(data[0], _.rest(data)); }
+
 /*
   Translate CSV file into js object, validate and infer the scehma.
   @param {object} file — {content: <CSV file itself, string>, name: <name to be displayed>, size: <in bytes>}
@@ -48,7 +50,10 @@ module.exports = function(file, options) {
       }, options);
 
       if(noValidation) {
-        resolve(this.file);
+        resolve(this.file = _.extend(this.file, !noSchemaInfer ? {
+          schema: infer(data)
+        } : {}));
+
         return false;
       }
 
@@ -59,17 +64,16 @@ module.exports = function(file, options) {
           var errors = result.getValidationErrors();
           var isValid = _.isEmpty(errors);
 
+          // Return validation report and schema if data file is valid and no noSchemaInfer
+          // option passed
           this.emit('parse-complete', this.file = _.extend(this.file, {
             parseError: !isValid && {
               message: 'We encountered some problems with this file. Click ' +
                 'here for a breakdown of the issues.',
 
               verbose: result.getGroupedByRows()
-            },
-
-            schema: !noSchemaInfer && isValid
-              && JSONSchema.infer(data[0], _.rest(data))
-          }));
+            }
+          }, !noSchemaInfer ? {schema: isValid && infer(data)} : {}));
 
           resolve(this.file);
         }).bind(this))
