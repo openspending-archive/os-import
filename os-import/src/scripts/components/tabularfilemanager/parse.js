@@ -3,13 +3,11 @@ var JSONSchema = require('json-table-schema');
 var Promise = require('bluebird');
 
 // Emit data with critical error message
-function emitError(error) {
+function emitError(fileName, error) {
   var result;
 
   this.emit('parse-complete', result = {
-    id        : id,
-    isURL     : isURL,
-    name      : file.name,
+    name: fileName,
     parseError: {message: error}
   });
 
@@ -79,7 +77,7 @@ module.exports = function(file, options) {
         }).bind(this))
 
         .catch((function(error) {
-          reject(this.file = emitError.call(this, error));
+          reject(this.file = emitError.call(this, file.name, error));
         }).bind(this));
     }).bind(this));
   }).bind(this));
