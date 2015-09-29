@@ -28,9 +28,7 @@ module.exports = backbone.BaseView.extend({
       if(event.keyCode !== 13)
         return true;
 
-      this.fileManager.fromURL(url, {maxSize: config.csvMaxSize})
-        .then(this.addFile.bind(this));
-
+      this.fileManager.addFile(url).then(this.addFile.bind(this));
       this.$('[data-id=link]').val('');
       return false;
     }
@@ -38,7 +36,7 @@ module.exports = backbone.BaseView.extend({
 
   initialize: function(options) {
     backbone.BaseView.prototype.initialize.call(this, options);
-    this.fileManager = new TabularFileManager();
+    this.fileManager = new TabularFileManager({maxSize: config.csvMaxSize});
   },
 
   render: function() { this.$el.html(this.template({})); return this; },
@@ -46,8 +44,7 @@ module.exports = backbone.BaseView.extend({
 
   uploadLocalFile: function(file) {
     // When file uploaded add it to the Step 1 form
-    this.fileManager.fromBlob(file, {maxSize: config.csvMaxSize})
-      .then(this.addFile.bind(this));
+    this.fileManager.addFile(file).then(this.addFile.bind(this));
 
     return this;
   }

@@ -48,6 +48,13 @@ describe('Form for creating data', function() {
   });
 
   it('switches submit button into loading state when uploading a file/URL', function(done) {
+    var upload = browser.window.APP.layout.step1.layout.upload;
+
+    sinon.stub(upload.fileManager, 'addFile', function() {
+      upload.fileManager.emit('upload-started');
+      return new Promise(function(resolve, reject) { resolve(true); });
+    });
+
     browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, 'decent.csv'));
     browser.assert.hasClass('[data-id="submit"]', 'form-button--loading');
 
@@ -68,21 +75,21 @@ describe('Form for creating data', function() {
       data : {},
       id   : 1,
       isURL: false,
-      name : 'decent.csv',
+      path : 'decent.csv',
       schema: {},
       text: 'CSV'
     };
 
     var upload = browser.window.APP.layout.step1.layout.upload;
 
-    sinon.stub(upload.fileManager, 'fromBlob', function(file) {
+    sinon.stub(upload.fileManager, 'addFile', function(file) {
       upload.fileManager.emit('parse-complete', fileData);
       return new Promise(function(resolve, reject) { resolve(fileData); });
     });
 
     upload.fileManager.on('parse-complete', function(data) {
       setTimeout(function() {
-        browser.assert.text('[data-editors=files] [data-id="file-name"]', fileData.name);
+        browser.assert.text('[data-editors=files] [data-id="file-name"]', fileData.path);
         browser.assert.elements('[data-editors=files] [data-id=error]', 0);
         browser.assert.elements('[data-id="submit"].form-button--disabled', 0);
         browser.assert.text('[data-id="submit-message"]', submitLabels.next);
@@ -90,30 +97,30 @@ describe('Form for creating data', function() {
       }, 100);
     });
 
-    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, fileData.name));
+    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, fileData.path));
   });
 
   it('uploads malformed CSV from local file, populates list with erroneus row and disallows next step', function(done) {
     var fileData = {
-      data : {},
-      id   : 1,
-      isURL: false,
-      name : 'malformed.csv',
+      data      : {},
+      id        : 1,
+      isURL     : false,
+      path      : 'malformed.csv',
       parseError: {error: true},
-      schema: {},
-      text: 'CSV'
+      schema    : {},
+      text      : 'CSV'
     };
 
     var upload = browser.window.APP.layout.step1.layout.upload;
 
-    sinon.stub(upload.fileManager, 'fromBlob', function(file) {
+    sinon.stub(upload.fileManager, 'addFile', function(file) {
       upload.fileManager.emit('parse-complete', fileData);
       return new Promise(function(resolve, reject) { resolve(fileData); });
     });
 
     upload.fileManager.on('parse-complete', function(data) {
       setTimeout(function() {
-        browser.assert.text('[data-editors=files] [data-id="file-name"]', fileData.name);
+        browser.assert.text('[data-editors=files] [data-id="file-name"]', fileData.path);
         browser.assert.elements('[data-editors=files] [data-id=error]', 1);
         browser.assert.elements('[data-id="submit"].form-button--disabled', 1);
         browser.assert.text('[data-id="submit-message"]', submitLabels.fixesRequired);
@@ -121,25 +128,25 @@ describe('Form for creating data', function() {
       }, 100);
     });
 
-    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, fileData.name));
+    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, fileData.path));
   });
 
   it('uploads valid CSV from URL, populates list with row and allows next step', function(done) {
     var URL = 'http://example.domain/file.csv';
 
     var fileData = {
-      data : {},
-      id   : 1,
-      isURL: true,
-      name : URL,
+      data  : {},
+      id    : 1,
+      isURL : true,
+      path  : URL,
       schema: {},
-      text: 'CSV'
+      text  : 'CSV'
     };
 
     var upload = browser.window.APP.layout.step1.layout.upload;
 
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.
-    sinon.stub(upload.fileManager, 'fromURL', function() {
+    sinon.stub(upload.fileManager, 'addFile', function() {
       upload.fileManager.emit('parse-complete', fileData);
       return new Promise(function(resolve, reject) { resolve(fileData); });
     });
@@ -167,7 +174,7 @@ describe('Form for creating data', function() {
       data      : {},
       id        : 1,
       isURL     : true,
-      name      : URL,
+      path      : URL,
       parseError: {error: true},
       schema    : {},
       text      : 'CSV'
@@ -176,7 +183,7 @@ describe('Form for creating data', function() {
     var upload = browser.window.APP.layout.step1.layout.upload;
 
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.
-    sinon.stub(upload.fileManager, 'fromURL', function() {
+    sinon.stub(upload.fileManager, 'addFile', function() {
       upload.fileManager.emit('parse-complete', fileData);
       return new Promise(function(resolve, reject) { resolve(fileData); });
     });

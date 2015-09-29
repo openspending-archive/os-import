@@ -12,6 +12,7 @@ var fromURL = require('./from-url');
 var validator = require('validator');
 
 module.exports = function(path) {
+  var displayedPath;
   var isURL;
   var that = this;
 
@@ -27,8 +28,10 @@ module.exports = function(path) {
     else if(_.isString(path))
       method = fromFile;
 
-    else if(typeof Blob !== 'undefined' && path instanceof Blob)
+    else if(typeof Blob !== 'undefined' && path instanceof Blob) {
+      displayedPath = path.name;
       method = fromBlob;
+    }
 
     else {
       reject('Invalid file type');
@@ -39,12 +42,12 @@ module.exports = function(path) {
   }))
     .catch(console.log)
 
-    .then(function(data, size) {
+    .then(function(result) {
       // TODO Filter non-csv data with appropriate error message
       return that.parse({
-        content: data,
-        path: path,
-        size: size
+        content: result.data,
+        path: displayedPath || path,
+        size: result.size
       }, _.extend(this.options, {isURL: isURL}));
     });
 }

@@ -56,7 +56,7 @@ module.exports = function(url, options) {
       });
 
       response.on('end', function() {
-        resolve(data, byteLen(data, encoding));
+        resolve({data: data, size: byteLen(data, encoding)});
       });
     });
   });
