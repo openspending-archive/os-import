@@ -31,6 +31,7 @@ module.exports = function(file, options) {
       // https://github.com/gvidon/backbone-base/issues/2
       var id = [file.name, (new Date()).getTime()].join('');
 
+      // Helpful to know that string used as file path is URL when need to get file name
       var isURL = (options || {}).isURL;
 
       if(error) {
