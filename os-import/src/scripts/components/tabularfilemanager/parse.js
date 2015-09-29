@@ -53,7 +53,7 @@ module.exports = function(file, options) {
             isURL: isURL,
             name : file.name,
 
-            parseError: !_.isEmpty(errors) && {
+            parseError: !isValid && {
               message: 'We encountered some problems with this file. Click ' +
                 'here for a breakdown of the issues.',
 
