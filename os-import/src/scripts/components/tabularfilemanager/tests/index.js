@@ -82,7 +82,7 @@ describe('Tabular file manager', function() {
 
       nock(csvHost).get(csvPath).reply(200, text);
 
-      fileManager.fromURL(csvURL).then(function(file) {
+      fileManager.addFile(csvURL).then(function(file) {
         assert(
           csvURL === file.path,
           'Returned file name doesn\'t correspond to the passed URL'
@@ -110,13 +110,14 @@ describe('Tabular file manager', function() {
       fs.readFile(decentCSV, csvEncoding, function (error, text) {
         // Set size so that just first line of CSV fits
         var maxSize = Buffer.byteLength(text.split('\n')[0], csvEncoding) + 1;
+        fileManager = new FileManager({maxSize: maxSize});
 
         if(error)
           return console.log(error);
 
         nock(csvHost).get(csvPath).reply(200, text);
 
-        fileManager.fromURL(csvURL, {maxSize: maxSize}).then(function(file) {
+        fileManager.addFile(csvURL).then(function(file) {
           var actualSize = Buffer.byteLength(file.text, csvEncoding)
 
           assert(
@@ -167,7 +168,7 @@ describe('Tabular file manager', function() {
 
         fileManager.on('upload-started', function() { uploadFired = true; });
 
-        fileManager.fromURL(csvURL).then(function() {
+        fileManager.addFile(csvURL).then(function() {
           assert(parseStartFired, 'Parse starting event didn\'t fire');
           assert(validationFired, 'Validation starting event didn\'t fire');
           assert(uploadFired, 'Upload starting event didn\'t fire');

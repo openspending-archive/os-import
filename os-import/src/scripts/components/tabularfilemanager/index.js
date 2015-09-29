@@ -10,14 +10,8 @@ var TabularFileManager = function(options) {
 };
 
 _.extend(TabularFileManager.prototype, EventEmitter.prototype, {
-  // Read data from File object, suitable only for in-browser usage
-  fromBlob: require('./from-blob'),
-
-  // TODO To be implemented
-  fromFile: function() {},
-
-  // Read data directly from URL
-  fromURL: require('./from-url'),
+  // Decide which loader to use and get the data
+  addFile: require('./add-file'),
 
   // Get CSV schema and validate text over good tables
   parse: require('./parse')

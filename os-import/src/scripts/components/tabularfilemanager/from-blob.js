@@ -10,10 +10,9 @@ module.exports = function(file, options) {
     if(blob.size < file.size)
       string = _.initial(string.split('\n')).join('\n');
 
-    return this.parse({
-      content: string,
-      path: file.name,
+    return {
+      data: string,
       size: file.size
-    });
+    };
   }).bind(this));
 }
