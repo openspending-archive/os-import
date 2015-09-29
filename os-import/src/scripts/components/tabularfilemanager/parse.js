@@ -41,11 +41,11 @@ module.exports = function(file, options) {
 
       // Save options for later use — check if there was validation or infering
       this.file = _.extend({
-        data : data,
-        id   : id,
-        path : file.path,
-        size : file.size,
-        text : file.content
+        data: data,
+        id  : id,
+        path: file.path,
+        size: file.size,
+        text: file.content
       }, options);
 
       if(noValidation) {
