@@ -218,4 +218,35 @@ describe('Tabular file manager', function() {
       });
     }
   );
+
+  it(
+    'has noSchemaInfer option to skip schema infering',
+
+    function(done) {
+      nock('http://goodtables.okfnlabs.org').post('/api/run').reply(
+        200,
+        GTResponses.success
+      );
+
+      fileManager = new FileManager({noSchemaInfer: true});
+
+      fs.readFile(decentCSV, csvEncoding, function (error, text) {
+        if(error)
+          return console.log(error);
+
+        fileManager.parse({
+          content: text,
+          name: 'decent.csv',
+          size: Buffer.byteLength(text, csvEncoding)
+        }, fileManager.options).then(function(fileObj) {
+          assert(
+            !fileManager.file.schema,
+            '.file.schema should be empty'
+          );
+
+          done();
+        });
+      });
+    }
+  );
 });
