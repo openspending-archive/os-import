@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var JSONSchema = require('json-table-schema');
 var Promise = require('bluebird');
 
 // Emit data with critical error message
@@ -29,7 +30,6 @@ module.exports = function(file, options) {
       var id = [file.name, (new Date()).getTime()].join('');
 
       var isURL = (options || {}).isURL;
-      var schema;
 
       if(error) {
         reject(this.file = emitError.call(this, error));
@@ -42,10 +42,6 @@ module.exports = function(file, options) {
         .then((function(result) {
           var errors = result.getValidationErrors();
           var isValid = _.isEmpty(errors);
-
-          // Get schema for only valid CSVs
-          if(isValid)
-            schema = require('json-table-schema').infer(data[0], _.rest(data));
 
           this.emit('parse-complete', this.file = {
             data : data,
@@ -60,7 +56,7 @@ module.exports = function(file, options) {
               verbose: result.getGroupedByRows()
             },
 
-            schema: schema,
+            schema: isValid && JSONSchema.infer(data[0], _.rest(data)),
             size: file.size,
             text: file.content
           });
