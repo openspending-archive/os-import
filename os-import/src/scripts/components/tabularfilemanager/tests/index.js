@@ -84,7 +84,7 @@ describe('Tabular file manager', function() {
 
       fileManager.fromURL(csvURL).then(function(file) {
         assert(
-          csvURL === file.name,
+          csvURL === file.path,
           'Returned file name doesn\'t correspond to the passed URL'
         );
 

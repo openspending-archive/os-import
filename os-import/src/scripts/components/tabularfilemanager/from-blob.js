@@ -12,7 +12,7 @@ module.exports = function(file, options) {
 
     return this.parse({
       content: string,
-      name: file.name,
+      path: file.name,
       size: file.size
     });
   }).bind(this));

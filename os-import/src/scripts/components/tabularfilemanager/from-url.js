@@ -63,7 +63,7 @@ module.exports = function(url, options) {
     // TODO Filter non-csv data with appropriate error message
     return this.parse({
       content: data,
-      name: url,
+      path: url,
       size: size
     }, {isURL: true});
   }).bind(this));

@@ -5,6 +5,7 @@ var DatapackageModel = require('../models/datapackage');
 var Step1View = require('./step1');
 var HeaderView = require('./header');
 var MapperView = require('./step2/mapper');
+var path = require('path');
 var slug = require('slug');
 
 module.exports = backbone.BaseView.extend({
@@ -61,7 +62,7 @@ module.exports = backbone.BaseView.extend({
       title: value.name,
 
       resources: _.map(value.files, function(file) {
-        var filePath = file.isURL ? _.last(file.name.split('/')) : file.name;
+        var filePath = _.last(file.path.split(file.isURL ? '/' : path.sep));
 
         return {
           bytes   : file.size,

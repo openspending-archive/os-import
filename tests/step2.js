@@ -25,7 +25,7 @@ function completeStep1(done) {
       data  : parsedData,
       id    : 1,
       isURL : false,
-      name  : 'decent.csv',
+      path  : 'decent.csv',
       schema: parsedSchema,
       size  : 230,
       text  : 'CSV'
@@ -46,7 +46,7 @@ function completeStep1(done) {
       }, 300);
     });
 
-    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, fileData.name));
+    browser.attach('[data-id=upload] [data-id=file]', path.join(dataDir, fileData.path));
   });
 }
 
@@ -354,7 +354,7 @@ describe('Manual mapping of types', function() {
         setTimeout(function() {
           app.layout.step1.layout.form.setValue('files', {
             data: [['name', 'age'], ['John', 33]],
-            name: 'another.csv',
+            path: 'another.csv',
 
             schema: {fields: [
               {name: 'name', type: 'string'},
