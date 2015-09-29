@@ -182,4 +182,40 @@ describe('Tabular file manager', function() {
       });
     }
   );
+
+  it(
+    'has noValidation option to skip validation',
+
+    function(done) {
+      var GTRequest = nock('http://goodtables.okfnlabs.org').post('/api/run').reply(
+        200,
+        GTResponses.success
+      );
+
+      fileManager = new FileManager({noValidation: true});
+
+      fs.readFile(decentCSV, csvEncoding, function (error, text) {
+        if(error)
+          return console.log(error);
+
+        fileManager.parse({
+          content: text,
+          name: 'decent.csv',
+          size: Buffer.byteLength(text, csvEncoding)
+        }, fileManager.options).then(function(fileObj) {
+          assert(
+            !GTRequest.isDone(),
+            'Good tables validation API was requested'
+          );
+
+          assert(
+            !fileManager.file.parseError,
+            '.file.parseError should be empty'
+          );
+
+          done();
+        });
+      });
+    }
+  );
 });
