@@ -31,7 +31,7 @@ module.exports = backbone.Router.extend({
     mapper = window.APP.activate().layout.mapper;
 
     if(_.isEmpty(window.APP.layout.step1.layout.form.getValue().files)) {
-      window.APP.activateEmptyState(true);
+      window.APP.activateEmptyState();
       return false;
     }
 

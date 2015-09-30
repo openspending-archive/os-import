@@ -22,7 +22,9 @@ module.exports = backbone.BaseView.extend({
   },
 
   activateEmptyState: function(state) {
-    window.APP.$('#direct-to-step-1').prop('hidden', !state);
+    window.APP.$('#direct-to-step-1')
+      .prop('hidden', !(_.isUndefined(state) || state));
+
     return this;
   },
 
