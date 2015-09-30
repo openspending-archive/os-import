@@ -23,13 +23,13 @@ module.exports = backbone.BaseView.extend({
     },
 
     'keydown [data-id=link]': function(event) {
-      var url = this.$('[data-id=link]').val();
+      var $link = this.$('[data-id=link]');
 
       if(event.keyCode !== 13)
         return true;
 
-      this.fileManager.loadFile(url).then(this.addFile.bind(this));
-      this.$('[data-id=link]').val('');
+      this.uploadLocalFile($link.val());
+      $link.val('');
       return false;
     }
   },
