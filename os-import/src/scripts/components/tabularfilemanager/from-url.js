@@ -26,7 +26,7 @@ module.exports = function(url, options) {
 
       // Avoid CORS
       withCredentials: false
-    }, function(response) {
+    }, function(response, error) {
       var data = '';
 
       var encoding = require('charset')(response.headers['content-type'])
@@ -56,6 +56,11 @@ module.exports = function(url, options) {
       });
 
       response.on('end', function() {
+        var status = response.statusCode;
+
+        if(status !== 200)
+          return reject('Got bad response status from ' + url + ': ' + status);
+
         resolve({data: data, size: byteLen(data, encoding)});
       });
     });
