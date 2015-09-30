@@ -40,6 +40,28 @@ describe('Data package model', function() {
   });
 
   it('passed with resource object updates internal list', function(done) {
+    var dpResources;
+
+    var resources = [
+      {data: '1', name: 'test.csv', path: 'test.csv', schema: {}},
+      {data: '2', name: 'another.csv', path: 'another.csv', schema: {}},
+
+      // First two rows are injected directly
+      {data: '3', path: 'the-last.csv', schema: {}}
+    ];
+
+    datapackage.set('resources', resources.slice(0, 2));
+    dpResources = datapackage.addResources(_.last(resources)).get('resources');
+
+    assert(
+      _.every(dpResources, function(resource, i) {
+        return resource.path === resources[i].path
+          && resource.name === resources[i].path;
+      }) && dpResources.length === 3,
+
+      'There are wrong values in resources list'
+    );
+
     done();
   });
 
@@ -47,5 +69,6 @@ describe('Data package model', function() {
     done();
   });
 
+  it('infer schema for passed in resource', function(done) { done(); });
   it('resets list of resources', function(done) { done(); });
 });

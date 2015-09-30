@@ -1,6 +1,8 @@
 var _ = require('lodash');
-var nested = require('nested-property');
 var dpinit = require('datapackage-init');
+var JSONSchema = require('json-table-schema');
+var nested = require('nested-property');
+var path = require('path');
 var slug = require('slug');
 
 var DatapackageModel = function() {
@@ -30,7 +32,15 @@ _.extend(DatapackageModel.prototype, {
   },
 
   clearResources: function(resource) { return this; },
-  createResourceEntry: function() { return {}; },
+
+  createResourceEntry: function(resource) { return {
+    format: _.last(resource.path.split('.')).toLowerCase(),
+    name: _.last(resource.path.split(path.sep)).toLowerCase(),
+    path: resource.path,
+
+    schema: resource.schema
+      || JSONSchema.infer(resource.data[0], _.rest(resource.data))
+  }; },
 
   get: function(path) { return nested.get(this.datapackage, path); },
 
@@ -46,7 +56,8 @@ _.extend(DatapackageModel.prototype, {
   },
 
   set: function(path, value) {
-    return nested.set(this.datapackage, path, value);
+    nested.set(this.datapackage, path, value);
+    return this;
   },
 
   setTitle: function(title) {
