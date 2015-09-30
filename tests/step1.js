@@ -50,7 +50,7 @@ describe('Form for creating data', function() {
   it('switches submit button into loading state when uploading a file/URL', function(done) {
     var upload = browser.window.APP.layout.step1.layout.upload;
 
-    sinon.stub(upload.fileManager, 'addFile', function() {
+    sinon.stub(upload.fileManager, 'loadFile', function() {
       upload.fileManager.emit('upload-started');
       return new Promise(function(resolve, reject) { resolve(true); });
     });
@@ -82,7 +82,7 @@ describe('Form for creating data', function() {
 
     var upload = browser.window.APP.layout.step1.layout.upload;
 
-    sinon.stub(upload.fileManager, 'addFile', function(file) {
+    sinon.stub(upload.fileManager, 'loadFile', function(file) {
       upload.fileManager.emit('parse-complete', fileData);
       return new Promise(function(resolve, reject) { resolve(fileData); });
     });
@@ -113,7 +113,7 @@ describe('Form for creating data', function() {
 
     var upload = browser.window.APP.layout.step1.layout.upload;
 
-    sinon.stub(upload.fileManager, 'addFile', function(file) {
+    sinon.stub(upload.fileManager, 'loadFile', function(file) {
       upload.fileManager.emit('parse-complete', fileData);
       return new Promise(function(resolve, reject) { resolve(fileData); });
     });
@@ -146,7 +146,7 @@ describe('Form for creating data', function() {
     var upload = browser.window.APP.layout.step1.layout.upload;
 
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.
-    sinon.stub(upload.fileManager, 'addFile', function() {
+    sinon.stub(upload.fileManager, 'loadFile', function() {
       upload.fileManager.emit('parse-complete', fileData);
       return new Promise(function(resolve, reject) { resolve(fileData); });
     });
@@ -183,7 +183,7 @@ describe('Form for creating data', function() {
     var upload = browser.window.APP.layout.step1.layout.upload;
 
     // csv.parse() for some reasons doesn't work. Don't have time to investigate.
-    sinon.stub(upload.fileManager, 'addFile', function() {
+    sinon.stub(upload.fileManager, 'loadFile', function() {
       upload.fileManager.emit('parse-complete', fileData);
       return new Promise(function(resolve, reject) { resolve(fileData); });
     });

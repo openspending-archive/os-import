@@ -82,7 +82,7 @@ describe('Tabular file manager', function() {
 
       nock(csvHost).get(csvPath).reply(200, text);
 
-      fileManager.addFile(csvURL).then(function(file) {
+      fileManager.loadFile(csvURL).then(function(file) {
         assert(
           csvURL === file.path,
           'Returned file name doesn\'t correspond to the passed URL'
@@ -117,7 +117,7 @@ describe('Tabular file manager', function() {
 
         nock(csvHost).get(csvPath).reply(200, text);
 
-        fileManager.addFile(csvURL).then(function(file) {
+        fileManager.loadFile(csvURL).then(function(file) {
           var actualSize = Buffer.byteLength(file.text, csvEncoding)
 
           assert(
@@ -168,7 +168,7 @@ describe('Tabular file manager', function() {
 
         fileManager.on('upload-started', function() { uploadFired = true; });
 
-        fileManager.addFile(csvURL).then(function() {
+        fileManager.loadFile(csvURL).then(function() {
           assert(parseStartFired, 'Parse starting event didn\'t fire');
           assert(validationFired, 'Validation starting event didn\'t fire');
           assert(uploadFired, 'Upload starting event didn\'t fire');

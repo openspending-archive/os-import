@@ -34,7 +34,7 @@ function completeStep1(done) {
     var upload = browser.window.APP.layout.step1.layout.upload;
     browser.fill('[data-editors=name] input[name=name]', 'This is the name');
 
-    sinon.stub(upload.fileManager, 'addFile', function(file) {
+    sinon.stub(upload.fileManager, 'loadFile', function(file) {
       upload.fileManager.emit('parse-complete', fileData);
       return new Promise(function(resolve, reject) { resolve(fileData); });
     });

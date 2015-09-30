@@ -11,7 +11,7 @@ var TabularFileManager = function(options) {
 
 _.extend(TabularFileManager.prototype, EventEmitter.prototype, {
   // Decide which loader to use and get the data
-  addFile: require('./add-file'),
+  loadFile: require('./load-file'),
 
   // Get CSV schema and validate text over good tables
   parse: require('./parse')

@@ -28,7 +28,7 @@ module.exports = backbone.BaseView.extend({
       if(event.keyCode !== 13)
         return true;
 
-      this.fileManager.addFile(url).then(this.addFile.bind(this));
+      this.fileManager.loadFile(url).then(this.addFile.bind(this));
       this.$('[data-id=link]').val('');
       return false;
     }
@@ -44,7 +44,7 @@ module.exports = backbone.BaseView.extend({
 
   uploadLocalFile: function(file) {
     // When file uploaded add it to the Step 1 form
-    this.fileManager.addFile(file).then(this.addFile.bind(this));
+    this.fileManager.loadFile(file).then(this.addFile.bind(this));
 
     return this;
   }
