@@ -65,7 +65,10 @@ module.exports = backbone.BaseView.extend({
       if(!_.isEmpty(this.layout.form.validate()))
         return false;
       
+      // Consider clicking Next button as submit action
       window.APP.datapackage.setTitle(this.layout.form.getValue().name);
+      window.APP.datapackage.resetResources(this.layout.form.getValue().files);
+
       window.ROUTER.navigate('/map', {trigger: true});
       return false;
     },

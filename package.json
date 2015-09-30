@@ -32,6 +32,7 @@
     "jquery": "^2.1.4",
     "json-table-schema": "0.0.2-alpha",
     "lodash": "^3.10.1",
+    "nested-property": "0.0.6",
     "node-ssi": "^0.3.0",
     "omit-empty": "^0.3.1",
     "resolve": "^1.1.6",

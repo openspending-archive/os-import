@@ -1,7 +1,7 @@
 // http://www.youtube.com/watch?v=OiBtx18jc4Qrequire('backbone-base');
 var _ = require('lodash');
 var backbone = require('backbone');
-var DatapackageModel = require('../models/datapackage');
+var DatapackageModel = require('../datapackage');
 var Step1View = require('./step1');
 var HeaderView = require('./header');
 var MapperView = require('./step2/mapper');
