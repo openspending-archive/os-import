@@ -66,6 +66,28 @@ describe('Data package model', function() {
   });
 
   it('passed with array of resources updates internal list', function(done) {
+    var dpResources;
+
+    var resources = [
+      {data: '1', name: 'test.csv', path: 'test.csv', schema: {}},
+
+      // First row is injected directly
+      {data: '2', path: 'another.csv', schema: {}},
+      {data: '3', path: 'the-last.csv', schema: {}}
+    ];
+
+    datapackage.set('resources', [resources[0]]);
+    dpResources = datapackage.addResources(_.rest(resources)).get('resources');
+
+    assert(
+      _.every(dpResources, function(resource, i) {
+        return resource.path === resources[i].path
+          && resource.name === resources[i].path;
+      }) && dpResources.length === 3,
+
+      'There are wrong values in resources list'
+    );
+
     done();
   });
 

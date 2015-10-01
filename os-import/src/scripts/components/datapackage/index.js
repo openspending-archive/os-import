@@ -22,7 +22,7 @@ _.extend(DatapackageModel.prototype, {
   {data: <CSV string>, path: <path>, schema: <schema to use, optional>}
   */
   addResources: function(resources) {
-    this.set('resources', this.get('resources').concat(
+    this.set('resources', (this.get('resources') || []).concat(
       _.chain([resources]).flatten().map(function(resource) {
         return this.createResourceEntry(resource);
       }, this).value()
